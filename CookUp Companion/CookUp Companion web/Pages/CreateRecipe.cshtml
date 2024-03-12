@@ -1,0 +1,122 @@
+﻿@page
+@model CookUp_Companion_web.Pages.CreateRecipeModel
+@{
+}
+
+<section class="vh-100">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                <form method="post" class="mx-1 mx-md-4">
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <label class="form-label" for="recipeTitle"><h2>Title</h2></label>
+                                            <input type="text"  id="recipeTitle" class="form-control" placeholder="Give your recipe name"/>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center mb-4">
+                                        <img id="selectedAvatar" src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
+                                             class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder" />
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="btn btn-primary btn-rounded">
+                                            <label class="form-label text-white m-1" for="customFile2">Choose file</label>
+                                            <input type="file" class="form-control d-none" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <label class="form-label" for="recipeDescription"><h2>Description</h2></label>
+                                            <textarea id="recipeDescription" class="form-control" placeholder="Introduce your recipe, add notes, cooking tips, serving suggestions, etc..."></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+                                            <div class="ingredients-container">
+                                                <!-- Dynamic ingredient input fields will be added here -->
+                                                <div class="ingredient-input">
+                                                    <input type="text" class="form-control ingredient" placeholder="Add one or paste multiple items
+">
+                                                    <button class="btn btn-danger remove-ingredient">Remove</button>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-success add-ingredient">Add Ingredient</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <div class="instructions-container">
+                                                <!-- Dynamic instruction input fields will be added here -->
+                                                <div class="instruction-input">
+                                                    <textarea class="form-control instruction" placeholder="Paste one or multiple steps"></textarea>
+                                                    <button class="btn btn-danger remove-instruction">Remove</button>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-success add-instruction">Add Instruction</button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <label class="form-label" for="recipeServings"><h2>Servings</h2></label>
+                                            <input type="text" id="recipeServings" class="form-control" placeholder="How many portions does this recipe make?" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <label class="form-label" for="recipePrepTime"><h2>Prep time</h2></label>
+                                            <p>How long does it take to prepare this recipe?</p>
+                                            <div class="PrepatationTime">
+                                                <input type="number" id="recipePrepTimeHours" class="form-control" placeholder="Hours 0" />
+                                                <input type="number" id="recipePrepTimeMin" class="form-control" placeholder="Minutes 0" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0">
+
+                                            <label class="form-label" for="recipeCookTime"><h2>Cook time</h2></label>
+                                            <p>How long does it take to cook this recipe?</p>
+                                            <div class="CookTime">
+                                                <input type="number" id="recipeCookTimeHours" class="form-control" placeholder="Hours 0" />
+                                                <input type="number" id="recipeCookTimeMin" class="form-control" placeholder="Minutes 0" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

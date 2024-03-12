@@ -1,0 +1,83 @@
+﻿@page
+@model CookUp_Companion_web.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="profile">
+    <div class="profile-bar">
+
+        <img class="rounded-circle" alt="avatar1" src="https://mdbcdn.b-cdn.net/img/new/avatars/9.webp" />
+
+        <div id="profile-label">
+            <h1>First name</h1>
+            <h1>Last Name</h1>
+            <div id="editProfile">
+                <button id="editProfileButton" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profileModal"> Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="profileModalLabel">Edit profile</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="modal-element">
+                        <img class="rounded-circle profilePic" alt="avatar1" src="https://mdbcdn.b-cdn.net/img/new/avatars/9.webp" />
+                    </div>
+                    <div class="image-container">
+                        <!-- Button to change the picture -->
+
+                        <button id="changePictureButton" type="button" class="btn btn-light" onclick="changePicture()">Change Picture</button>
+
+                    </div>
+
+                    <div class="modal-element">
+                        <input type="text" id="FName" name="F_Name" placeholder="First Name" value="FirstName" />
+                    </div>
+                    <div class="modal-element">
+                        <input type="text" id="SName" name="S_Name" placeholder="Last Name" value="LastName" />
+                    </div>
+                    <div class="modal-element">
+                        <input type="text" id="Username" name="Username" placeholder="Username" value="Username" />
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+
+            
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-tracking">
+        <button class="recipe-button selected" onclick="toggleButton(this)">Activity</button>
+        <button class="recipe-button" onclick="toggleButton(this)">Created</button>
+
+    </div>
+
+    <div class="border-top text-muted" id="createdContent" style="display: none;">
+        <hr />
+        <!-- Placeholder for the content to be displayed when "Created" is clicked -->
+        <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
+        <p>No recipres was found</p>
+        <button class="btn btn-primary" onclick="createNewRecipe()"> <a class="nav-link text-dark" asp-area="" asp-page="/CreateRecipe">Create New Recipe</a></button>
+    
+    </div>
+
+    <div class="border-top text-muted" id="activityContent" >
+        <hr />
+        <!-- Placeholder for the content to be displayed when "Created" is clicked -->
+        <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
+        <p>Keep track of recipes you made</p>
+        <button class="btn btn-primary" asp-area="" asp-page="/CreateRecipe">Create New Recipe</button>
+
+    </div>
+</div>

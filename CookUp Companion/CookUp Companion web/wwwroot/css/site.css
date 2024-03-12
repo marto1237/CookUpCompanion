@@ -1,0 +1,322 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    width: 90%;
+    justify-content: center;
+    margin: auto;
+    justify-content: center;
+    margin-bottom: 60px;
+    background-image: url("../images/body.jpg")
+}
+/* Navigation bar  design */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    background-color: #CDE990;
+    text-decoration: underline; /* Underline on hover and when active */
+    text-underline-offset: 8px;
+}
+
+
+
+/* Dropmenu */
+.icon-img {
+    /* % of the viewport width */
+    width: 2vw;
+    height: auto;
+    margin-right: 15px /* Optional: Add margin to separate the icon from text */
+}
+
+/* Profile design*/
+
+
+.profile-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-bar img {
+    width: 200px;
+    height: 200px;
+    margin-right: 3vw; 
+}
+
+#profile-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#profile-label h1 {
+    margin: 20px; 
+}
+
+#editProfile button {
+    margin: 20px; 
+}
+
+.recipe-tracking {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recipe-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 26px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.recipe-button:hover {
+    text-decoration: underline;
+    text-decoration-color: gray;
+    text-underline-offset: 8px;
+}
+.recipe-button.selected {
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    color: green;
+}
+#createdContent,
+#activityContent {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.profilePic {
+    width: 12vw;
+    height: 12vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.modal-element{
+    padding: 0.5vw;
+}
+.modal-element input {
+    width: 20vw;
+}
+
+/*Setting modal*/
+
+.settingsbtn {
+    display: flex;
+    width: 80%;
+    margin: 2%;
+}
+.leftSettings {
+    flex-grow: 1;
+    text-align: left;
+}
+.rightSettings {
+    text-align: right;
+}
+
+/* Dislike modal styling*/
+
+.searchIngredient {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.dislikeIngerdient {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.searchIng{
+    padding:10px;
+}
+
+.dislikeIngredientFrame {
+    padding: 10px;
+    height: 55px;
+    justify-content: center;
+    width: fit-content;
+}
+
+.dislikeIngredientFrame img {
+    width: 50px; 
+    height: 50px;
+    align-items:flex-start;
+    
+}
+
+.dislikeIngredientFrame .dislikeIngredientName {
+        text-align: center;
+        align-content: center;
+        flex: 1;
+}
+.dislikeIngredientFrame .removeDislikeIngredient {
+        margin-left: 10px;
+}
+
+/*Login page */
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+/*Sign up*/
+
+/*Recipe Card*/
+
+.wrapper-grid {
+    
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 20rem);
+    justify-content: center;
+}
+
+.card-recipe {
+    overflow: hidden;
+    box-shadow: 0px 2px 8px 0px var(--clr-gray-light);
+    background-color: white;
+    border-radius: 1rem;
+    position: relative;
+    margin: 0.5rem;
+    --clr-primary: #651fff;
+    --clr-gray: #37474f;
+    --clr-gray-light: #b0bec5;
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+}
+
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+}
+.card-img-top {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+.like-container, .bookmark-container {
+    display: flex;
+    align-items: baseline;
+}
+
+.like-container button ,.bookmark-container button {
+    background-color: Transparent;
+    border: none;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.like-container p , .bookmark-container p{
+    margin-left: 0.5rem;
+}
+
+.bookmark-container {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+}
+
+/* Style for the hover effect */
+.bookmark-container .save-tooltip,
+.bookmark-container .remove-tooltip {
+    position: absolute;
+    left: -100%; 
+    top: 50%; 
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 1);
+    padding: 5px 10px; /* Adjust padding as needed */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    font-size: 14px; 
+    justify-content: center;
+    opacity: 0; /* Initially hide the save tooltip */
+    transition: opacity 0.3s ease; 
+}
+    .bookmark-container:hover .save-tooltip{
+        opacity: 1; /* Show both tooltips on hover */
+    }
+
+.card-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    align-items: center;
+}
+
+.card-bottom i {
+    border-radius: 50%;
+    padding: 0.5rem;
+    background-color: white;
+    color: black;
+}
+
+.card-recipe button {
+    background-color: Transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.card-recipe img {
+    transition: transform 0.5s ease;
+}
+
+.card-recipe:hover img {
+    transform: scale(1.1);
+}
+
+.card-bottom #creator {
+    color: white;
+    font-weight: bold;
+}
+/* Add Recipe Design */
+.createRecipeHeader{
+    display: flex;
+}

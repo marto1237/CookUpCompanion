@@ -1,0 +1,263 @@
+﻿    @using Microsoft.AspNetCore.Identity
+
+    @{
+    }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - CookUp_Companion_web</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/CookUp_Companion_web.styles.css" asp-append-version="true" />
+
+        <!-- Fontawsome kit-->
+    <script src="https://kit.fontawesome.com/df0ff9c732.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <!--NavBar-->
+
+            <nav class="navbar sticky-top navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-page="/Index">CookUp_Companion_web</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse d-lg-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1 justify-content-center">
+                            <li class="nav-item userdropmenu">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Recipe">Recipe</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Saved">Saved</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Planner">Planner</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Shopping">Shopping</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown" >
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @User.Identity.Name <!-- Display username or any other user information -->
+                                </a>
+
+                                <!-- Button trigger modal -->
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Profile"><img src="./images/user.png" alt="user pic" class="icon-img img-fluid" /> Profile</a></li>
+                                    <li><a class="dropdown-item" id="settings-link" href="#"><img src="./images/setting.png" alt="settinggear icon" class="icon-img img-fluid" /> Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-page="/Logout" method="post" class="dropdown-item">
+                                            <img src="./images/logout.png" alt="Logoutpic" class="icon-img" />
+                                            <button type="submit" class="btn btn-link">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                        
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                        }
+                    </div>
+                </div>
+            </nav>
+        <!-- Modal Settings-->
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="settingsModalLabel">Settings</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <button id="AccountButton" type="button" class="btn btn-light settingsbtn">
+                                <div class="leftSettings">Account  </div>
+                            <div class="rightSettings"> <!--User.Identity.Email -->user@gmail.com ></div>
+                            </button>
+                        <button id="ProfileButton" type="button" class="btn btn-light settingsbtn" onclick="openProfileModal()">
+                                <div class="leftSettings">Profile  </div>
+                            <div class="rightSettings"><!--User.Identity.FirstName--> <!--User.Identity.Email -->  FirstName LastName ></div>
+                            <button id="PreferencesButton" type="button" class="btn btn-light settingsbtn">
+                                <div class="leftSettings">Preferances  </div>
+                                <div class="rightSettings"> ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+        <!-- Account modal-->
+        <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="accountModalLabel">Account</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <button id="editEmail" type="button" class="btn btn-light settingsbtn" >
+                            <div class="leftSettings">Email  </div>
+                            <div class="rightSettings"> <!--User.Identity.Email -->user@gmail.com ></div>
+                        </button>
+                        <button id="editPassword" type="button" class="btn btn-light settingsbtn" >
+                            <div class="leftSettings">Password  </div>
+                            <div class="rightSettings">  Set a Password ></div>
+                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferances modal-->
+        <div class="modal fade" id="preferancesModal" tabindex="-1" aria-labelledby="preferancesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="preferancesModalLabel">Preferances</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <button id="DislikesButton" type="button" class="btn btn-light settingsbtn">
+                            <div class="leftSettings">Dislikes  </div>
+                            <div class="rightSettings"> <!--User.Identity.DislikesNumber --> selected ></div>
+                        </button>             
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UserConfirm modal-->
+        <div class="modal fade" id="userConfirmModal" tabindex="-1" aria-labelledby="userConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="userConfirmLabel">Confirm ownership of the account</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="settingsbtn" type="email" name="email" value="" placeholder="Enter the email address" />
+                        <input class="settingsbtn" type="password" name="email" value="" placeholder="Enter the password" />
+
+                        <button id="VerifyAccount" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+                            
+                    </div>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+
+        <!-- ChangeEmail modal-->
+        <div class="modal fade" id="changeEmailModal" tabindex="-1" aria-labelledby="changeEmailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="changeEmailModalLabel">Enter new email address</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="settingsbtn" type="email" name="newemail" value="" placeholder="Enter the email address" />
+                        <input class="settingsbtn" type="email" name="confirmemail" value="" placeholder="Confirm the email" />
+
+                        <button id="VerifyAccountEmail" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ChangePassword modal-->
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="changePasswordModalLabel">Enter new password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="settingsbtn" type="password" name="newpassword" value="" placeholder="Enter the new password" />
+                        <input class="settingsbtn" type="password" name="confirmpassword" value="" placeholder="Confirm the password" />
+
+                        <button id="VerifyAccountPassword" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dislikes modal-->
+        <div class="modal fade" id="dislikesModal" tabindex="-1" aria-labelledby="dislikesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="dislikesModalLabel">Dislikes</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="goBackToSettingsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-inline">
+                            <div class="searchIngredient">
+                                <i class="fas fa-search searchIng" aria-hidden="true"></i>
+                                <input class="form-control form-control-sm ml-3 w-75 searchIng" type="text" placeholder="Search"
+                                       aria-label="Search">
+                            </div>
+                        </form>
+                        <div class="dislikeIngerdient">
+                            <div id="dislikeIngredientPhoto" class="dislikeIngredientFrame col-sm-3"><img src="#" alt="Alternate Text" /></div>
+                            <div id="dislikeIngredientName" class="dislikeIngredientFrame col-sm-3">Salt</div>
+                            <div id="removeDislikeIngredient" class="dislikeIngredientFrame col-sm-3"><button id="removeIng" class="btn-close"> </button></div>
+                        </div>
+                        <div class="dislikeIngerdient">
+                            <div id="dislikeIngredientPhoto" class="dislikeIngredientFrame"><img src="#" alt="Alternate Text" /></div>
+                            <div id="dislikeIngredientName" class="dislikeIngredientFrame">Pineapple</div>
+                            <div id="removeDislikeIngredient" class="dislikeIngredientFrame"><button id="removeIng" class="btn-close"> </button></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+
+        <footer class="border-top footer text-muted">
+            <div class="container"> 
+                &copy; 2024 - CookUp_Companion_web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+        </footer>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        @await RenderSectionAsync("Scripts", required: false)
+
+    </body>
+    </html>
