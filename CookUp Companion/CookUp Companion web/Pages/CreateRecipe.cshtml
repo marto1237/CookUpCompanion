@@ -17,7 +17,8 @@
                                         <div class="form-outline flex-fill mb-0">
 
                                             <label class="form-label" for="recipeTitle"><h2>Title</h2></label>
-                                            <input type="text"  id="recipeTitle" class="form-control" placeholder="Give your recipe name"/>
+                                            <input type="text" asp-for="createRecipe.RecipeName" id="recipeTitle" class="form-control" placeholder="Give your recipe name" />
+                                            <span asp-validation-for="createRecipe.RecipeName" class="text-danger"></span>
 
                                         </div>
                                     </div>
@@ -28,16 +29,24 @@
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <div class="btn btn-primary btn-rounded">
-                                            <label class="form-label text-white m-1" for="customFile2">Choose file</label>
-                                            <input type="file" class="form-control d-none" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                                            <label class="form-label text-white m-1" for="uploadRecipePicture">Choose file</label>
+                                            <input type="file" asp-for="createRecipe.RecipePicture" class="form-control d-none" id="uploadRecipePicture" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                                            <span asp-validation-for="createRecipe.RecipePicture" class="text-danger"></span>
+
+                                            
                                         </div>
                                     </div>
+                                    <label for="avatar">Choose a profile picture:</label>
+
+                                    <input type="file" asp-for="createRecipe.RecipePicture" id="avatar" name="avatar" accept="image/png, image/jpeg" />
+                                    <span asp-validation-for="createRecipe.RecipePicture" class="text-danger"></span>
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
 
                                             <label class="form-label" for="recipeDescription"><h2>Description</h2></label>
-                                            <textarea id="recipeDescription" class="form-control" placeholder="Introduce your recipe, add notes, cooking tips, serving suggestions, etc..."></textarea>
+                                            <textarea id="recipeDescription" asp-for="createRecipe.RecipeDescription" class="form-control" placeholder="Introduce your recipe, add notes, cooking tips, serving suggestions, etc..."></textarea>
+                                            <span asp-validation-for="createRecipe.RecipeDescription" class="text-danger"></span>
 
                                         </div>
                                     </div>
@@ -45,10 +54,13 @@
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
                                             <div class="ingredients-container">
+                                                <label class="form-label" for="recipeDescription"><h2>Ingredients</h2></label>
                                                 <!-- Dynamic ingredient input fields will be added here -->
                                                 <div class="ingredient-input">
-                                                    <input type="text" class="form-control ingredient" placeholder="Add one or paste multiple items
-">
+
+                                                    
+                                                    <input type="text" asp-for="createRecipe.Ingredients" class="form-control ingredient" placeholder="Add one or paste multiple items" />
+                                                    <span asp-validation-for="createRecipe.Ingredients" class="text-danger"></span>
                                                     <button class="btn btn-danger remove-ingredient">Remove</button>
                                                 </div>
                                             </div>
@@ -60,9 +72,13 @@
                                         <div class="form-outline flex-fill mb-0">
 
                                             <div class="instructions-container">
+                                                <label class="form-label" for="recipeDescription"><h2>Instructions</h2></label>
                                                 <!-- Dynamic instruction input fields will be added here -->
                                                 <div class="instruction-input">
-                                                    <textarea class="form-control instruction" placeholder="Paste one or multiple steps"></textarea>
+
+                                                   
+                                                    <textarea asp-for="createRecipe.Instructions" class="form-control instruction" placeholder="Paste one or multiple steps"></textarea>
+                                                    <span asp-validation-for="createRecipe.Instructions" class="text-danger"></span>
                                                     <button class="btn btn-danger remove-instruction">Remove</button>
                                                 </div>
                                             </div>
@@ -75,7 +91,8 @@
                                         <div class="form-outline flex-fill mb-0">
 
                                             <label class="form-label" for="recipeServings"><h2>Servings</h2></label>
-                                            <input type="text" id="recipeServings" class="form-control" placeholder="How many portions does this recipe make?" />
+                                            <input type="number" asp-for="createRecipe.Servings" id="recipeServings" min="0" class="form-control" placeholder="How many portions does this recipe make?" />
+                                            <span asp-validation-for="createRecipe.Servings" class="text-danger"></span>
 
                                         </div>
                                     </div>
@@ -86,8 +103,10 @@
                                             <label class="form-label" for="recipePrepTime"><h2>Prep time</h2></label>
                                             <p>How long does it take to prepare this recipe?</p>
                                             <div class="PrepatationTime">
-                                                <input type="number" id="recipePrepTimeHours" class="form-control" placeholder="Hours 0" />
-                                                <input type="number" id="recipePrepTimeMin" class="form-control" placeholder="Minutes 0" />
+                                                <input type="number" asp-for="createRecipe.PrepHours" id="recipePrepTimeHours" min="0" class="form-control" placeholder="Hours 0" />
+                                                <span asp-validation-for="createRecipe.PrepHours" class="text-danger"></span>
+                                                <input type="number" asp-for="createRecipe.PrepMinutes" id="recipePrepTimeMin" min="0" class="form-control" placeholder="Minutes 0" />
+                                                <span asp-validation-for="createRecipe.PrepMinutes" class="text-danger"></span>
                                             </div>
 
                                         </div>
@@ -99,12 +118,19 @@
                                             <label class="form-label" for="recipeCookTime"><h2>Cook time</h2></label>
                                             <p>How long does it take to cook this recipe?</p>
                                             <div class="CookTime">
-                                                <input type="number" id="recipeCookTimeHours" class="form-control" placeholder="Hours 0" />
-                                                <input type="number" id="recipeCookTimeMin" class="form-control" placeholder="Minutes 0" />
+                                                <input type="number" asp-for="createRecipe.CookHours" id="recipeCookTimeHours" min="0" class="form-control" placeholder="Hours 0" />
+                                                <span asp-validation-for="createRecipe.CookHours" class="text-danger"></span>
+                                                <input type="number" asp-for="createRecipe.CookMinutes" id="recipeCookTimeMin" min="0" class="form-control" placeholder="Minutes 0" />
+                                                <span asp-validation-for="createRecipe.CookMinutes" class="text-danger"></span>
                                             </div>
 
                                         </div>
                                     </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg"
+                                            style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                                        Create recipe
+                                    </button>
                                 </form>
 
 
@@ -117,6 +143,6 @@
         </div>
     </div>
 </section>
-@section Scripts {
+ic@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

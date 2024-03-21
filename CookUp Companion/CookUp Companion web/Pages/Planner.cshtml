@@ -2,3 +2,226 @@
 @model CookUp_Companion_web.Pages.PlannerModel
 @{
 }
+
+<html>
+
+	<body>
+
+        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-interval="false">
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active" data-recipe="Recipe1" draggable="true">
+                    <div class="col-md-2">
+                        <div class="card-planner">
+                            <div class="card-body">
+                            <img src="./images/logout.png" class="img-fluid" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" data-recipe="Recipe2" draggable="true">
+                    <div class="col-md-2">
+                        <div class="card-planner">
+                            <div class="card-body">
+                            <img src="./images/magnifying-glass.png" class="img-fluid" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" data-recipe="Recipe3" draggable="true">
+                    <div class="col-md-2">
+                        <div class="card-planner">
+                            <div class="card-body">
+                            <img src="./images/pencil.png"  class="img-fluid" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" draggable="true">
+                    <div class="col-md-2">
+                        <div class="card-planner">
+                            <div class="card-body">
+                            <img src="./images/setting.png" class="img-fluid" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" draggable="true">
+                    <div class="col-md-2">
+                        <div class="card-planner">
+                            <div class="card-body">
+                            <img src="./images/settings.png" class="img-fluid" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="carousel-item" draggable="true">
+                <div class="col-md-2">
+                    <div class="card-planner">
+                        <div class="card-body">
+                            <img src="./images/magnifying-glass.png" class="img-fluid" alt="...">
+                            dsa
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" draggable="true">
+                <div class="col-md-2">
+                    <div class="card-planner">
+                        <div class="card-body">
+                            <img src="./images/magnifying-glass.png" class="img-fluid" alt="...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" draggable="true">
+                <div class="col-md-2">
+                    <div class="card-planner">
+                        <div class="card-body">
+                            <img src="./images/magnifying-glass.png" class="img-fluid" alt="...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item" draggable="true">
+                <div class="col-md-2">
+                    <div class="card-planner">
+                        <div class="card-body">
+                            <img src="./images/magnifying-glass.png" class="img-fluid" alt="...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+
+    <div class="wrapper-calendar">
+        <div class="calendar-nav">
+            <div class="icons">
+                <span id="prev" class="material-symbols-rounded"><</span>
+                <p class="current-week"></p>
+                <span id="next" class="material-symbols-rounded">></span>
+            </div>
+        </div>
+        <div class="calendar">
+            <ul class="weeks">
+                
+                <li>Mon</li>
+                <li>Tue</li>
+                <li>Wed</li>
+                <li>Thu</li>
+                <li>Fri</li>
+                <li>Sat</li>
+            </ul>
+            <ul class="days"></ul>
+        </div>
+    </div>
+
+    <div class="container-days">
+        <div class="Day-Monday day-container">
+            <p>Monday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Tuesday day-container">
+            <p>Tuesday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Wednesday day-container">
+            <p>Wednesday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Thursday day-container">
+            <p>Thursday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Friday day-container">
+            <p>Friday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Saturday day-container">
+            <p>Saturday</p>
+            <div class="recipes"></div>
+        </div>
+        <div class="Day-Sunday day-container">
+            <p>Sunday</p>
+            <div class="recipes"></div>
+        </div>
+    </div>
+
+ 
+    @section Scripts {
+        <script type="text/javascript" src="/js/calendar.js"></script>
+        <script>
+            $('.carousel .carousel-item').each(function () {
+                var next = $(this).next();
+                if (!next.length) {
+                    next = $(this).siblings(':first');
+                }
+                next.children(':first-child').clone().appendTo($(this));
+
+                for (var i = 0; i < 4; i++) {
+                    next = next.next();
+                    if (!next.length) {
+                        next = $(this).siblings(':first');
+                    }
+
+                    next.children(':first-child').clone().appendTo($(this));
+                }
+            });
+
+            $(document).ready(function () {
+                const recipes = document.querySelectorAll('.carousel-item');
+                const days = document.querySelectorAll('.day-container');
+
+                                // Function to scroll down when dragging below a certain point
+            function scrollDownIfNeeded(y) {
+                const threshold = window.innerHeight / 2; // Adjust threshold as needed
+                if (y > threshold) {
+                    window.scrollBy({
+                        top: 100, // Adjust scrolling amount as needed
+                        behavior: 'smooth' // Optionally, make the scrolling smooth
+                    });
+                }
+            }
+                recipes.forEach(recipe => {
+                    recipe.addEventListener('dragstart', dragStart);
+                });
+
+                days.forEach(day => {
+                    day.addEventListener('dragover', dragOver);
+                    day.addEventListener('drop', dragDrop);
+                });
+
+                function dragStart(e) {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.recipe);
+                }
+
+                function dragOver(e) {
+                    e.preventDefault();
+                }
+
+                function dragDrop(e) {
+                    e.preventDefault();
+                    const recipe = e.dataTransfer.getData('text/plain');
+                    const clonedRecipe = document.querySelector(`[data-recipe="${recipe}"]`).cloneNode(true);
+                    clonedRecipe.removeAttribute('draggable');
+                    const dayContainer = e.currentTarget;
+                    const recipesContainer = dayContainer.querySelector('.recipes');
+                    recipesContainer.appendChild(clonedRecipe);
+                }
+            });
+        </script>
+
+    }
+	</body>
+
+</html>

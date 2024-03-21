@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-//function to show the profile picture on log in
+//function to show the picture  of the recipe when creating new one
 function displaySelectedImage(event, elementId) {
     const selectedImage = document.getElementById(elementId);
     const fileInput = event.target;
@@ -139,11 +139,11 @@ document.querySelector('.add-ingredient').addEventListener('click', function (ev
     event.preventDefault(); // Prevent form submission
     const container = document.querySelector('.ingredients-container');
     const ingredientInput = document.createElement('div');
+    const index = document.querySelectorAll('.ingredient-input').length + 1; // Get the current number of ingredients
     ingredientInput.classList.add('ingredient-input');
-    ingredientInput.innerHTML = `
-        <input type="text" class="form-control ingredient" placeholder="Add one or paste multiple items">
-        <button class="btn btn-danger remove-ingredient">Remove</button>
-    `;
+    ingredientInput.innerHTML = `<input type="text" class="form-control ingredient" placeholder="Add one or paste multiple items" data-val="true" data-val-required="The Ingredients field is required." name="createRecipe.Ingredients[${index}]" value="" />
+    <span class="text-danger field-validation-valid" data-valmsg-for="createRecipe.Ingredients" data-valmsg-replace="true"></span>
+    <button class="btn btn-danger remove-ingredient">Remove</button>`;
     container.appendChild(ingredientInput);
 });
 
@@ -154,17 +154,16 @@ document.addEventListener('click', function (event) {
 });
 
 
-//For Instruction to be added when creating recipe
-
+// For Instructions to be added when creating recipe
 document.querySelector('.add-instruction').addEventListener('click', function (event) {
     event.preventDefault(); // Prevent form submission
     const container = document.querySelector('.instructions-container');
     const instructionsInput = document.createElement('div');
+    const index = document.querySelectorAll('.instruction-input').length + 1; // Get the current number of instructions
     instructionsInput.classList.add('instruction-input');
-    instructionsInput.innerHTML = `
-        <textarea class="form-control instruction" placeholder="Paste one or multiple steps"></textarea>
-        <button class="btn btn-danger remove-instruction">Remove</button>
-    `;
+    instructionsInput.innerHTML = `<textarea class="form-control instruction" placeholder="Paste one or multiple steps" data-val="true" data-val-required="The Instructions field is required." name="createRecipe.Instructions[${index}]"></textarea>
+    <span class="text-danger field-validation-valid" data-valmsg-for="createRecipe.Instructions" data-valmsg-replace="true"></span>
+    <button class="btn btn-danger remove-instruction">Remove</button>`;
     container.appendChild(instructionsInput);
 });
 
@@ -173,5 +172,54 @@ document.addEventListener('click', function (event) {
         event.target.parentElement.remove();
     }
 });
+
+// Function to handle form submission
+document.querySelector('form').addEventListener('submit', function (event) {
+    // Check validity of dynamically added inputs
+    const ingredientInputs = document.querySelectorAll('.ingredient');
+    ingredientInputs.forEach(function (input) {
+        if (!input.value.trim()) {
+            input.nextElementSibling.textContent = 'Ingredient is required.';
+        } else {
+            input.nextElementSibling.textContent = ''; // Clear previous error message
+        }
+    });
+
+    const instructionInputs = document.querySelectorAll('.instruction');
+    instructionInputs.forEach(function (input) {
+        if (!input.value.trim()) {
+            input.nextElementSibling.textContent = 'Instruction is required.';
+        } else {
+            input.nextElementSibling.textContent = ''; // Clear previous error message
+        }
+    });
+
+    // Prevent form submission if there are validation errors
+    if (document.querySelectorAll('.text-danger').length > 0) {
+        event.preventDefault();
+    }
+});
+// Function to handle file input change event
+document.getElementById('uploadRecipePicture').addEventListener('change', function (event) {
+    var file = event.target.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function () {
+        var arrayBuffer = reader.result;
+        var array = new Uint8Array(arrayBuffer);
+
+        // Convert the byte array to a string and set it as the value of the hidden input field
+        var imageData = Array.prototype.map.call(array, function (byte) {
+            return String.fromCharCode(byte);
+        }).join('');
+
+        document.getElementById('imageData').value = imageData;
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+
+/* Calendar */
+
 
 // Write your JavaScript code.

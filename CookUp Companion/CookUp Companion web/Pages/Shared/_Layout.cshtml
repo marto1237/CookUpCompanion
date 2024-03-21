@@ -44,10 +44,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Shopping">Shopping</a>
                             </li>
                         </ul>
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                        
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown" >
@@ -119,7 +116,7 @@
                         <button id="editPassword" type="button" class="btn btn-light settingsbtn" >
                             <div class="leftSettings">Password  </div>
                             <div class="rightSettings">  Set a Password ></div>
-                            
+                        </button>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary">Save changes</button>
@@ -158,7 +155,7 @@
                         <input class="settingsbtn" type="email" name="email" value="" placeholder="Enter the email address" />
                         <input class="settingsbtn" type="password" name="email" value="" placeholder="Enter the password" />
 
-                        <button id="VerifyAccount" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+                        <button id="VerifyAccount" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm </button>
                             
                     </div>
                     </div>
@@ -179,7 +176,7 @@
                         <input class="settingsbtn" type="email" name="newemail" value="" placeholder="Enter the email address" />
                         <input class="settingsbtn" type="email" name="confirmemail" value="" placeholder="Confirm the email" />
 
-                        <button id="VerifyAccountEmail" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+                        <button id="VerifyAccountEmail" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm</button>
 
                     </div>
                     
@@ -200,7 +197,7 @@
                         <input class="settingsbtn" type="password" name="newpassword" value="" placeholder="Enter the new password" />
                         <input class="settingsbtn" type="password" name="confirmpassword" value="" placeholder="Confirm the password" />
 
-                        <button id="VerifyAccountPassword" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm
+                        <button id="VerifyAccountPassword" type="button" class="btn btn-primary" onclick="VerifyAccountChange()">Confirm</button>
                     </div>
                 </div>
 

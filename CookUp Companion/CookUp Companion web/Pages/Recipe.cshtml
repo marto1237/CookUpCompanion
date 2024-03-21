@@ -5,7 +5,33 @@
 
 
 <body>
-    
+    <div class="recipeHeader"><h2>Recipes</h2>
+        <div class="recipeShowFilter">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form class="d-flex" method="post">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <form id="sortForm" method="post">
+            <label for="filterRecipe">Sort by: </label>
+            <select name="filterRecipe" id="filterRecipe">
+                <option value="relevance">Relevance</option>
+                <option value="alphabet">A to Z</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="topRated">Top rated</option>
+                <option value="topSaved">Top saved</option>
+            </select>
+            </form>
+           
+        </div>
+    </div>
     <div class="wrapper-grid">
         <div class="card-recipe">
             <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
@@ -206,9 +232,28 @@
                     </div>
                 </div>
         </div>
-        </div>
+        </div>  
 
     </div>
+
+    <!--Function to change the show recipes by selected option -->
+    
+    <script>
+        // Function to save selected option in local storage
+        document.getElementById('filterRecipe').addEventListener('change', function () {
+            localStorage.setItem('selectedOption', this.value);
+            this.form.submit();
+        });
+
+        // Set the selected option when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectedOption = localStorage.getItem('selectedOption');
+            if (selectedOption) {
+                document.getElementById('filterRecipe').value = selectedOption;
+            }
+        });
+    </script>
+
 @* 
     <script>
         // Initialize tooltip text to "Save" when the page loads
@@ -221,4 +266,5 @@
         });
     </script>
  *@
+
 </body>
