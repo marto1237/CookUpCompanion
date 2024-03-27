@@ -6,7 +6,7 @@ namespace CookUp_Companion_web.Models
     public class Recipe
     {
         public byte[] Picture { get; private set; }
-        public User Creator { get; private set; }
+        public Users Creator { get; private set; }
         public string RecipeName { get; private set; }
         public string Description { get; private set; }
         public List<Ingredient> Ingredients { get; private set; }
@@ -16,7 +16,7 @@ namespace CookUp_Companion_web.Models
         public int Views { get; private set; }
         public List<RateRecipe> Ratings { get; private set; }
 
-        public Recipe(byte[] picture, User creator, string recipeName, string description, List<Ingredient> ingredients, string instructions, int cookingTime, int preparationTime)
+        public Recipe(byte[] picture, Users creator, string recipeName, string description, List<Ingredient> ingredients, string instructions, int cookingTime, int preparationTime)
         {
             Picture = picture;
             Creator = creator;

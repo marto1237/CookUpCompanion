@@ -1,4 +1,6 @@
-﻿namespace CookUp_Companion_web.Models
+﻿using Logic;
+
+namespace Logic
 {
     public class RateRecipe
     {

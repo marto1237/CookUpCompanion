@@ -9,12 +9,12 @@
             recipes = new List<Recipe>();
         }
 
-        public void RateRecipe(Recipe recipe, User user, bool rating, string comment, DateTime timestamp)
+        public void RateRecipe(Recipe recipe, Users user, bool rating, string comment, DateTime timestamp)
         {
             RateRecipe newRate = new RateRecipe(recipe, user, rating, comment, timestamp);
             recipe.AddRating(newRate);
         }
-        public void CreateRecipe(byte[] picture, User creator, string recipeName, string description, List<Ingredient> ingredients, string instructions, int cookingTime, int preparationTime)
+        public void CreateRecipe(byte[] picture, Users creator, string recipeName, string description, List<Ingredient> ingredients, string instructions, int cookingTime, int preparationTime)
         {
             Recipe newRecipe = new Recipe(picture, creator, recipeName, description, ingredients, instructions, cookingTime, preparationTime);
             recipes.Add(newRecipe);
@@ -35,7 +35,7 @@
             return recipes.FindAll(r => r.RecipeName == recipeName);
         }
 
-        public List<Recipe> GetRecipesByUser(User user)
+        public List<Recipe> GetRecipesByUser(Users user)
         {
             return recipes.FindAll(r => r.Creator == user);
         }

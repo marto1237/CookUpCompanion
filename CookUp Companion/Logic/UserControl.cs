@@ -1,6 +1,13 @@
-﻿using Logic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Logic;
+using System.Security.Cryptography;
+using System.IO;
 
-namespace CookUp_Companion_web.Models
+namespace Logic
 {
     public class UserControl
     {
@@ -9,12 +16,12 @@ namespace CookUp_Companion_web.Models
         {
             users = new List<User>();
         }
-        public void SignUp(byte[] profilePic, string username, string email,string first_name, string last_name, string password, Roles role)
+        public void SignUp(byte[] profilePic, string username, string email,string first_name, string last_name, string password, int roleId)
         {
 
             Preference preference = new Preference();
 
-            User createUser = new User(profilePic, username, email, password, first_name, last_name, role, preference);
+            User createUser = new User(profilePic, username, email, password, first_name, last_name, roleId, preference);
 
             users.Add(createUser);
         }
@@ -25,13 +32,13 @@ namespace CookUp_Companion_web.Models
 
             //add function there to verify is the credentials are right
         }
-        public void ChangeUserRole(string email, Roles role)
+        public void ChangeUserRole(string email, int roleID)
         {
             User userToPromote = users.Find(u=> u.Email == email);
 
             if (userToPromote != null)
             {
-                userToPromote.ChangeRole(role);
+                userToPromote.ChangeRole(roleID);
             }
         }
 

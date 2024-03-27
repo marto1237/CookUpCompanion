@@ -228,6 +228,9 @@ body {
     background-position: center;
     height: 300px;
 }
+.card-recipe p{
+    color: black;
+}
 
 
 .card-top {
@@ -537,4 +540,222 @@ carousel-inner .carousel-item img {
         justify-content:center;
     }
 
+}
+
+/*Recipe Info */
+
+#recipeInformation {
+    width: 80%;
+    margin: 0 auto;
+    justify-content: center;
+}
+.cardinfo-bottom {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+    align-items: center;
+}
+
+.cardinfo-bottom i {
+    border-radius: 50%;
+    padding: 0.9rem 0.5rem 0.9rem 0.5rem;
+    background-color: greenyellow;
+    color: black;
+}
+
+
+.cardinfo-bottom button {
+    display: flex;
+    align-items: center; 
+    border: none;
+    border-radius: 25px; 
+    padding: 0.5rem 1rem;
+    background-color: white; 
+    color: black;
+}
+
+.cardinfo-bottom button p {
+    margin: 0.3rem; /* Remove default margin */
+}
+
+.card-recipeInfo {
+    overflow: hidden;
+    box-shadow: 0px 2px 8px 0px var(--clr-gray-light);
+    background-color: white;
+    border-radius: 1rem;
+    position: relative;
+    margin: 0.5rem;
+    --clr-primary: #651fff;
+    --clr-gray: #37474f;
+    --clr-gray-light: #b0bec5;
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    width: 100%;
+    max-width: 400px;
+}
+
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.recipeInfoTop{
+    display:flex;
+    padding: 50px 50px 50px 0;
+}
+.recipeInfoHeader{
+    padding-top: 5%;
+    padding-left: 10%;
+}
+.recipeInfoHeader h2{
+    padding: 0.2rem;
+}
+.recipeInfo-cookingTime{
+    display: flex;
+    
+}
+.timeType{
+    color: dimgrey;
+    padding: 0 5px 0 5px;
+}
+.Ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.2rem;
+    justify-content: space-between; /* Adjust spacing between columns */
+}
+
+.Ingredient {
+    width: calc(50% - 10px); /* Calculate width to fit two columns with margin */
+    margin-bottom: 1rem;
+    display: flex;
+    padding: 0.1rem;
+    align-items: center; /* Adjust spacing between rows */
+}
+.Ingredient img {
+    border-radius: 50%;
+    width: 15%;
+    height: auto;
+    
+}
+.IngredientMeasurment{
+    padding: 0.5rem;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+.recipeIngredientsnNutrition{
+    display: flex;
+    flex-direction: row;
+}
+.recipeIngredients {
+    flex: 70%; /* Take up 70% of the container */
+}
+#recipeNutrition {
+    flex: 30%; /* Take up 30% of the container */
+    margin-left: 20px; /* Add some space between the ingredients and the table */
+}
+#recipeNutrition table {
+    margin: 0 auto; /* Center the table horizontally */
+}
+#recipeNutrition td {
+    padding: 12px; /* Increase the padding of table cells */
+}
+.Ratings{
+    display: flex;
+    padding: 0.3rem;
+}
+.possitiveRatings i {
+    border-radius: 50%;
+    padding: 0.9rem 0.5rem 0.9rem 0.5rem;
+    background-color: greenyellow;
+}
+.neggativeRatings i {
+    transform: rotate(180deg);
+    border-radius: 50%;
+    padding: 0.9rem 0.5rem 0.9rem 0.5rem;
+    background-color: orangered;
+}
+.possitiveRatings, .neggativeRatings {
+    display: flex;
+    align-items: center;
+    padding: 0.7rem;
+}
+.Ratings p {
+    margin-left: 5px; 
+}
+.Comment img {
+    border-radius: 50%;
+    width: 0,5vw;
+    height: 0,5vw;
+    align-items: center;
+}
+#RecipeComments{
+    align-items: center;
+}
+.Comment {
+    display: flex;
+    border: 1px solid grey;
+    margin: 10px;
+    background-color: whitesmoke;
+    border-radius: 25px;
+}
+.CommentHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.CommentHeader button {
+    align-self: flex-start; /* Align the button to the top */
+}
+.CommentInfo {
+    width: 100%; /* Make the CommentInfo div take up the full width */
+}
+.recipeCreator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recipeCreator a {
+    margin-right: auto; /* Push the anchor element to the left */
+}
+
+.recipeCreator i {
+    margin-left: auto; /* Push the icon to the right */
+
+}
+.saveButton {
+    background-color: orange;
+    color: black;
+    border: none;
+    border-radius: 25px;
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    display: flex;
+    align-items: center;
+}
+.saveButton i {
+    margin-right: 0.5rem; /* Add space between icon and text */
 }

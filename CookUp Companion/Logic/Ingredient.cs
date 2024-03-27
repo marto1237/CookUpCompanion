@@ -1,4 +1,4 @@
-﻿namespace CookUp_Companion_web.Models
+﻿namespace Logic
 {
     public class Ingredient
     {
