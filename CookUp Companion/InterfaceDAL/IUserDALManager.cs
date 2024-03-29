@@ -10,9 +10,18 @@ namespace InterfaceDAL
     public interface IUserDALManager
     {
         bool InsertUser(User newUser);
+
+        bool CheckExistingUsername(string username);
+
+        bool CheckExistingEmail(string email);
+
+
+        User Login(string username, string password);
+        User GetUserByEmail(string email);
+
         //List<User> GetAll();
         //User GetUserById(int id);
-        //User GetUserByUsername(string username);
+
         //bool UpdateUser(User newUser);
         //void DeleteUser(int id);
         //void BanUser(User banUser, string reason);

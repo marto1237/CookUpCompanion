@@ -63,6 +63,172 @@ namespace DAL
 			
 		}
 
+        /*Query that get the user on login from the database */
 
-	}
+        public User GetUserByEmail(string email)
+        {
+            User user = null;
+
+            using (SqlConnection connection = base.connection)
+			{
+				connection.Open();
+
+				//set up the query 
+
+				string query = $"SELECT * FROM {tableName} WHERE email = @email";
+
+				SqlCommand command = new SqlCommand (query, connection);
+
+                
+				try
+				{
+					//Give the searche email parameter
+					command.Parameters.AddWithValue("@email", email);
+					//Execute the query and get the data
+					using SqlDataReader reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						user = new User(
+                                (byte[])reader["profilePicture"],
+								(string)reader["username"],
+								(string)reader["email"],
+								(string)reader["password"],
+								(string)reader["firstName"],
+								(string)reader["lastName"],
+								(int)reader["roleID"],
+								////NEED TO FIX THAT WHEN USER LOGIN
+								null
+
+
+                        );
+                        user.GetSaltForDb(reader["passwordSalt"].ToString());
+                    }
+				}
+				catch(SqlException e)
+				{
+					// Handle any errors that may have occurred.
+					System.Diagnostics.Debug.WriteLine(e.Message);
+
+
+                }
+            }
+
+			return user;
+		}
+
+		public User Login(string email, string password)
+		{
+            User user = null;
+
+            using (SqlConnection connection = base.connection)
+            {
+                connection.Open();
+
+                //set up the query 
+
+                string query = $"SELECT * FROM {tableName} WHERE email = @email";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+
+                try
+                {
+                    //Give the searche email parameter
+                    command.Parameters.AddWithValue("@email", email);
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        user = new User(
+                                (byte[])reader["profilePicture"],
+                                (string)reader["username"],
+                                (string)reader["email"],
+                                (string)reader["password"],
+								//Password
+                                (string)reader["firstName"],
+                                (string)reader["lastName"],
+                                (int)reader["roleID"],
+                                ////NEED TO FIX THAT WHEN USER LOGIN
+                                null
+
+
+                        );
+                        user.GetSaltForDb(reader["passwordSalt"].ToString());
+						if (user.VerifyPassword(password))
+						{
+							return user;
+						}
+						else
+						{
+							//Give error message that the login failed
+							return null;
+						}
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+
+                }
+            }
+
+            return null;
+		}
+
+		public bool CheckExistingEmail(string email)
+		{
+			using(SqlConnection connection = base.connection)
+			{
+				connection.Open();
+
+				string query = $"SELECT * FROM {tableName} WHERE email = @email";
+
+				SqlCommand command = new SqlCommand(query, connection);
+
+				try
+				{
+					command.Parameters.AddWithValue("@email", email);
+					using SqlDataReader reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						return true;
+					}
+				}
+				catch (SqlException e)
+				{
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+				return false;
+			}
+		}
+		public bool CheckExistingUsername(string username)
+		{
+            using(SqlConnection connection = base.connection)
+            {
+                connection.Open();
+
+                string query = $"SELECT * FROM {tableName} WHERE username = @username";
+
+				SqlCommand command = new SqlCommand(query, connection);
+
+				try
+				{
+					command.Parameters.AddWithValue("@username", username);
+					using SqlDataReader reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						return true;
+					}
+				}
+				catch (Exception e)
+				{
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+				return false;
+			}
+		}
+
+    }
 }

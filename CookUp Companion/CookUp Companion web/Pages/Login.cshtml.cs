@@ -1,10 +1,11 @@
-using CookUp_Companion_web.Models;
+using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -16,6 +17,15 @@ namespace CookUp_Companion_web.Pages
 
         [BindProperty]
         public UserDTO userDTO { get; set; }
+
+        [BindProperty]
+        [EmailAddress(ErrorMessage = "Enter a valid email address!")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required!")]
+        public string? Email { get; set; }
+
+        [BindProperty]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required!")]
+        public string? Password { get; set; }
 
         List<Claim> claims = new List<Claim>();
         //public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -46,9 +56,20 @@ namespace CookUp_Companion_web.Pages
 
         //    return LocalRedirect(returnUrl ?? "/");
         //}
+        private readonly IUserManager userManager;
+        public LoginModel (IUserManager _userManager)
+        {
+            userManager = _userManager;
+        }
 
         public void OnGet()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                
+                Response.Redirect("/Account/YourAccount");
+                return;
+            }
 
         }
 
@@ -56,8 +77,31 @@ namespace CookUp_Companion_web.Pages
         {
             if (!ModelState.IsValid)
             {
+                ViewData["Error"] = "Oops Something went wrong!";
                 return Page();
             }
+
+            try
+            {
+                //if (Email != null && userManager.BannedUser(userManager.GetUserByEmail))
+                //{
+                //    ViewData["Error"] = "You are currently banned!";
+                //    return Page();
+
+                //}
+                //else 
+                //{
+                //    User user = userManager.CheckUser(Email, Password);
+                //}
+
+                User user = userManager.Login(Email, Password);
+
+            }
+            catch (Exception ) 
+            {
+
+            }
+
 
 			claims.Add(new Claim(ClaimTypes.Name, userDTO.Email));
 

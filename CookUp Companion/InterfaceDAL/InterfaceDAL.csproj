@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InterfacesLL\InterfacesLL.csproj" />
-    <ProjectReference Include="..\Logic\Logic.csproj" />
+    <ProjectReference Include="..\Logic\CookUp Companion Classes.csproj" />
   </ItemGroup>
 
 </Project>

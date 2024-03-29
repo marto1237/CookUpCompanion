@@ -1,4 +1,3 @@
-using CookUp_Companion_web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DAL;
@@ -26,7 +25,6 @@ namespace CookUp_Companion_web.Pages
 
         [BindProperty]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Username should be between 8 and 50 symbols!")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please enter a valid username!")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Username is required!")]
         public string? Username { get; set; }
 
@@ -90,8 +88,31 @@ namespace CookUp_Companion_web.Pages
                                         1, 
                                         null);
 
-                userManager.CreateUser(newUser);
-                return RedirectToPage("/Index");
+                newUser.SetPassword(Password);
+               
+                // Check if the email is already in use
+                //if (userManager.CheckExistingEmail(newUser.Email))
+                //{
+                //    ViewData["EmailError"] = "The email is already in use by another user. Please choose a different email.";
+                //    return Page();
+                //}
+
+                //if (userManager.CheckExistingUsername(newUser.Username))
+                //{
+                //    ViewData["UsernameError"] = "The username is already in use by another user. Please choose a different username.";
+                //    return Page();
+                //}
+                //else
+                //{
+                    
+                        userManager.CreateUser(newUser);
+                        return RedirectToPage("/Index");
+                    
+                //}
+
+               
+                
+                
             }
            
             
