@@ -9,22 +9,21 @@ namespace InterfacesLL
         bool CheckExistingEmail(string email);
         User Login(string email, string password);
         User GetUserByEmail(string email);
-        //bool BannedUser(User bannedUser);
-        //User CheckUser(string email, string password);
+        string GetRole(User user);
+        bool BannedUser(User bannedUser);
+        List<User> GetAllUsers();
+        User GetUserById(int id);
+        List<User> GetBySearch(string search);
+        bool UpdateUser(User user);
+        bool UpdateUserPassword(User user, string password);
+        bool DeleteUser(int id);
+        int GetIdByUsername(string username);
 
-        //List<User> GetAllUsers();
+        List<User> GetBannedUsers();
 
-        //User GetUserById(int id);
-        //List<User> GetBySearch(string search);
-        //bool UpdateUser(User user);
-        //void DeleteUser(int id);
-        //void BanningUser(User bannedUser, string reason);
-        //void UnbanningUser(User user);
-        //bool EmailCheck(string email);
-        //bool UsernameExists(string username);
-        //bool EmailExists(string email);
-        //List<User> Search(string search);
-        //string GetReason(User banUser);
+        bool BanningUser(User banningUser, User bannedUser, string reason);
+        bool UnbanningUser(int userId);
+        string GetReason(int userID);
 
     }
 }

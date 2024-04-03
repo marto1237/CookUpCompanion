@@ -13,7 +13,9 @@ namespace CookUp_Companion_web.Pages
         }
         public void OnGet()
         {
+            // byte[] profilePictureBytes = userManager.GetProfilePicture();
+            // ProfilePictureBase64 = Convert.ToBase64String(profilePictureBytes);
         }
-        
+
     }
 }

@@ -8,8 +8,9 @@ namespace CookUp_Companion_web.Pages
     public class CreateRecipeModel : PageModel
     {
         [BindProperty]
-        [Required]
-        public byte[] ? RecipePicture { get; set; }
+        [Required(ErrorMessage = "Recipe picture is required.")]
+        public IFormFile ? RecipePicture { get; set; }
+
         [BindProperty]
         [StringLength(70, MinimumLength = 3, ErrorMessage = "The recipe name should be between 3 and 70 symbols!")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please enter a valid recipe name!")]
@@ -42,14 +43,15 @@ namespace CookUp_Companion_web.Pages
         public int PrepMinutes { get; set; }
 
         [BindProperty]
-        [RegularExpression("^[0-5]?[0-9]$", ErrorMessage = "Preparation minutes must be a valid two-digit number.")]
-        [Required(ErrorMessage = "Preparation minutes time is required.")]
+        [RegularExpression("^[0-9]$", ErrorMessage = "Cooking hours must be a valid two-digit number.")]
+        [Required(ErrorMessage = "Cooking hours time is required.")]
         public int CookHours { get; set; }
 
         [BindProperty]
-        [RegularExpression("^[0-5]?[0-9]$", ErrorMessage = "Preparation minutes must be a valid two-digit number.")]
-        [Required(ErrorMessage = "Preparation minutes time is required.")]
+        [RegularExpression("^[0-5]?[0-9]$", ErrorMessage = "Cooking minutes must be a valid two-digit number.")]
+        [Required(ErrorMessage = "Cooking minutes time is required.")]
         public int CookMinutes { get; set; }
+
 
         
         
@@ -57,9 +59,22 @@ namespace CookUp_Companion_web.Pages
         public void OnGet()
         {
         }
-        public void OnPost() 
+        public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                // If ModelState is not valid, return the page with validation errors
+                return Page();
+            }
 
+
+
+            // If ModelState is valid, process the form data
+            // Save the recipe, handle the uploaded image, etc.
+
+            TempData["IsSuccess"] = true;
+            // Redirect to a success page or perform any other action
+            return RedirectToPage("/CreateRecipe");
         }
     }
 }

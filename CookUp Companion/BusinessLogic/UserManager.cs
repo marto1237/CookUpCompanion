@@ -1,6 +1,7 @@
 ﻿using InterfaceDAL;
 using InterfacesLL;
 using Logic;
+using System.Security.Cryptography;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,25 @@ namespace BusinessLogic
 
         public User Login(string email, string password)
         {
-            return controller.Login(email, password);
+            // Retrieve user from database
+            User user = controller.GetUserByEmail(email);
+            if (user != null && VerifyPassword(password, user.Password, user.PasswordSalt, 10000))
+            {
+                return user;
+            }
+
+            return null;
+           
         }
         
         public bool CreateUser(User user)
         {
+            // Generate salt and hash password
+            byte[] salt = GenerateSalt();
+            string hashedPassword = HashPassword(user.Password, salt, 10000);
+            user.ChangePasswordSalt(Convert.ToBase64String(salt));
+            user.ChangePassword(hashedPassword);
+
             return controller.InsertUser(user);
         }
 
@@ -41,8 +56,75 @@ namespace BusinessLogic
         {
             return controller.GetUserByEmail(email);
         }
+        public bool BannedUser(User banneduser)
+        {
+            if (controller.IsUserBanned(banneduser) == true)
+            {
+                return true;
+            }
+            return false;
+        }
+        public string GetRole(User user)
+        {
+            return controller.GetRole(user);
+        }
+        private byte[] GenerateSalt()
+        {
+            byte[] salt = new byte[16]; // You can adjust the salt length as needed
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(salt);
+            }
+            return salt;
+        }
 
+        private string HashPassword(string password, byte[] salt, int iterations)
+        {
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations))
+            {
+                return Convert.ToBase64String(pbkdf2.GetBytes(32)); // Generate a 256-bit (32-byte) hash
+            }
+        }
 
+        private bool VerifyPassword(string password, string hashedPassword, string salt, int iterations)
+        {
+            // Convert the salt from string to byte array
+            byte[] saltBytes = Convert.FromBase64String(salt);
 
+            // Hash the provided password with the stored salt and compare it with the stored hashed password
+            string inputHashedPassword = HashPassword(password, saltBytes, iterations);
+            return inputHashedPassword == hashedPassword;
+        }
+        
+        public List<User> GetAllUsers() { return controller.GetAllUsers(); }
+
+        public User GetUserById(int id) { return controller.GetUserById(id); }
+
+        public List<User> GetBySearch(string search) { return controller.GetBySearch(search); }
+
+        public bool UpdateUser(User user) { return controller.UpdateUser(user); }
+
+        public bool UpdateUserPassword(User user, string newPassword) 
+        {
+            byte[] salt = Convert.FromBase64String(user.PasswordSalt);
+
+            string hashedPassword = HashPassword(newPassword, salt, 10000);
+            user.ChangePassword(hashedPassword);
+
+            // Update user in the database
+            return controller.UpdateUserPassword(user);
+
+        }
+
+        public bool DeleteUser(int id) { return controller.DeleteUser(id); return true;}
+
+        public int GetIdByUsername(string username) { return controller.GetIdByUsername(username); }
+
+        public List<User> GetBannedUsers() { return controller.GetBannedUsers(); }
+        public bool BanningUser(User banningUser, User bannedUser, string reason) { return controller.BanUser(banningUser , bannedUser, reason); }
+
+        public bool UnbanningUser(int userId) {  return controller.UnbanUser(userId); }
+
+        public string GetReason(int userID) { return controller.GetBanReason(userID); }
     }
 }

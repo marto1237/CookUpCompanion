@@ -180,7 +180,6 @@
             // 
             this.ProfiliePicture.BackColor = System.Drawing.Color.Transparent;
             this.ProfiliePicture.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ProfiliePicture.Image = global::CookUp_Companion.Properties.Resources.user;
             this.ProfiliePicture.Location = new System.Drawing.Point(0, 0);
             this.ProfiliePicture.Name = "ProfiliePicture";
             this.ProfiliePicture.Size = new System.Drawing.Size(96, 188);

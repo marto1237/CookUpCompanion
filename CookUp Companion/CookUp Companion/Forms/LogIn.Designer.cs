@@ -35,6 +35,8 @@
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.lbForgotPassword = new System.Windows.Forms.Label();
             this.btnLogIn = new System.Windows.Forms.Button();
+            this.revealPassword = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.revealPassword)).BeginInit();
             this.SuspendLayout();
             // 
             // lbLogIn
@@ -90,6 +92,7 @@
             this.tbPassword.ForeColor = System.Drawing.SystemColors.InfoText;
             this.tbPassword.Location = new System.Drawing.Point(834, 537);
             this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(391, 56);
             this.tbPassword.TabIndex = 4;
             // 
@@ -119,12 +122,26 @@
             this.btnLogIn.UseVisualStyleBackColor = false;
             this.btnLogIn.Click += new System.EventHandler(this.btnLogIn_Click);
             // 
+            // revealPassword
+            // 
+            this.revealPassword.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.revealPassword.Image = global::CookUp_Companion.Properties.Resources.eye;
+            this.revealPassword.Location = new System.Drawing.Point(1259, 537);
+            this.revealPassword.Name = "revealPassword";
+            this.revealPassword.Size = new System.Drawing.Size(58, 57);
+            this.revealPassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.revealPassword.TabIndex = 7;
+            this.revealPassword.TabStop = false;
+            this.revealPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.revealPassword_MouseDown);
+            this.revealPassword.MouseUp += new System.Windows.Forms.MouseEventHandler(this.revealPassword_MouseUp);
+            // 
             // LogIn
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1902, 1033);
+            this.Controls.Add(this.revealPassword);
             this.Controls.Add(this.btnLogIn);
             this.Controls.Add(this.lbForgotPassword);
             this.Controls.Add(this.tbPassword);
@@ -135,6 +152,7 @@
             this.Name = "LogIn";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LogIn";
+            ((System.ComponentModel.ISupportInitialize)(this.revealPassword)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +167,6 @@
         private System.Windows.Forms.TextBox tbPassword;
         private System.Windows.Forms.Label lbForgotPassword;
         private System.Windows.Forms.Button btnLogIn;
+        private System.Windows.Forms.PictureBox revealPassword;
     }
 }

@@ -327,6 +327,7 @@ body {
     font-weight: bold;
 }
 /* Add Recipe Design */
+
 .createRecipeHeader{
     display: flex;
 }
@@ -740,7 +741,7 @@ tr:nth-child(even) {
 }
 
 .recipeCreator a {
-    margin-right: auto; /* Push the anchor element to the left */
+    margin-right: auto; 
 }
 
 .recipeCreator i {
@@ -752,10 +753,27 @@ tr:nth-child(even) {
     color: black;
     border: none;
     border-radius: 25px;
-    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    padding: 0.5rem 1rem; 
     display: flex;
     align-items: center;
 }
 .saveButton i {
-    margin-right: 0.5rem; /* Add space between icon and text */
+    margin-right: 0.5rem; 
+}
+
+/* CreateRecipe */
+.PrepatationTime, .CookTime {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+    padding: 10px;
+}
+.PrepatationTime input[type="number"],
+.CookTime input[type="number"] {
+    width: 80px; /* Adjust the width as needed */
+}
+.submitCreateRecipe {
+    display: block;
+    margin: 0 auto;
 }

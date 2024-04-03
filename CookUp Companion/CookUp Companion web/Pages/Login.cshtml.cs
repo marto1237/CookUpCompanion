@@ -14,10 +14,6 @@ namespace CookUp_Companion_web.Pages
     public class LoginModel : PageModel
     {
 
-
-        [BindProperty]
-        public UserDTO userDTO { get; set; }
-
         [BindProperty]
         [EmailAddress(ErrorMessage = "Enter a valid email address!")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required!")]
@@ -57,7 +53,7 @@ namespace CookUp_Companion_web.Pages
         //    return LocalRedirect(returnUrl ?? "/");
         //}
         private readonly IUserManager userManager;
-        public LoginModel (IUserManager _userManager)
+        public LoginModel(IUserManager _userManager)
         {
             userManager = _userManager;
         }
@@ -66,14 +62,14 @@ namespace CookUp_Companion_web.Pages
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                
+
                 Response.Redirect("/Account/YourAccount");
                 return;
             }
 
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -83,41 +79,44 @@ namespace CookUp_Companion_web.Pages
 
             try
             {
-                //if (Email != null && userManager.BannedUser(userManager.GetUserByEmail))
-                //{
-                //    ViewData["Error"] = "You are currently banned!";
-                //    return Page();
-
-                //}
-                //else 
-                //{
-                //    User user = userManager.CheckUser(Email, Password);
-                //}
+                
 
                 User user = userManager.Login(Email, Password);
+                if (user != null)
+                {
+                    if (userManager.BannedUser(user))
+                    {
+                        ViewData["Error"] = "You are currently banned!";
+                        return Page();
+                    }
 
+                    var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+                        new Claim(ClaimTypes.Role, userManager.GetRole(user))
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // Sign in the user with the created identity
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    return RedirectToPage("/Index");
+                }
+                else
+                {
+                    TempData["IsLogInError"] = true;
+                    ViewData["EmailPasswordError"] = "Check your email and password !";
+                    return Page();
+                }
             }
-            catch (Exception ) 
+            catch (Exception)
             {
-
+                // Handle exception
+                ViewData["Error"] = "Oops Something went wrong!";
+                return Page();
             }
-
-
-			claims.Add(new Claim(ClaimTypes.Name, userDTO.Email));
-
-			if (userDTO.Email.ToLower().Contains("employee"))
-            {
-				claims.Add(new Claim(ClaimTypes.Role, "employee"));
-            }
-            else if (userDTO.Email.ToLower().Contains("admin"))
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "admin"));
-            }
-            else { return Page(); }
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            return RedirectToPage("/Index");
         }
+
     }
 }

@@ -19,18 +19,20 @@ namespace InterfaceDAL
         User Login(string username, string password);
         User GetUserByEmail(string email);
 
-        //List<User> GetAll();
-        //User GetUserById(int id);
+        bool IsUserBanned(User bannedUser);
 
-        //bool UpdateUser(User newUser);
-        //void DeleteUser(int id);
-        //void BanUser(User banUser, string reason);
-        //void UnbanUser(User bannedUser);
-        //bool IsUserBanned(User bannedUser);
-        //bool ExistingUsername(string username);
-        //bool ExistingEmail(string email);
-        //List<User> GetSearch(string search);
-        //public string GetBanReason(User banUser);
+        string GetRole(User user);
+        List<User> GetAllUsers();
+        User GetUserById(int id);
+        List<User> GetBySearch(string search);
+        bool UpdateUser(User newUser);
+        bool UpdateUserPassword(User user);
+        bool DeleteUser(int id);
+        int GetIdByUsername(string username);
+        bool BanUser(User banningUser, User bannnedUser, string reason);
+        List<User> GetBannedUsers();
+        bool UnbanUser(int userID);
+        string GetBanReason(int userID);
     }
 
 }

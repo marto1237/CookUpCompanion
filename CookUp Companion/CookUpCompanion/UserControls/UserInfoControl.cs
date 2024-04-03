@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace CookUpCompanion.UserControls
+{
+    public partial class UsersInfoControl : UserControl
+    {
+        public UsersInfoControl()
+        {
+            InitializeComponent();
+            MoreOptionsMenuMenu.Visible = false;
+        }
+
+
+
+        private void MoreOptions_Click_1(object sender, EventArgs e)
+        {
+            if (MoreOptionsMenuMenu.Visible == true)
+            {
+                MoreOptionsMenuMenu.Visible = false;
+            }
+            else
+            {
+                MoreOptionsMenuMenu.Visible = true;
+            }
+        }
+
+        #region Properties
+
+        private byte[] _userProfilePicture;
+        private string _userName;
+        private string _firstName;
+        private string _lastName;
+        private string _email;
+        private string _role;
+
+        private void btnMoreInfo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBanUser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnChangeRole_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        [Category("UserData")]
+        public byte[] UserProfilePicture
+        {
+            get { return _userProfilePicture; }
+            set
+            {
+                _userProfilePicture = value;
+                using (MemoryStream ms = new MemoryStream(value))
+                {
+                    ProfiliePicture.Image = Image.FromStream(ms);
+                }
+            }
+        }
+
+        [Category("UserData")]
+        public string UserName
+        {
+            get { return _userName; }
+            set { _userName = value; lbUsername.Text = value; }
+        }
+
+        [Category("UserData")]
+
+        public string FirstName
+        {
+            get { return _firstName; }
+            set { _firstName = value; lbFirstname.Text = value; }
+        }
+
+        [Category("UserData")]
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; lbLastName.Text = value; }
+        }
+
+        [Category("UserData")]
+        public string Email
+        {
+            get { return _email; }
+            set { _email = value; lbEmail.Text = value; }
+        }
+
+        [Category("UserData")]
+        public string Role
+        {
+            get { return _role; }
+            set { _role = value; lbRole.Text = value; }
+        }
+
+
+        #endregion
+    }
+}

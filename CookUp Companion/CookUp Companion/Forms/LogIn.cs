@@ -7,18 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using InterfacesLL;
 
 namespace CookUp_Companion.Forms
 {
     public partial class LogIn : Form
     {
+        private readonly IUserManager userManager;
         public LogIn()
         {
             InitializeComponent();
+            this.userManager = userManager;
         }
 
         private void btnLogIn_Click(object sender, EventArgs e)
         {
+            string username;
             //check the user credential and the role load the mainform
             Form mainForm = new MainForm();
             mainForm.Show();
@@ -36,6 +40,14 @@ namespace CookUp_Companion.Forms
             forgotPassword.Show();
         }
 
-        
+        private void revealPassword_MouseDown(object sender, MouseEventArgs e)
+        {
+            tbPassword.PasswordChar = '\0';
+        }
+
+        private void revealPassword_MouseUp(object sender, MouseEventArgs e)
+        {
+            tbPassword.PasswordChar = '●';
+        }
     }
 }

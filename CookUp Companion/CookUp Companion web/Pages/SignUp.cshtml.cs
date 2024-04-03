@@ -59,16 +59,7 @@ namespace CookUp_Companion_web.Pages
                 return Page();
             }
 
-            //if (Username != null && userManager.UsernameExists(Username) == true)
-            //{
-            //    ViewData["Error"] = "The username \"" + Username + "\" is already in use by another user!";
-            //    return Page();
-            //}
-            //else if (Email != null && userManager.EmailExists(Email) == true)
-            //{
-            //    ViewData["Error"] = "The email \"" + Email + "\" is already in use by another user!";
-            //    return Page();
-            //}
+            
             else if (Password != ConfirmPassword)
             {
                 ViewData["Error"] = "Passwords doesn't match";
@@ -88,31 +79,30 @@ namespace CookUp_Companion_web.Pages
                                         1, 
                                         null);
 
-                newUser.SetPassword(Password);
-               
-                // Check if the email is already in use
-                //if (userManager.CheckExistingEmail(newUser.Email))
-                //{
-                //    ViewData["EmailError"] = "The email is already in use by another user. Please choose a different email.";
-                //    return Page();
-                //}
+                //Check if the email and the username are already in use
+                if (userManager.CheckExistingEmail(newUser.Email))
+                {
+                    ViewData["EmailError"] = "The email is already in use by another user. Please choose a different email.";
+                    return Page();
+                }
 
-                //if (userManager.CheckExistingUsername(newUser.Username))
-                //{
-                //    ViewData["UsernameError"] = "The username is already in use by another user. Please choose a different username.";
-                //    return Page();
-                //}
-                //else
-                //{
-                    
-                        userManager.CreateUser(newUser);
-                        return RedirectToPage("/Index");
-                    
-                //}
+                if (userManager.CheckExistingUsername(newUser.Username))
+                {
+                    ViewData["UsernameError"] = "The username is already in use by another user. Please choose a different username.";
+                    return Page();
+                }
+                else
+                {
 
-               
-                
-                
+                    userManager.CreateUser(newUser);
+
+                    return RedirectToPage("/Index");
+
+                }
+
+
+
+
             }
            
             

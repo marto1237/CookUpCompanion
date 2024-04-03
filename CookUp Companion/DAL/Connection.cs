@@ -12,7 +12,7 @@ namespace DAL
 	{
 		public string ConnectionString = "Server=mssqlstud.fhict.local;Database=dbi525452_cookup;User Id = dbi525452_cookup; Password=cookup;";
 
-		public SqlConnection connection;
+		public static SqlConnection connection;
 		protected Connection() 
 		{
 			connection = new SqlConnection(ConnectionString);

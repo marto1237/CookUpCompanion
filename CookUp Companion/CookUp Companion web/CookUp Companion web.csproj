@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\CookUp Companion BusinessLogic.csproj" />
-    <ProjectReference Include="..\CookUp Companion\CookUp Companion.csproj" />
     <ProjectReference Include="..\DAL\DAL.csproj" />
     <ProjectReference Include="..\InterfaceDAL\InterfaceDAL.csproj" />
     <ProjectReference Include="..\InterfacesLL\InterfacesLL.csproj" />

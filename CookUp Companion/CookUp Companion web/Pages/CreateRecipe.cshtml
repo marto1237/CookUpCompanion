@@ -1,6 +1,7 @@
 ﻿@page
 @model CookUp_Companion_web.Pages.CreateRecipeModel
 @{
+    ViewData["Title"] = "Add new recipe";
 }
 
 <section class="vh-100">
@@ -11,13 +12,21 @@
                     <div class="card-body p-md-5">
                         <div class="row justify-content-center">
                             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                                <form method="post" class="mx-1 mx-md-4">
+
+                                @if (TempData["IsSuccess"] != null && (bool)TempData["IsSuccess"])
+                                {
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Congratulations</strong> You have added new recipe successfully. <br />
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                }
+                                <form method="post" enctype="multipart/form-data" class="mx-1 mx-md-4">
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
 
                                             <label class="form-label" for="recipeTitle"><h2>Title</h2></label>
-                                            <input type="text" asp-for="RecipeName" id="recipeTitle" class="form-control" placeholder="Give your recipe name" />
+                                            <input asp-for="RecipeName" id="recipeTitle" class="form-control" placeholder="Give your recipe name" />
                                             <span asp-validation-for="RecipeName" class="text-danger"></span>
 
                                         </div>
@@ -30,16 +39,13 @@
                                     <div class="d-flex justify-content-center">
                                         <div class="btn btn-primary btn-rounded">
                                             <label class="form-label text-white m-1" for="uploadRecipePicture">Choose file</label>
-                                            <input type="file" asp-for="RecipePicture" class="form-control d-none" id="uploadRecipePicture" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                                            <input asp-for="RecipePicture" class="form-control d-none" id="uploadRecipePicture" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
                                             <span asp-validation-for="RecipePicture" class="text-danger"></span>
 
                                             
                                         </div>
                                     </div>
-                                    <label for="avatar">Choose a profile picture:</label>
-
-                                    <input type="file" asp-for="RecipePicture" id="avatar" name="avatar" accept="image/png, image/jpeg" />
-                                    <span asp-validation-for="RecipePicture" class="text-danger"></span>
+                                    
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
@@ -103,9 +109,11 @@
                                             <label class="form-label" for="recipePrepTime"><h2>Prep time</h2></label>
                                             <p>How long does it take to prepare this recipe?</p>
                                             <div class="PrepatationTime">
-                                                <input type="number" asp-for="PrepHours" id="recipePrepTimeHours" min="0" class="form-control" placeholder="Hours 0" />
+                                                <p>Hours</p>
+                                                <input type="number" asp-for="PrepHours" id="recipePrepTimeHours" min="0" max="9" class="form-control" placeholder="Hours 0" />
                                                 <span asp-validation-for="PrepHours" class="text-danger"></span>
-                                                <input type="number" asp-for="PrepMinutes" id="recipePrepTimeMin" min="0" class="form-control" placeholder="Minutes 0" />
+                                                <p>Minutes</p>
+                                                <input type="number" asp-for="PrepMinutes" id="recipePrepTimeMin" min="0" max="59" class="form-control" placeholder="Minutes 0" />
                                                 <span asp-validation-for="PrepMinutes" class="text-danger"></span>
                                             </div>
 
@@ -118,16 +126,18 @@
                                             <label class="form-label" for="recipeCookTime"><h2>Cook time</h2></label>
                                             <p>How long does it take to cook this recipe?</p>
                                             <div class="CookTime">
-                                                <input type="number" asp-for="CookHours" id="recipeCookTimeHours" min="0" class="form-control" placeholder="Hours 0" />
+                                                <p>Hours</p>
+                                                <input type="number" asp-for="CookHours" id="recipeCookTimeHours" min="0" max="9" class="form-control" placeholder="Hours 0" />
                                                 <span asp-validation-for="CookHours" class="text-danger"></span>
-                                                <input type="number" asp-for="CookMinutes" id="recipeCookTimeMin" min="0" class="form-control" placeholder="Minutes 0" />
+                                                <p>Minutes</p>
+                                                <input type="number" asp-for="CookMinutes" id="recipeCookTimeMin" min="0" max="59" class="form-control" placeholder="Minutes 0" />
                                                 <span asp-validation-for="CookMinutes" class="text-danger"></span>
                                             </div>
 
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary btn-lg"
+                                    <button type="submit" class="btn btn-primary btn-lg submitCreateRecipe text-center"
                                             style="padding-left: 2.5rem; padding-right: 2.5rem;">
                                         Create recipe
                                     </button>
