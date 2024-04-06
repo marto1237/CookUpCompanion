@@ -3,6 +3,7 @@ using InterfacesLL;
 using Logic;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace DAL
 							   $"@passwordHash, @passwordSalt, @role, @profilePicture)";
 
 				// Creating Command string to combine the query and the connection String
-				SqlCommand command = new SqlCommand(query, new SqlConnection(Server_Connection));
+				SqlCommand command = new SqlCommand(query, connection);
 
 				try
 				{
@@ -116,7 +117,109 @@ namespace DAL
 			return user;
 		}
 
-		public User Login(string email, string password)
+        public List<User> GetUsersBySimilarUsername(string username)
+        {
+            List<User> users = new List<User>();
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                //set up the query 
+
+                string query = $"SELECT DISTINCT * FROM {tableName} WHERE username LIKE '%' + @username + '%'";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+
+                try
+                {
+                    //Give the searche email parameter
+                    command.Parameters.AddWithValue("@username", username);
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                       User user = new User(
+                                (byte[])reader["profilePicture"],
+                                (string)reader["username"],
+                                (string)reader["email"],
+                                (string)reader["password"],
+                                (string)reader["firstName"],
+                                (string)reader["lastName"],
+                                (int)reader["roleID"],
+                                ////NEED TO FIX THAT WHEN USER LOGIN
+                                null
+
+
+                        );
+                        user.GetSaltForDb(reader["passwordSalt"].ToString());
+                        users.Add(user);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+
+                }
+            }
+
+            return users;
+        }
+        public List<User> GetUsersBySimilarEmail(string email)
+        {
+            List<User> users = new List<User>();
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                //set up the query 
+
+                string query = $"SELECT DISTINCT * FROM {tableName} WHERE email LIKE '%' + @email + '%'";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+
+                try
+                {
+                    //Give the searche email parameter
+                    command.Parameters.AddWithValue("@email", email);
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        User user = new User(
+                                 (byte[])reader["profilePicture"],
+                                 (string)reader["username"],
+                                 (string)reader["email"],
+                                 (string)reader["password"],
+                                 (string)reader["firstName"],
+                                 (string)reader["lastName"],
+                                 (int)reader["roleID"],
+                                 ////NEED TO FIX THAT WHEN USER LOGIN
+                                 null
+
+
+                         );
+                        user.GetSaltForDb(reader["passwordSalt"].ToString());
+                        users.Add(user);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+
+                }
+            }
+            return users ;
+        }
+
+        public User Login(string email, string password)
 		{
             User user = null;
 
@@ -543,24 +646,24 @@ namespace DAL
             }
             return userId;
         }
-        public bool BanUser(User banningUser , User bannedUser, string reason)
+        public bool BanUser(User banningUser , User bannedUser, string reason, int banLevel)
 		{
 			using(SqlConnection connection = new SqlConnection(Server_Connection))
 			{
 				connection.Open();
 
 				string query = $"INSERT INTO BannedPeople " +
-                               $"(userID, reason, banLevel, email, bannedOn, bannedBy) " +
+                               $"(userID, reason, banLevel, bannedOn, bannedBy) " +
                                $"VALUES (@userID, @reason, @banLevel, @bannedOn, @bannedBy)";
 
-				SqlCommand command = connection.CreateCommand();
+				SqlCommand command = new SqlCommand(query, connection);
 
-				try
+                try
 				{
                     // Set parameters for banning user
                     command.Parameters.AddWithValue("@userID", GetIdByUsername(bannedUser.Username)); 
                     command.Parameters.AddWithValue("@reason", reason);
-                    command.Parameters.AddWithValue("@banLevel", 1); 
+                    command.Parameters.AddWithValue("@banLevel", banLevel); 
                     command.Parameters.AddWithValue("@bannedOn", DateTime.Now); 
                     command.Parameters.AddWithValue("@bannedBy", GetIdByUsername(banningUser.Username));
 
@@ -592,8 +695,11 @@ namespace DAL
             {
                 connection.Open();
 
-                string query = $"SELECT userID FROM BannedPeople " +
-                               $"INNER JOIN Users ON BannedPeople.userID = Users.userID";
+                string query = $"SELECT BannedPeople.userID, Users.profilePicture, Users.username, Users.email, Users.password, " +
+                       $"Users.firstName, Users.lastName, Users.roleID, Users.passwordSalt " +
+                       $"FROM BannedPeople " +
+                       $"INNER JOIN Users ON BannedPeople.userID = Users.userID";
+
 
                 SqlCommand command = new SqlCommand(query, connection);
 
@@ -721,6 +827,72 @@ namespace DAL
                     return false;
                 }
             }
+        }
+
+        public List<string> AllRoles()
+        {
+            List<string> roles = new List<string>();
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                string query = "SELECT RoleName FROM Roles";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            roles.Add(reader.GetString(0));
+                        }
+                    }
+                    
+
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                   
+                }
+            }
+            return roles;
+        }
+
+        public int GetRoleIdByRoleName(string roleName)
+        {
+            int roleID = -1;
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                string query = "SELECT roleId FROM Roles WHERE roleName = @roleName";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@roleName", roleName);
+
+                try
+                {
+                    // Execute the query and retrieve the role ID
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        roleID = Convert.ToInt32(result);
+                    }
+
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    
+                }
+            }
+            return roleID ;
         }
     }
 }

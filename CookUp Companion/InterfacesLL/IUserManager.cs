@@ -10,6 +10,7 @@ namespace InterfacesLL
         User Login(string email, string password);
         User GetUserByEmail(string email);
         string GetRole(User user);
+        User CurrentUser();
         bool BannedUser(User bannedUser);
         List<User> GetAllUsers();
         User GetUserById(int id);
@@ -18,12 +19,14 @@ namespace InterfacesLL
         bool UpdateUserPassword(User user, string password);
         bool DeleteUser(int id);
         int GetIdByUsername(string username);
-
         List<User> GetBannedUsers();
-
-        bool BanningUser(User banningUser, User bannedUser, string reason);
+        string GetBanReason(int userID);
+        bool BanningUser(User banningUser, User bannedUser, string reason, int banLevel);
         bool UnbanningUser(int userId);
-        string GetReason(int userID);
+        List<User> GetUsersBySimilarEmail(string email);
+        List<User> GetUsersBySimilarUsername(string username);
+        List<string> AllRoles();
+        int GetRoleIdByRoleName(string roleName);
 
     }
 }

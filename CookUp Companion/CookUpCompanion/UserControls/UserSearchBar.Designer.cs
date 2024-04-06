@@ -68,10 +68,12 @@
             pSearchIcon.SizeMode = PictureBoxSizeMode.Zoom;
             pSearchIcon.TabIndex = 15;
             pSearchIcon.TabStop = false;
+            pSearchIcon.Click += pSearchIcon_Click;
             // 
             // cbTypeOfUser
             // 
             cbTypeOfUser.Anchor = AnchorStyles.None;
+            cbTypeOfUser.DropDownStyle = ComboBoxStyle.DropDownList;
             cbTypeOfUser.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cbTypeOfUser.FormattingEnabled = true;
             cbTypeOfUser.Items.AddRange(new object[] { "All Users", "Banned Users" });

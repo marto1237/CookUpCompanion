@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BusinessLogic;
+using CookUpCompanion.Forms;
+using InterfacesLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +15,13 @@ namespace CookUpCompanion.UserControls
 {
     public partial class UsersInfoControl : UserControl
     {
-        public UsersInfoControl()
+        private readonly IUserManager userManager; 
+
+        public UsersInfoControl(IUserManager userManager)
         {
             InitializeComponent();
             MoreOptionsMenuMenu.Visible = false;
+            this.userManager = userManager; 
         }
 
 
@@ -43,17 +49,20 @@ namespace CookUpCompanion.UserControls
 
         private void btnMoreInfo_Click(object sender, EventArgs e)
         {
-
+            UserMoreInfo userMoreInfo = new UserMoreInfo(userManager, _userProfilePicture, _userName, _firstName, _lastName , _email, _role);
+            userMoreInfo.Show();
         }
 
         private void btnBanUser_Click(object sender, EventArgs e)
         {
-
+            BanUser banUser  = new BanUser(userManager,_email, _firstName, _lastName);
+            banUser.Show();
         }
 
         private void btnChangeRole_Click(object sender, EventArgs e)
         {
-
+            ChangeRole changeRole = new ChangeRole(userManager, _userName, _email);
+            changeRole.Show();
         }
 
         [Category("UserData")]

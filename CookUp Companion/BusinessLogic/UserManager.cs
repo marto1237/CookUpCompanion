@@ -13,6 +13,7 @@ namespace BusinessLogic
 {
     public class UserManager : IUserManager
     {
+        private  User currentUser;
 
         IUserDALManager controller;
         public UserManager(IUserDALManager controller)
@@ -26,13 +27,19 @@ namespace BusinessLogic
             User user = controller.GetUserByEmail(email);
             if (user != null && VerifyPassword(password, user.Password, user.PasswordSalt, 10000))
             {
+                currentUser = user;
                 return user;
             }
 
             return null;
            
         }
+        public User CurrentUser()
+        {
+            return currentUser;
+        }
         
+
         public bool CreateUser(User user)
         {
             // Generate salt and hash password
@@ -116,15 +123,23 @@ namespace BusinessLogic
 
         }
 
-        public bool DeleteUser(int id) { return controller.DeleteUser(id); return true;}
+        public bool DeleteUser(int id) { return controller.DeleteUser(id);}
 
         public int GetIdByUsername(string username) { return controller.GetIdByUsername(username); }
 
         public List<User> GetBannedUsers() { return controller.GetBannedUsers(); }
-        public bool BanningUser(User banningUser, User bannedUser, string reason) { return controller.BanUser(banningUser , bannedUser, reason); }
+        public bool BanningUser(User banningUser, User bannedUser, string reason, int banLevel) { return controller.BanUser(banningUser , bannedUser, reason, banLevel); }
 
         public bool UnbanningUser(int userId) {  return controller.UnbanUser(userId); }
 
-        public string GetReason(int userID) { return controller.GetBanReason(userID); }
+        public string GetBanReason(int userID) { return controller.GetBanReason(userID); }
+
+        public List<User> GetUsersBySimilarUsername(string username) {  return controller.GetUsersBySimilarUsername(username); }
+
+        public List<User> GetUsersBySimilarEmail(string email) { return controller.GetUsersBySimilarEmail(email); }
+
+        public List<string> AllRoles() {  return controller.AllRoles(); }
+
+        public int GetRoleIdByRoleName(string roleName) { return controller.GetRoleIdByRoleName(roleName); }
     }
 }

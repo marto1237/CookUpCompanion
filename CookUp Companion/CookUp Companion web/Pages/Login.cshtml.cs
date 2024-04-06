@@ -23,6 +23,8 @@ namespace CookUp_Companion_web.Pages
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required!")]
         public string? Password { get; set; }
 
+        public string AppealMessage { get; set; }
+
         List<Claim> claims = new List<Claim>();
         //public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         //{
@@ -86,9 +88,16 @@ namespace CookUp_Companion_web.Pages
                 {
                     if (userManager.BannedUser(user))
                     {
-                        ViewData["Error"] = "You are currently banned!";
+                        int userID = userManager.GetIdByUsername(user.Username);
+                        string reason = userManager.GetBanReason(userID);
+                        TempData["IsBanned"] = true;
+                        TempData["BanReason"] = reason;
+
+
                         return Page();
                     }
+                    // Get the appeal message from the form submission
+                    string appealMessage = AppealMessage;
 
                     var claims = new List<Claim>()
                     {
@@ -98,6 +107,25 @@ namespace CookUp_Companion_web.Pages
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                    // Assuming you have a method to store the appeal in the database
+                    bool appealSent = true; //userManager.SendAppeal(userIdentity.Name, AppealMessage);
+
+                    if (appealSent)
+                    {
+                        // Show a success alert
+                        TempData["AppealSent"] = true;
+                    }
+                    else
+                    {
+                        // Show an error alert
+                        TempData["AppealSent"] = false;
+                    }
+
+
+                    // Get the authenticated user's identity
+                    var userIdentity = HttpContext.User.Identity;
+
+                    
                     // Sign in the user with the created identity
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 

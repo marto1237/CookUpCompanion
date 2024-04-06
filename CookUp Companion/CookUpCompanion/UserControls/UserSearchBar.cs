@@ -15,6 +15,7 @@ namespace CookUpCompanion.UserControls
         // Make the ComboBox public
         public ComboBox CbTypeOfUser => cbTypeOfUser;
         public event EventHandler SelectedIndexChanged;
+        public event EventHandler<string> SearchButtonClicked;
 
         public UserSearchBar()
         {
@@ -49,6 +50,12 @@ namespace CookUpCompanion.UserControls
         public void UpdateUserCount(string newCount)
         {
             lbNumUser.Text = newCount;
+        }
+
+        private void pSearchIcon_Click(object sender, EventArgs e)
+        {
+            string searchUser = tbSearchUser.Text;
+            SearchButtonClicked?.Invoke(this, searchUser);
         }
     }
 }
