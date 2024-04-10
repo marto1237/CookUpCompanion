@@ -1,0 +1,28 @@
+﻿@page
+@model CookUp_Companion_web.Pages.IngredientInfoModel
+@{
+}
+<h1>@Html.ValidationMessage("error")</h1>
+@if (Model.ingredient is not null)
+{
+	<div id="ingredient-info" data-ingredient='@Json.Serialize(Model.ingredient)'></div>
+
+
+
+	<li>
+		@Model.ingredient.IngredientId
+		<img src="@Model.ingredient.GetBase64Image()">
+		@Model.ingredient.IngredientName
+		<select >
+			@foreach (var unit in Model.ingredient.MeasurementUnits)
+			{
+				// Trim and replace characters to remove unwanted characters
+				var cleanedUnit = unit.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
+				<option value="@cleanedUnit">@cleanedUnit</option>
+			}
+		</select>
+		
+	</li>
+
+}
+

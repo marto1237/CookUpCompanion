@@ -141,10 +141,121 @@ document.querySelector('.add-ingredient').addEventListener('click', function (ev
     const ingredientInput = document.createElement('div');
     const index = document.querySelectorAll('.ingredient-input').length + 1; // Get the current number of ingredients
     ingredientInput.classList.add('ingredient-input');
-    ingredientInput.innerHTML = `<input type="text" class="form-control ingredient" placeholder="Add one or paste multiple items" data-val="true" data-val-required="The Ingredients field is required." name="createRecipe.Ingredients[${index}]" value="" />
-    <span class="text-danger field-validation-valid" data-valmsg-for="createRecipe.Ingredients" data-valmsg-replace="true"></span>
-    <button class="btn btn-danger remove-ingredient">Remove</button>`;
+    ingredientInput.innerHTML = `<img class="ingredient-image" style="display: none;" />
+                                     <input type="hidden" asp-for="Ingredients[i].IngredientId" class="ingredientID" />
+                                    <input type="text" asp-for="Ingredients[i].IngredientName" class="form-control ingredient" placeholder="Add one or paste multiple items" onblur="loadIngredientDetails(this)" />
+                                                        <select class="form-select possible-units" style="display: none;"></select>
+                                                        <input type="number" asp-for="Ingredients[i].Quantity" class="form-control ingredient-quantity" min="0" max="1000" placeholder="Quantity" />
+                                                        <span asp-validation-for="Ingredients[i].IngredientName" class="text-danger"></span>
+                                                        <button class="btn btn-danger remove-ingredient">Remove</button>`;
     container.appendChild(ingredientInput);
+});
+
+// Function to load ingredient details when the input field changes
+async function loadIngredientDetails(inputField) {
+    let ingredientName = inputField.value.trim().toLowerCase(); // Convert to lowercase
+    if (!ingredientName) return;
+
+    // Fetch ingredient details asynchronously
+    const response = await fetch(`/IngredientInfo?name=${ingredientName}`);
+    if (response.ok) {
+        const responseData = await response.text();
+        // Get the HTML content of the response
+        const parser = new DOMParser();
+        const responseDoc = parser.parseFromString(responseData, 'text/html');
+        // Get the div element
+        var ingredientInfoDiv = responseDoc.getElementById('ingredient-info');
+
+        // Parse the JSON string stored in the data-ingredient attribute
+        var ingredientData = JSON.parse(ingredientInfoDiv.dataset.ingredient);
+        console.log(ingredientData)
+        if (ingredientData) {
+
+            // Get the ingredient ID from the response
+            const ingredientId = ingredientData.ingredientId;
+            console.log(ingredientId)
+            // Assign the retrieved ingredient ID to the ingredient entity
+            const ingredientIdInput = inputField.parentElement.querySelector('.ingredientID');
+            ingredientIdInput.value = ingredientId;
+            // Update the ingredient image
+            const imageElement = inputField.parentElement.querySelector('.ingredient-image');
+            imageElement.src = 'data:image/jpeg;base64,' + ingredientData.ingredientPicture;
+            imageElement.style.display = 'block';
+
+
+            // Fill the combo box with units
+            const unitsSelect = inputField.parentElement.querySelector('.possible-units');
+            unitsSelect.innerHTML = ''; // Clear previous options
+            ingredientData.measurementUnits.forEach(unit => {
+                // Remove the square brackets and double quotes from the unit
+                unit = unit.replace(/[\[\]"]/g, '');
+                unitsSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+            unitsSelect.style.display = 'block';
+
+        }
+        else {
+            const imageElement = inputField.parentElement.querySelector('.ingredient-image');
+            imageElement.src = "https://cdn1.iconfinder.com/data/icons/ui-beast-9/32/ui-35-512.png";
+            imageElement.style.display = 'block';
+            
+        }
+    }
+}
+
+// Function to gather ingredient data and submit it to the server
+async function submitIngredientList() {
+    const ingredientInputs = document.querySelectorAll('.ingredient-input');
+    const ingredients = [];
+
+    ingredientInputs.forEach(input => {
+        const ingredientName = input.querySelector('.ingredient').value;
+        const quantity = parseFloat(input.querySelector('.ingredient-quantity').value);
+        const selectedUnit = input.querySelector('.possible-units').value;
+        const ingredientId = parseInt(input.querySelector('.ingredientID').value);
+        const ingredientPicture = input.querySelector('.ingredient-image').src;
+
+        // Convert the ingredientPicture to a base64 string
+        const base64Image = ingredientPicture.split(',')[1];
+
+        const ingredient = {
+            ingredientPicture: base64Image,
+            ingredientId: ingredientId,
+            ingredientName: ingredientName,
+            measurementUnits: [], // Initialize an empty array for measurement units
+            quantity: quantity
+        };
+
+        // Get all possible units for this ingredient
+        const possibleUnits = input.querySelector('.possible-units').options;
+        for (let i = 0; i < possibleUnits.length; i++) {
+            ingredient.measurementUnits.push(possibleUnits[i].value);
+        }
+
+        ingredients.push(ingredient);
+    });
+
+    // Send ingredient data to the server using AJAX
+    const response = await fetch('/CreateRecipe', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ingredients)
+    });
+
+    if (response.ok) {
+        // Handle successful response
+    } else {
+        // Handle error
+    }
+}
+
+// Attach event listener to dynamically added input fields
+document.addEventListener('focusout', function (event) {
+    if (event.target.classList.contains('ingredient')) {
+        loadIngredientDetails(event.target);
+    }
 });
 
 document.addEventListener('click', function (event) {
@@ -153,19 +264,6 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
-// For Instructions to be added when creating recipe
-document.querySelector('.add-instruction').addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent form submission
-    const container = document.querySelector('.instructions-container');
-    const instructionsInput = document.createElement('div');
-    const index = document.querySelectorAll('.instruction-input').length + 1; // Get the current number of instructions
-    instructionsInput.classList.add('instruction-input');
-    instructionsInput.innerHTML = `<textarea class="form-control instruction" placeholder="Paste one or multiple steps" data-val="true" data-val-required="The Instructions field is required." name="createRecipe.Instructions[${index}]"></textarea>
-    <span class="text-danger field-validation-valid" data-valmsg-for="createRecipe.Instructions" data-valmsg-replace="true"></span>
-    <button class="btn btn-danger remove-instruction">Remove</button>`;
-    container.appendChild(instructionsInput);
-});
 
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('remove-instruction')) {

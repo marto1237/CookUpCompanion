@@ -41,7 +41,7 @@ namespace CookUp_Companion_web.Pages
         [BindProperty]
         [DataType(DataType.Password)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required!")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match.")]
         public string? ConfirmPassword { get; set; }
 
 
@@ -79,12 +79,7 @@ namespace CookUp_Companion_web.Pages
                                         1, 
                                         null);
 
-                //Check if the email and the username are already in use
-                if (userManager.CheckExistingEmail(newUser.Email))
-                {
-                    ViewData["EmailError"] = "The email is already in use by another user. Please choose a different email.";
-                    return Page();
-                }
+                
 
                 if (userManager.CheckExistingUsername(newUser.Username))
                 {
@@ -93,7 +88,7 @@ namespace CookUp_Companion_web.Pages
                 }
                 else
                 {
-
+                    //check the boolean
                     userManager.CreateUser(newUser);
 
                     return RedirectToPage("/Index");

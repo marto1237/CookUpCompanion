@@ -1,7 +1,10 @@
+using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using Newtonsoft.Json; // Add this namespace for JSON deserialization
 
 namespace CookUp_Companion_web.Pages
 {
@@ -24,7 +27,7 @@ namespace CookUp_Companion_web.Pages
 
         [BindProperty]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Ingredient name is required!")]
-        public List<Ingredient> Ingredients { get;  set; }
+        public List<Ingredient> Ingredients { get;  set; } = new List<Ingredient>();
 
         [BindProperty]
         [MinLength(10, ErrorMessage = "The instruction should be atleast 10 symbols!")]
@@ -52,12 +55,31 @@ namespace CookUp_Companion_web.Pages
         [Required(ErrorMessage = "Cooking minutes time is required.")]
         public int CookMinutes { get; set; }
 
+        // Add a class to represent the DTO for ingredient data
+        public class IngredientDto
+        {
+            public string IngredientPicture { get; set; }
+            public int IngredientId { get; set; }
+            public string IngredientName { get; set; }
+            public List<string> MeasurementUnits { get; set; }
+            public float Quantity { get; set; }
+        }
 
-        
+        public User _user { get; private set; }
+
+        private readonly IRecipeManager recipeManager;
+        private readonly IUserManager userManager;
+
+        public CreateRecipeModel(IRecipeManager recipeManager, IUserManager userManager)
+        {
+            this.recipeManager = recipeManager;
+            this.userManager = userManager;
+        }
         
 
         public void OnGet()
         {
+
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -67,14 +89,55 @@ namespace CookUp_Companion_web.Pages
                 return Page();
             }
 
+            // If ModelState is valid, process the form data
+            // Convert the uploaded image to a byte array
+            byte[] pictureBytes = null;
+            if (RecipePicture != null)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await RecipePicture.CopyToAsync(ms);
+                    pictureBytes = ms.ToArray();
+                }
+            }
 
+            //convert the Recipe PrepTime and CookingTime into minutes
+            if(PrepHours != 0)
+            {
+                PrepMinutes += PrepMinutes * 60;
+            }
+
+            if (CookHours != 0)
+            {
+                CookMinutes += CookHours * 60;
+            }
 
             // If ModelState is valid, process the form data
-            // Save the recipe, handle the uploaded image, etc.
+
+            
+
+            // Retrieve the authenticated user's claims
+            var userClaims = HttpContext.User.Claims;
+
+            //get the user id fro mthe claims
+
+            // Extract user data from claims
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            var userNameClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+            var roleClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+            if (userEmailClaim != null)
+            {
+                _user = userManager.GetUserByEmail(userEmailClaim.Value);
+            }
 
             TempData["IsSuccess"] = true;
+            //Recipe recipe = new Recipe(pictureBytes, current user, RecipeDescription, Ingredients, Instructions, CookMinutes, PrepMinutes);
             // Redirect to a success page or perform any other action
             return RedirectToPage("/CreateRecipe");
         }
     }
+
 }
+
+

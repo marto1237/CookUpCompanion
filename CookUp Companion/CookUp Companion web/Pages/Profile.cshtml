@@ -7,11 +7,11 @@
 <div class="profile">
     <div class="profile-bar">
 
-        <img class="rounded-circle" alt="avatar1" src="https://mdbcdn.b-cdn.net/img/new/avatars/9.webp" />
+        <img class="rounded-circle" alt="avatar1" src=data:image/jpeg;base64,@Convert.ToBase64String(Model.UserProfilePicture) />
 
         <div id="profile-label">
-            <h1>First name</h1>
-            <h1>Last Name</h1>
+            <h1>@Model.FirstName</h1>
+            <h1>@Model.LastName</h1>
             <div id="editProfile">
                 <button id="editProfileButton" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profileModal"> Edit Profile</button>
             </div>
@@ -29,23 +29,31 @@
                 <div class="modal-body">
 
                     <div class="modal-element">
-                        <img class="rounded-circle profilePic" alt="avatar1" src="https://mdbcdn.b-cdn.net/img/new/avatars/9.webp" />
+                        
                     </div>
                     <div class="image-container">
-                        <!-- Button to change the picture -->
-
-                        <button id="changePictureButton" type="button" class="btn btn-light" onclick="changePicture()">Change Picture</button>
+                        <div class="d-flex justify-content-center mb-4">
+                            <img id="selectedAvatar" src=data:image/jpeg;base64,@Convert.ToBase64String(Model.UserProfilePicture)
+                                             class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder" />
+                                    </div>
+                        <div class="d-flex justify-content-center">
+                            <label for="uploadProfilePicture" class="btn btn-primary btn-rounded">
+                                Choose file
+                            </label>
+                            <input asp-for="UserProfilePicture" class="form-control d-none" id="uploadProfilePicture" type="file" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                            <span asp-validation-for="UserProfilePicture" class="text-danger"></span>
+                        </div>
 
                     </div>
 
                     <div class="modal-element">
-                        <input type="text" id="FName" name="F_Name" placeholder="First Name" value="FirstName" />
+                        <input type="text" id="FName" name="F_Name" placeholder="First Name" value=@Model.FirstName />
                     </div>
                     <div class="modal-element">
-                        <input type="text" id="SName" name="S_Name" placeholder="Last Name" value="LastName" />
+                        <input type="text" id="SName" name="S_Name" placeholder="Last Name" value=@Model.LastName />
                     </div>
                     <div class="modal-element">
-                        <input type="text" id="Username" name="Username" placeholder="Username" value="Username" />
+                        <input type="text" id="Username" name="Username" placeholder="Username" value=@Model.Username />
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">

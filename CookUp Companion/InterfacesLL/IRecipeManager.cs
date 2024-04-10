@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Logic;
 
 namespace InterfacesLL
 {
-    internal class IRecipeManager
+    public interface IRecipeManager
     {
-    }
+        List<Ingredient> GetAllIngredients(int page, int pageSize);
+        Ingredient GetInputIngredient(string name);
+        bool CreateRecipe(Recipe recipe);
+        int GetAllIngredientsPageNum(int pageSize);
+        Ingredient GetIngredientByName(string ingredientName);
+
+	}
 }

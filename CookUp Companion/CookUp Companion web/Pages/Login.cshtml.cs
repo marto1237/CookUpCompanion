@@ -55,9 +55,9 @@ namespace CookUp_Companion_web.Pages
         //    return LocalRedirect(returnUrl ?? "/");
         //}
         private readonly IUserManager userManager;
-        public LoginModel(IUserManager _userManager)
+        public LoginModel(IUserManager userManager)
         {
-            userManager = _userManager;
+            this.userManager = userManager;
         }
 
         public void OnGet()
@@ -65,7 +65,7 @@ namespace CookUp_Companion_web.Pages
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
 
-                Response.Redirect("/Account/YourAccount");
+                Response.Redirect("/Profile");
                 return;
             }
 
@@ -102,6 +102,7 @@ namespace CookUp_Companion_web.Pages
                     var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+                        new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, userManager.GetRole(user))
                     };
 

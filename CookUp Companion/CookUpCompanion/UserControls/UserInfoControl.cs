@@ -15,8 +15,7 @@ namespace CookUpCompanion.UserControls
 {
     public partial class UsersInfoControl : UserControl
     {
-        private readonly IUserManager userManager; 
-
+        private readonly IUserManager userManager;
         public UsersInfoControl(IUserManager userManager)
         {
             InitializeComponent();
@@ -38,6 +37,11 @@ namespace CookUpCompanion.UserControls
             }
         }
 
+        public void UpdateBanButtonText(bool isBanned)
+        {
+            btnBanUser.Text = isBanned ? "Unban User" : "Ban User";
+        }
+
         #region Properties
 
         private byte[] _userProfilePicture;
@@ -55,8 +59,19 @@ namespace CookUpCompanion.UserControls
 
         private void btnBanUser_Click(object sender, EventArgs e)
         {
-            BanUser banUser  = new BanUser(userManager,_email, _firstName, _lastName);
-            banUser.Show();
+            // Check if the user is banned
+            if (userManager.BannedUser(userManager.GetUserByEmail(_email)))
+            {
+                // If the user is banned, show the UnbanUser form
+                UnbanUser unbanUserForm = new UnbanUser(userManager, _email);
+                unbanUserForm.Show();
+            }
+            else
+            {
+                // If the user is not banned, show the BanUser form
+                BanUser banUserForm = new BanUser(userManager, _email, _firstName, _lastName);
+                banUserForm.Show();
+            }
         }
 
         private void btnChangeRole_Click(object sender, EventArgs e)

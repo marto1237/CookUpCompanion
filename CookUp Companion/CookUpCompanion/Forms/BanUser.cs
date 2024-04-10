@@ -51,12 +51,17 @@ namespace CookUpCompanion.Forms
             if (success)
             {
                 MessageBox.Show("User banned successfully.");
-                // Refresh the user list or take other appropriate action
+                this.Close();
             }
             else
             {
                 MessageBox.Show("Failed to ban user.");
             }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

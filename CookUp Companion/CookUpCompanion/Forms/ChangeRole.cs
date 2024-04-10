@@ -40,9 +40,16 @@ namespace CookUpCompanion.Forms
             {
                 string selectedRoleName = cbRoles.SelectedItem.ToString();
                 int roleId = userManager.GetRoleIdByRoleName(selectedRoleName);
-                user.ChangeRole(roleId);
-                userManager.UpdateUser(user);
-                MessageBox.Show("Yeas");
+                if (roleId != -1)
+                {
+                    user.ChangeRole(roleId);
+                    userManager.UpdateUser(user);
+                    MessageBox.Show("The user role has been updated");
+                }
+                else
+                {
+                    MessageBox.Show("Error");
+                }
             }
         }
     }

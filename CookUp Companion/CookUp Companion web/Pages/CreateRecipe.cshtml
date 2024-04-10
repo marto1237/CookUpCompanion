@@ -20,7 +20,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 }
-                                <form method="post" enctype="multipart/form-data" class="mx-1 mx-md-4">
+                                <form method="post" enctype="multipart/form-data" class="mx-1 mx-md-4" onsubmit="return submitIngredientList();">
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0">
@@ -62,13 +62,21 @@
                                             <div class="ingredients-container">
                                                 <label class="form-label" for="recipeDescription"><h2>Ingredients</h2></label>
                                                 <!-- Dynamic ingredient input fields will be added here -->
-                                                <div class="ingredient-input">
-
-                                                    
-                                                    <input type="text" asp-for="Ingredients" class="form-control ingredient" placeholder="Add one or paste multiple items" />
-                                                    <span asp-validation-for="Ingredients" class="text-danger"></span>
-                                                    <button class="btn btn-danger remove-ingredient">Remove</button>
-                                                </div>
+                                                @for (int i = 0; i < Model.Ingredients.Count; i++)
+                                                {
+                                                    <div class="ingredient-input">
+                                                        <input type="text" asp-for="@Model.Ingredients[i].IngredientName" class="form-control" placeholder="Ingredient name" />
+                                                        <input type="text" asp-for="@Model.Ingredients[i].Quantity" class="form-control" placeholder="Quantity" />
+                                                        <select asp-for="@Model.Ingredients[i].SelectedUnit" class="form-select">
+                                                            <option value="">Select unit</option>
+                                                            @foreach (var unit in @Model.Ingredients[i].MeasurementUnits)
+                                                            {
+                                                                <option value="@unit">@unit</option>
+                                                            }
+                                                        </select>
+                                                        <button class="btn btn-danger remove-ingredient">Remove</button>
+                                                    </div>
+                                                }
                                             </div>
                                             <button class="btn btn-success add-ingredient">Add Ingredient</button>
                                         </div>

@@ -61,7 +61,7 @@ namespace CookUpCompanion.Forms
 
             if (ListeUsers(users) == false)
             {
-                MessageBox.Show("There are not users yet");
+                MessageBox.Show("There are no more users yet");
                 userSearchBar1.UpdateUserCount($"Users(0)");
             }
 
@@ -74,7 +74,7 @@ namespace CookUpCompanion.Forms
             List<User> users = userManager.GetBannedUsers().Skip(startIndex).Take(usersPerPage).ToList();
             if (ListeUsers(users) == false)
             {
-                MessageBox.Show("There are not banned users yet");
+                MessageBox.Show("There are no more banned users yet");
                 userSearchBar1.UpdateUserCount($"Users(0)");
             }
         }
@@ -217,6 +217,12 @@ namespace CookUpCompanion.Forms
                 {
 
                     UsersInfoControl usersInfoControl = new UsersInfoControl(userManager);
+
+                    // Determine if the user is banned
+                    bool isBanned = userManager.BannedUser(user);
+
+                    // Update the ban button text
+                    usersInfoControl.UpdateBanButtonText(isBanned);
 
                     usersInfoControl.UserProfilePicture = user.ProfilePicture;
                     usersInfoControl.UserName = user.Username;

@@ -38,6 +38,7 @@
             lbReason = new Label();
             rtbReason = new RichTextBox();
             btnBan = new Button();
+            btnClose = new Button();
             SuspendLayout();
             // 
             // lbBanUser
@@ -165,12 +166,27 @@
             btnBan.UseVisualStyleBackColor = false;
             btnBan.Click += btnBan_Click;
             // 
+            // btnClose
+            // 
+            btnClose.Anchor = AnchorStyles.None;
+            btnClose.BackColor = Color.OrangeRed;
+            btnClose.FlatStyle = FlatStyle.Popup;
+            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnClose.Location = new Point(918, 29);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(85, 48);
+            btnClose.TabIndex = 10;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = false;
+            btnClose.Click += btnClose_Click;
+            // 
             // BanUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Control;
+            BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(1053, 750);
+            Controls.Add(btnClose);
             Controls.Add(btnBan);
             Controls.Add(rtbReason);
             Controls.Add(lbReason);
@@ -181,6 +197,7 @@
             Controls.Add(lbUserNames);
             Controls.Add(lbNotification);
             Controls.Add(lbBanUser);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "BanUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "BanUser";
@@ -200,5 +217,6 @@
         private Label lbReason;
         private RichTextBox rtbReason;
         private Button btnBan;
+        private Button btnClose;
     }
 }

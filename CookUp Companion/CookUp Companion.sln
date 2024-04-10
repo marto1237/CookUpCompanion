@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfaceDAL", "InterfaceDA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookUp Companion BusinessLogic", "BusinessLogic\CookUp Companion BusinessLogic.csproj", "{A3920FE1-7C32-4EBA-A962-E60F28514B2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookUpCompanion", "CookUpCompanion\CookUpCompanion.csproj", "{462782F6-79B9-47EC-8DAB-5280253D159D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookUpCompanion", "CookUpCompanion\CookUpCompanion.csproj", "{462782F6-79B9-47EC-8DAB-5280253D159D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

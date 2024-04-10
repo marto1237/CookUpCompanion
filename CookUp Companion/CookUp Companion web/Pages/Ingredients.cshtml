@@ -1,0 +1,20 @@
+﻿@page
+@model CookUp_Companion_web.Pages.IngredientsModel
+
+<ul>
+    @foreach (var ingredient in Model.Ingredients)
+    {
+        <li>@ingredient.IngredientId @ingredient.IngredientName  <img src="@ingredient.GetBase64Image()">  <a asp-page="/IngredientInfo" asp-route-name="@ingredient.IngredientName">details</a></li>
+    }
+</ul>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-page="/Ingredients" asp-route-pageNum="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
