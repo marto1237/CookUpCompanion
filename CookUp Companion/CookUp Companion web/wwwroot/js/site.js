@@ -139,16 +139,21 @@ document.querySelector('.add-ingredient').addEventListener('click', function (ev
     event.preventDefault(); // Prevent form submission
     const container = document.querySelector('.ingredients-container');
     const ingredientInput = document.createElement('div');
-    const index = document.querySelectorAll('.ingredient-input').length + 1; // Get the current number of ingredients
+    const index = document.querySelectorAll('.ingredient-input').length; // Get the current number of ingredients
+    
     ingredientInput.classList.add('ingredient-input');
-    ingredientInput.innerHTML = `<img class="ingredient-image" style="display: none;" />
-                                     <input type="hidden" asp-for="Ingredients[i].IngredientId" class="ingredientID" />
-                                    <input type="text" asp-for="Ingredients[i].IngredientName" class="form-control ingredient" placeholder="Add one or paste multiple items" onblur="loadIngredientDetails(this)" />
-                                                        <select class="form-select possible-units" style="display: none;"></select>
-                                                        <input type="number" asp-for="Ingredients[i].Quantity" class="form-control ingredient-quantity" min="0" max="1000" placeholder="Quantity" />
-                                                        <span asp-validation-for="Ingredients[i].IngredientName" class="text-danger"></span>
-                                                        <button class="btn btn-danger remove-ingredient">Remove</button>`;
+    ingredientInput.innerHTML = `<img class="ingredient-image" name="IngredientPicture[${index}]" style="display: none;" />
+                                <input type="hidden" class="image-string"  name="IngredientPicture[${index}]" />
+                                <input type="hidden" name="IngredientId[${index}]" class="ingredientID" />
+                                <input type="text" name="IngredientName[${index}]" class="form-control ingredient" placeholder="Ingredient name" onblur="loadIngredientDetails(this)" />
+                                <select name="SelectedIngredientMeasurmentUnits[${index}]" class="form-select possible-units" style="display: none;"></select>
+                                <input type="number" name="IngredientQuanity[${index}]" class="form-control ingredient-quantity" min="0" max="1000" placeholder="Quantity" />
+                                <button class="btn btn-danger remove-ingredient" type="button">Remove</button>`;
+                                    
+    
+
     container.appendChild(ingredientInput);
+
 });
 
 // Function to load ingredient details when the input field changes
@@ -182,6 +187,9 @@ async function loadIngredientDetails(inputField) {
             imageElement.src = 'data:image/jpeg;base64,' + ingredientData.ingredientPicture;
             imageElement.style.display = 'block';
 
+            const imageString = inputField.parentElement.querySelector('.image-string');
+            imageString.value = ingredientData.ingredientPicture;
+
 
             // Fill the combo box with units
             const unitsSelect = inputField.parentElement.querySelector('.possible-units');
@@ -203,53 +211,6 @@ async function loadIngredientDetails(inputField) {
     }
 }
 
-// Function to gather ingredient data and submit it to the server
-async function submitIngredientList() {
-    const ingredientInputs = document.querySelectorAll('.ingredient-input');
-    const ingredients = [];
-
-    ingredientInputs.forEach(input => {
-        const ingredientName = input.querySelector('.ingredient').value;
-        const quantity = parseFloat(input.querySelector('.ingredient-quantity').value);
-        const selectedUnit = input.querySelector('.possible-units').value;
-        const ingredientId = parseInt(input.querySelector('.ingredientID').value);
-        const ingredientPicture = input.querySelector('.ingredient-image').src;
-
-        // Convert the ingredientPicture to a base64 string
-        const base64Image = ingredientPicture.split(',')[1];
-
-        const ingredient = {
-            ingredientPicture: base64Image,
-            ingredientId: ingredientId,
-            ingredientName: ingredientName,
-            measurementUnits: [], // Initialize an empty array for measurement units
-            quantity: quantity
-        };
-
-        // Get all possible units for this ingredient
-        const possibleUnits = input.querySelector('.possible-units').options;
-        for (let i = 0; i < possibleUnits.length; i++) {
-            ingredient.measurementUnits.push(possibleUnits[i].value);
-        }
-
-        ingredients.push(ingredient);
-    });
-
-    // Send ingredient data to the server using AJAX
-    const response = await fetch('/CreateRecipe', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(ingredients)
-    });
-
-    if (response.ok) {
-        // Handle successful response
-    } else {
-        // Handle error
-    }
-}
 
 // Attach event listener to dynamically added input fields
 document.addEventListener('focusout', function (event) {

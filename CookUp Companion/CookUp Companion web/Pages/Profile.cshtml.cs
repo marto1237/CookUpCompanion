@@ -28,6 +28,8 @@ namespace CookUp_Companion_web.Pages
         public string Username { get; private set; }
         public string Role { get; private set; }
         public User _user  { get; private set; }
+
+        
         public void OnGet()
         {
             // Retrieve the authenticated user's claims

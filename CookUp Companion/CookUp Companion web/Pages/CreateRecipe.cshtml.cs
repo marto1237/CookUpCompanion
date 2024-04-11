@@ -18,16 +18,13 @@ namespace CookUp_Companion_web.Pages
         [StringLength(70, MinimumLength = 3, ErrorMessage = "The recipe name should be between 3 and 70 symbols!")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please enter a valid recipe name!")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Recipe name is required!")]
-        public string RecipeName { get; private set; }
+        public string RecipeName { get;  set; }
 
         [BindProperty]
         [MinLength(10, ErrorMessage = "The description should be atleast 10 symbols!")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Recipe name is required!")]
         public string RecipeDescription { get;  set; }
 
-        [BindProperty]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Ingredient name is required!")]
-        public List<Ingredient> Ingredients { get;  set; } = new List<Ingredient>();
 
         [BindProperty]
         [MinLength(10, ErrorMessage = "The instruction should be atleast 10 symbols!")]
@@ -55,27 +52,40 @@ namespace CookUp_Companion_web.Pages
         [Required(ErrorMessage = "Cooking minutes time is required.")]
         public int CookMinutes { get; set; }
 
-        // Add a class to represent the DTO for ingredient data
-        public class IngredientDto
-        {
-            public string IngredientPicture { get; set; }
-            public int IngredientId { get; set; }
-            public string IngredientName { get; set; }
-            public List<string> MeasurementUnits { get; set; }
-            public float Quantity { get; set; }
-        }
+        [BindProperty]
+        public List<string> IngredientPicture { get; set; } = new List<string>();
+
+        [BindProperty]
+        public List<int> IngredientId { get; set; } = new List<int>();
+
+        [BindProperty]
+        public List<string> IngredientName { get; set; } = new List<string>();
+
+        [BindProperty]
+        public List<string> SelectedIngredientMeasurmentUnits { get; set; } = new List<string>();
+        [BindProperty]
+        public List<int> IngredientQuanity { get; set; } = new List<int>();
+
 
         public User _user { get; private set; }
 
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
 
+        public List<Ingredient> Ingredients = new List<Ingredient>();
+
         public CreateRecipeModel(IRecipeManager recipeManager, IUserManager userManager)
         {
             this.recipeManager = recipeManager;
             this.userManager = userManager;
         }
-        
+        public class IngredientModel
+        {
+            public string IngredientName { get; set; }
+            public int Quantity { get; set; }
+            // Other properties...
+        }
+
 
         public void OnGet()
         {
@@ -83,12 +93,15 @@ namespace CookUp_Companion_web.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            
+
             if (!ModelState.IsValid)
             {
                 // If ModelState is not valid, return the page with validation errors
                 return Page();
             }
 
+            
             // If ModelState is valid, process the form data
             // Convert the uploaded image to a byte array
             byte[] pictureBytes = null;
@@ -101,20 +114,29 @@ namespace CookUp_Companion_web.Pages
                 }
             }
 
-            //convert the Recipe PrepTime and CookingTime into minutes
-            if(PrepHours != 0)
-            {
-                PrepMinutes += PrepMinutes * 60;
-            }
-
-            if (CookHours != 0)
-            {
-                CookMinutes += CookHours * 60;
-            }
+            /// Convert the Recipe PrepTime and CookingTime into minutes
+            int totalPrepMinutes = PrepHours * 60 + PrepMinutes;
+            int totalCookMinutes = CookHours * 60 + CookMinutes;
 
             // If ModelState is valid, process the form data
 
-            
+            // Change the foreach loop to iterate over the indexes of the collections
+            for (int i = 0; i < IngredientPicture.Count; i++)
+            {
+                // Retrieve values for each ingredient
+                string ingredientPicture = IngredientPicture[i];
+                byte[] ingredientPic = Convert.FromBase64String(ingredientPicture);
+                int ingredientId = IngredientId[i];
+                string ingredientName = IngredientName[i];
+                string measurmentUnits = SelectedIngredientMeasurmentUnits[i];
+                int ingredientQuantity = IngredientQuanity[i];
+
+                // Create an Ingredient object using the retrieved values
+                Ingredient ingredient = new Ingredient(ingredientPic, ingredientId, measurmentUnits, ingredientName, ingredientQuantity);
+
+                // Add the ingredient to the Ingredients list
+                Ingredients.Add(ingredient);
+            }
 
             // Retrieve the authenticated user's claims
             var userClaims = HttpContext.User.Claims;
@@ -129,6 +151,13 @@ namespace CookUp_Companion_web.Pages
             if (userEmailClaim != null)
             {
                 _user = userManager.GetUserByEmail(userEmailClaim.Value);
+               
+            
+            }
+            if(_user != null)
+            {
+                Recipe recipe = new Recipe(pictureBytes,_user,RecipeName, RecipeDescription ,Ingredients, Instructions, totalCookMinutes, totalPrepMinutes);
+                recipeManager.CreateRecipe(recipe);
             }
 
             TempData["IsSuccess"] = true;
@@ -139,5 +168,6 @@ namespace CookUp_Companion_web.Pages
     }
 
 }
+
 
 
