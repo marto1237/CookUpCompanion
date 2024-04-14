@@ -3,260 +3,279 @@
 @{
 }
 
-<body>
-    <div id="recipeInformation">
-        <div class="recipeInfoTop">
-            <div class="wrapper-grid">
-                <div class="card-recipeInfo">
-                    <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-                    <div class="card-img-overlay">
+
+<div id="recipeInformation">
+    @if (TempData["CommentStatus"] != null)
+    {
+        <div class="alert alert-dismissible @(TempData["CommentStatus"].ToString().StartsWith("Failed") ? "alert-danger" : "alert-success")" role="alert">
+            @TempData["CommentStatus"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="recipeInfoTop">
+        <div class="wrapper-grid">
+            <div class="card-recipeInfo">
+                <img class="card-img-top" src="@($"data:image/png;base64,{Convert.ToBase64String(Model.recipe.Picture)}")" alt="Card image">
+                <div class="card-img-overlay">
                 
-                        <div class="cardinfo-bottom">
-                            <div class="card-right">
-                                    <div class="like-container">
-                                        <button id="likebtn"><p>90% </p><p>rated</p><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
+                    <div class="cardinfo-bottom">
+                        <div class="card-right">
+                                <div class="like-container">
+                                    <button id="likebtn" onclick="RateRecipe()"><p>@Model.LikePercentage % </p><p>rated</p><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
                                 
-                                    </div>
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="recipeInfoHeader">
-                <div class="recipeCreator"><a href="#">recipeCreator</a>
-                    <button class="saveButton"><i class="fa-regular fa-bookmark fa-lg" style="color: #ffffff;"></i> Save</button>
-                </div>
-                <h2>RecipeTitle</h2>
-                <p>RecipeDescription
+        <div class="recipeInfoHeader">
+            <div class="recipeCreator"><a href="#">@Model.recipe.Creator.Username</a>
+                <button class="saveButton"><i class="fa-regular fa-bookmark fa-lg" style="color: #ffffff;"></i> Save</button>
+            </div>
+            <h2>@Model.recipe.RecipeName</h2>
+            <p>@Model.recipe.Description </p>
+            <div class="recipeInfo-cookingTime">
+                <p class="timeType">Prep:</p>
+                <p>@Model.recipe.PreparationTime min</p>
+                <p class="timeType">Cooking:</p>
+                <p>@Model.recipe.CookingTime  min</p>
+            </div>
 
-                    Try this delicious Cajun pasta, that’s made in one skillet and ready in less than 30 minutes!
-                </p>
-                <div class="recipeInfo-cookingTime">
-                    <p class="timeType">Prep:</p>
-                    <p> 20min</p>
-                    <p class="timeType">Cooking:</p>
-                    <p> 45min</p>
-                </div>
+        </div>
+    </div>
 
+    <div class="recipeIngredientsnNutrition">
+        <div class="recipeIngredients">
+            <div id="IngredientTitle"><h3>Ingredients</h3></div>
+            <div class="Ingredients">
+
+                @foreach (var ingredient in Model.recipe.Ingredients)
+                {
+                    <div class="Ingredient">
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(ingredient.IngredientPicture)}")" alt="img" />
+                        <p class="IngredientQuantity">@ingredient.Quantity</p>
+                        <p class="IngredientMeasurment">@ingredient.SelectedUnit</p>
+                        <p class="IngredientName">@ingredient.IngredientName</p>
+                    </div>
+                }
+                    
             </div>
         </div>
 
-        <div class="recipeIngredientsnNutrition">
-            <div class="recipeIngredients">
-                <div id="IngredientTitle"><h3>Ingredients</h3></div>
-                <div class="Ingredients">
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
+        <div class="recipeNutrition">
+            <h3>Recipe nutrition</h3>
 
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
+            <table>
+                <tr>
+                    <td>Calories</td>
+                    <td id="RecipeCalories">@Model.Calories cal</td>
+                </tr>
+                <tr>
+                    <td>Fat</td>
+                    <td id="RecipeFat">@Model.Fat g</td>
+                </tr>
+                <tr>
+                    <td>Carbs</td>
+                    <td id="RecipeCarbs">@Model.Carbs g</td>
+                </tr>
+                <tr>
+                    <td>Sugar</td>
+                    <td id="RecipeSugar">@Model.Sugar g</td>
+                </tr>
+                <tr>
+                    <td>Sodium</td>
+                    <td id="RecipeSodium">@Model.Sodium mg</td>
+                </tr>
+                <tr>
+                    <td>Protein</td>
+                    <td id="RecipeProtein">@Model.Protein g</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
+    <div id="RecipeInstruction">
+        <div><h3>Instruction</h3></div>
 
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-
-                    <div class="Ingredient">
-                        <img src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-                        <p class="IngredientMeasurment">2 Tbsp</p>
-                        <p class="IngredientName">paprika</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="recipeNutrition">
-                <h3>Recipe nutrition</h3>
-
-                <table>
-                    <tr>
-                        <td>Calories</td>
-                        <td id="RecipeCalories">452.5</td>
-                    </tr>
-                    <tr>
-                        <td>Fat</td>
-                        <td id="RecipeFat">1.09 g</td>
-                    </tr>
-                    <tr>
-                        <td>Carbs</td>
-                        <td id="RecipeCarbs">118.74 g</td>
-                    </tr>
-                    <tr>
-                        <td>Sugar</td>
-                        <td id="RecipeSugar">89.14 g</td>
-                    </tr>
-                    <tr>
-                        <td>Sodium</td>
-                        <td id="RecipeSodium">9.05</td>
-                    </tr>
-                    <tr>
-                        <td>Protein</td>
-                        <td id="RecipeProtein">4.89 g</td>
-                    </tr>
-                </table>
-            </div>
+        <div class="Instrution">
+            <p>
+            @Model.recipe.Instructions
+        </p>
         </div>
 
-        <div id="RecipeInstruction">
-            <div><h3>Instruction</h3></div>
+        <div class="Instrution2">
+            <h6 class="stepId">Step 2</h6>
+            <p>
+                Add the seasoned chicken to the skillet and cook for a couple minutes on each side, or just until the outside gets some colour. The chicken does not need to be cooked through at this point.
+                Add the diced yellow onion to the skillet with more Cajun seasoning and continue to sauté for about two minutes more, or just until the onion begins to soften. 
+        </div>
 
-            <div class="Instrution1">
-                <h6 class="stepId">Step 1</h6>
-                <p>
-                Combine the ingredients for the Cajun seasoning in a small bowl. Cut the chicken into half- to three-quarter-inch cubes. Place the cubed chicken in a bowl, pour the Cajun seasoning over top, and stir to coat the chicken in spices.
-                Add the olive oil and butter to a large deep skillet. Heat the oil and butter over medium-high until the skillet is very hot and the butter is melted and foamy. 
+        <div class="Instrution2">
+            <h6 class="stepId">Step 3</h6>
+            <p>
+                Allow the moisture from the onion to dissolve any browned bits from the bottom of the skillet.
+                Next, add the pasta, fire roasted diced tomatoes (with the juices), salt and chicken broth to the skillet. Stir just until everything is evenly combined, then place a lid on top and allow the broth to come up to a boil.
             </p>
-            </div>
-
-            <div class="Instrution2">
-                <h6 class="stepId">Step 2</h6>
-                <p>
-                    Add the seasoned chicken to the skillet and cook for a couple minutes on each side, or just until the outside gets some colour. The chicken does not need to be cooked through at this point.
-                    Add the diced yellow onion to the skillet with more Cajun seasoning and continue to sauté for about two minutes more, or just until the onion begins to soften. 
-            </div>
-
-            <div class="Instrution2">
-                <h6 class="stepId">Step 3</h6>
-                <p>
-                    Allow the moisture from the onion to dissolve any browned bits from the bottom of the skillet.
-                    Next, add the pasta, fire roasted diced tomatoes (with the juices), salt and chicken broth to the skillet. Stir just until everything is evenly combined, then place a lid on top and allow the broth to come up to a boil.
-                </p>
-            </div>
         </div>
+    </div>
 
-        <div id="RecipeComments">
-            <div class="RatingHeader">
-                <h4>Rating Details</h4>
-                <div class="Ratings">
-                    <div class="possitiveRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i> <p id="numbersOfLikes">1337</p> <p>liked</p></div>
-                    <div class="neggativeRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i><p id="numbersOfDislikes">16</p> <p>disliked</p></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="RecipeComments">
-
-            <div class="Comment">
-                <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-                <div class="CommentInfo">
-                    <div class="CommentHeader">
-                        <p>Username</p>
-                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    </div>
-                    <p>Comment Content Needed more liquid to cook pasta.</p>
-                </div>
-
-
-                
-            </div>
-        </div>
-        
-        <div id="RecipeComments">
-
-            <div class="Comment">
-                <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-                <div class="CommentInfo">
-                    <div class="CommentHeader">
-                        <p>Username</p>
-                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    </div>
-                    <p>Comment Content Needed more liquid to cook pasta.</p>
-                </div>
-
-
-                
-            </div>
-        </div>
-
-        <div id="RecipeComments">
-
-            <div class="Comment">
-                <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-                <div class="CommentInfo">
-                    <div class="CommentHeader">
-                        <p>Username</p>
-                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    </div>
-                    <p>Comment Content Needed more liquid to cook pasta.</p>
-                </div>
-
-
-                
-            </div>
-        </div>
-
-        <div id="RecipeComments">
-
-            <div class="Comment">
-                <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-
-                <div class="CommentInfo">
-                    <div class="CommentHeader">
-                        <p>Username</p>
-                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    </div>
-                    <p>Comment Content Needed more liquid to cook pasta.</p>
-                </div>
-
-
-
+    <div id="RecipeComments">
+        <div class="RatingHeader">
+            <h4>Rating Details</h4>
+            <div class="Ratings">
+                <div class="possitiveRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i> <p id="numbersOfLikes">@Model.Likes</p> <p>liked</p></div>
+                <div class="neggativeRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i><p id="numbersOfDislikes">@Model.Dislikes</p> <p>disliked</p></div>
             </div>
         </div>
     </div>
 
+    <div id="RecipeComments">
+
+        <div class="Comment">
+            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
+                
+            <div class="CommentInfo">
+                <div class="CommentHeader">
+                    <p>Username</p>
+                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+                <p>Comment Content Needed more liquid to cook pasta.</p>
+            </div>
 
 
-</body>
+                
+        </div>
+    </div>
+        
+    @foreach (var comment in Model.Comments)
+    {
+        <div id="RecipeComments">
+
+            <div class="Comment">
+                <img class="userPicture" src="@($"data:image/png;base64,{Convert.ToBase64String(comment.rater.ProfilePicture)}")" alt="img" />
+                <div class="CommentInfo">
+                    <div class="CommentHeader">
+                        <p>@comment.rater.Username</p>
+                        <p>@comment.timestamp</p>
+                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    </div>
+                    <p>@comment.comment</p>
+                </div>
+
+
+
+            </div>
+        </div>
+    }
+
+    <div id="RecipeComments">
+
+        <div class="Comment">
+            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
+                
+            <div class="CommentInfo">
+                <div class="CommentHeader">
+                    <p>Username</p>
+                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+                <p>Comment Content Needed more liquid to cook pasta.</p>
+            </div>
+
+
+                
+        </div>
+    </div>
+
+    <div id="RecipeComments">
+
+        <div class="Comment">
+            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
+                
+            <div class="CommentInfo">
+                <div class="CommentHeader">
+                    <p>Username</p>
+                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+                <p>Comment Content Needed more liquid to cook pasta.</p>
+            </div>
+
+
+                
+        </div>
+    </div>
+
+    <div id="RecipeComments">
+
+        <div class="Comment">
+            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
+
+            <div class="CommentInfo">
+                <div class="CommentHeader">
+                    <p>Username</p>
+                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+                <p>Comment Content Needed more liquid to cook pasta.</p>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="rateRecipeModal" aria-hidden="true" aria-labelledby="rateRecipeModalLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>Rate this Recipe:</h4>
+                <form method="post" asp-page-handler="Comment">
+                    <input type="hidden" id="recipeId" value="@Model.recipeId" />
+
+                    <div class="ratingBody">
+                        
+                        <div class="recipeRating">
+
+                            <input type="radio" id="like_option" asp-for="UserReaction" value="like" checked>
+                            <label for="like_option" class="radio-inline" id="like_button">
+                                <i class="fa-solid fa-thumbs-up fa-2xl"></i>
+                            </label>
+                            <input type="radio" id="dislike_option"  asp-for="UserReaction" value="dislike">
+                            <label for="dislike_option" class="radio-inline" id="dislike_button">
+                                <i class="fa-solid fa-thumbs-down fa-2xl"></i>
+                            </label>
+                        </div>
+
+                        <div id="RecipeComments_area">
+                            <span asp-validation-for="UserComment" class="text-danger"></span>
+                            <textarea asp-for="UserComment" placeholder="Share about your experience. Any tips for improving the recipe?"></textarea>
+                            
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var currentPage = @Model.CurrentPage;
+
+        function loadMoreComments() {
+            currentPage++;
+            var url = '?handler=LoadComments&id=@Model.recipeId&page=' + currentPage;
+
+            $.get(url, function (data) {
+                $('#commentsContainer').append(data); // Append new comments to existing HTML
+                if (data.trim() === "") { // If no more comments, hide the button
+                    $('#loadMoreBtn').hide();
+                }
+            }).fail(function () {
+                $('#loadMoreBtn').hide(); // Hide button if error occurs
+            });
+        }
+    </script>
+}

@@ -117,7 +117,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+//function to show the more option to the recipe 
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.card-recipe .more').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();  // Prevent navigating if it's in an anchor tag.
+            event.stopPropagation(); // Stop the event from bubbling up to parent elements.
 
+            const card = button.closest('.card-recipe'); // Find closest parent '.card-recipe'
+           
+            showOptionsMenu(id);
+        });
+    });
+});
+
+function showOptionsMenu(id) {
+    // Here, you could dynamically create a menu and append it to 'card'
+    // or use a pre-existing hidden menu in the HTML that you show and position appropriately.
+    $('#moreOptionsModal').modal('show')
+    console.log("Showing options for:", card);
+    // Implement showing the menu here. You might use a library like Popper.js for popups, or simple CSS.
+}
+
+//function to close more Option modal to show add to modal
+
+function addToModal() {
+    $('#moreOptionsModal').modal('hide'); // Hide the moreOption modal
+    $('#AddToModal').modal('show'); // Show the settings modal
+}
 
 //function to show the picture  of the recipe when creating new one
 function displaySelectedImage(event, elementId) {
@@ -147,7 +174,7 @@ document.querySelector('.add-ingredient').addEventListener('click', function (ev
                                 <input type="hidden" name="IngredientId[${index}]" class="ingredientID" />
                                 <input type="text" name="IngredientName[${index}]" class="form-control ingredient" placeholder="Ingredient name" onblur="loadIngredientDetails(this)" />
                                 <select name="SelectedIngredientMeasurmentUnits[${index}]" class="form-select possible-units" style="display: none;"></select>
-                                <input type="number" name="IngredientQuanity[${index}]" class="form-control ingredient-quantity" min="0" max="1000" placeholder="Quantity" />
+                                <input type="number" name="IngredientQuanity[${index}]" class="form-control ingredient-quantity" min="0" max="1000"  placeholder="Quantity" />
                                 <button class="btn btn-danger remove-ingredient" type="button">Remove</button>`;
                                     
     
@@ -278,7 +305,16 @@ document.getElementById('uploadRecipePicture').addEventListener('change', functi
     reader.readAsArrayBuffer(file);
 });
 
+function RateRecipe() {
+    $('#rateRecipeModal').modal('show')
+}
 /* Calendar */
 
-
+function toggleRate(choice) {
+    if (choice === 'like') {
+        document.getElementById('like_option').checked = true;
+    } else if (choice === 'dislike') {
+        document.getElementById('dislike_option').checked = true;
+    }
+}
 // Write your JavaScript code.

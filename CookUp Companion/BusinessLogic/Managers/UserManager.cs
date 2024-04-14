@@ -9,11 +9,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace CookUp_Companion_BusinessLogic.Manager
 {
     public class UserManager : IUserManager
     {
-        private  User currentUser;
+        private User currentUser;
 
         IUserDALManager controller;
         public UserManager(IUserDALManager controller)
@@ -32,13 +32,13 @@ namespace BusinessLogic
             }
 
             return null;
-           
+
         }
         public User CurrentUser()
         {
             return currentUser;
         }
-        
+
 
         public bool CreateUser(User user)
         {
@@ -102,7 +102,7 @@ namespace BusinessLogic
             string inputHashedPassword = HashPassword(password, saltBytes, iterations);
             return inputHashedPassword == hashedPassword;
         }
-        
+
         public List<User> GetAllUsers() { return controller.GetAllUsers(); }
 
         public User GetUserById(int id) { return controller.GetUserById(id); }
@@ -111,7 +111,7 @@ namespace BusinessLogic
 
         public bool UpdateUser(User user) { return controller.UpdateUser(user); }
 
-        public bool UpdateUserPassword(User user, string newPassword) 
+        public bool UpdateUserPassword(User user, string newPassword)
         {
             byte[] salt = Convert.FromBase64String(user.PasswordSalt);
 
@@ -123,22 +123,22 @@ namespace BusinessLogic
 
         }
 
-        public bool DeleteUser(int id) { return controller.DeleteUser(id);}
+        public bool DeleteUser(int id) { return controller.DeleteUser(id); }
 
         public int GetIdByUsername(string username) { return controller.GetIdByUsername(username); }
 
         public List<User> GetBannedUsers() { return controller.GetBannedUsers(); }
-        public bool BanningUser(User banningUser, User bannedUser, string reason, int banLevel) { return controller.BanUser(banningUser , bannedUser, reason, banLevel); }
+        public bool BanningUser(User banningUser, User bannedUser, string reason, int banLevel) { return controller.BanUser(banningUser, bannedUser, reason, banLevel); }
 
-        public bool UnbanningUser(int userId) {  return controller.UnbanUser(userId); }
+        public bool UnbanningUser(int userId) { return controller.UnbanUser(userId); }
 
         public string GetBanReason(int userID) { return controller.GetBanReason(userID); }
 
-        public List<User> GetUsersBySimilarUsername(string username) {  return controller.GetUsersBySimilarUsername(username); }
+        public List<User> GetUsersBySimilarUsername(string username) { return controller.GetUsersBySimilarUsername(username); }
 
         public List<User> GetUsersBySimilarEmail(string email) { return controller.GetUsersBySimilarEmail(email); }
 
-        public List<string> AllRoles() {  return controller.AllRoles(); }
+        public List<string> AllRoles() { return controller.AllRoles(); }
 
         public int GetRoleIdByRoleName(string roleName) { return controller.GetRoleIdByRoleName(roleName); }
     }

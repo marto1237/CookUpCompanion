@@ -1,6 +1,4 @@
-
-
-using BusinessLogic;
+using CookUp_Companion_BusinessLogic.Manager;
 using CookUpCompanion.Forms;
 using DAL;
 using InterfaceDAL;

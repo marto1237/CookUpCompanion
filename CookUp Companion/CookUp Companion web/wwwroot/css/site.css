@@ -777,3 +777,48 @@ tr:nth-child(even) {
     display: block;
     margin: 0 auto;
 }
+/*Rate recipe modal */
+
+.recipeRating {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom:2rem;
+
+}
+textarea {
+    resize: none;
+    width: 350px;
+}
+.recipeRating label {
+    cursor: pointer;
+    padding: 30px 30px;
+    border: 2px solid #ccc;
+    background-color: white;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+#like_option:checked + label {
+    background-color: #63E6BE; /* Green */
+}
+
+#dislike_option:checked + label {
+    background-color: orangered; /* Red */
+}
+
+input[type="radio"] {
+    display: none; /* Hides the radio button but keeps it functional */
+}
+.ratingBody{
+    padding-top: 20px;
+}
+#RecipeComments_area {
+    padding-bottom: 2rem;
+}
+.Comment img{
+    height: 100px;
+    width: 100px;
+}
+.CommentInfo{
+    padding-left: 15px;
+}

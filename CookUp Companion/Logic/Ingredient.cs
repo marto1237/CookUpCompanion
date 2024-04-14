@@ -19,6 +19,15 @@
             Quantity = quantity;
             SelectedUnit = null;
         }
+        //This is for saving ingredient for the recipes
+        public Ingredient(byte[] ingredientPicture, int ingredientId, string ingredientName, float quantity, string measurementUnit )
+        {
+            IngredientPicture = ingredientPicture;
+            IngredientId = ingredientId;
+            IngredientName = ingredientName;
+            Quantity = quantity;
+            SelectedUnit = measurementUnit;
+        }
 
         public string GetBase64Image()
         {

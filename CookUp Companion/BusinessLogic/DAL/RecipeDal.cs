@@ -1,0 +1,530 @@
+﻿using CookUp_Companion_Classes;
+using InterfaceDAL;
+using InterfacesLL;
+using Logic;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace DAL
+{
+    public class RecipeDal : Connection, IRecipeDALManager
+    {
+        IUserManager userManager;
+        private readonly string tableName = "Recipes";
+        private string Server_Connection = "Server=mssqlstud.fhict.local;Database=dbi525452_cookup;User Id = dbi525452_cookup; Password=cookup;";
+        public RecipeDal(IUserManager userManager) 
+        { this.userManager = userManager; }
+
+
+        public Ingredient GetInputIngredient(string name) 
+        {
+            Ingredient ingredient = null;
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                string query = "SELECT * FROM Ingredient WHERE name = @name";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@name", name);
+
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ingredient = new Ingredient(
+                            (byte[])reader["ingredientPicture"],
+                            (int)reader["ingredientID"],
+                            (string)reader["name"],
+                            (string)reader["possibleUnits"],
+                            0 //Default value for the units
+                            
+                            );
+                    }
+                }
+
+            }
+
+            return ingredient;
+        }
+        public bool InsertRecipe(Recipe recipe)
+        {
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+
+                // Step 1: Insert into Recipes table
+                string insertRecipeQuery = $"INSERT INTO {tableName} (recipeName, recipePicture,creator, description, cookingInstructions, preparationTime, cookingTime) " +
+                                           "VALUES (@RecipeName,@RecipePicture,@Creator, @Description, @Instructions, @PrepTime, @CookTime); " +
+                                           "SELECT SCOPE_IDENTITY();"; // Retrieve the generated ID
+
+                SqlCommand insertRecipeCommand = new SqlCommand(insertRecipeQuery, connection);
+                insertRecipeCommand.Parameters.AddWithValue("@RecipeName", recipe.RecipeName);
+                insertRecipeCommand.Parameters.AddWithValue("@RecipePicture", recipe.Picture);
+                insertRecipeCommand.Parameters.AddWithValue("@Creator",  userManager.GetIdByUsername(recipe.Creator.Username));
+                insertRecipeCommand.Parameters.AddWithValue("@Description", recipe.Description);
+                insertRecipeCommand.Parameters.AddWithValue("@Instructions", recipe.Instructions);
+                insertRecipeCommand.Parameters.AddWithValue("@PrepTime", recipe.PreparationTime);
+                insertRecipeCommand.Parameters.AddWithValue("@CookTime", recipe.CookingTime);
+
+                int recipeId = Convert.ToInt32(insertRecipeCommand.ExecuteScalar());
+
+                // Step 2: Insert into RecipeIngredients table
+                foreach (Ingredient ingredient in recipe.Ingredients)
+                {
+                    string insertIngredientQuery = "INSERT INTO RecipeIngredients (recipeID, ingredientID, quantity, measurementUnit) " +
+                                                    "VALUES (@RecipeID, @IngredientID, @Quantity, @MeasurementUnit);";
+
+                    SqlCommand insertIngredientCommand = new SqlCommand(insertIngredientQuery, connection);
+                    insertIngredientCommand.Parameters.AddWithValue("@RecipeID", recipeId);
+                    insertIngredientCommand.Parameters.AddWithValue("@IngredientID", ingredient.IngredientId);
+                    insertIngredientCommand.Parameters.AddWithValue("@Quantity", ingredient.Quantity);
+                    insertIngredientCommand.Parameters.AddWithValue("@MeasurementUnit", ingredient.SelectedUnit);
+
+                    insertIngredientCommand.ExecuteNonQuery();
+                }
+            }
+            return true;
+        }
+
+        public List<Ingredient> GetAllIngredients(int page, int pageSize)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+
+            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                string query = $"SELECT * FROM Ingredient ORDER BY ingredientID OFFSET {(page - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Ingredient ingredient = new Ingredient(
+                                 (byte[])reader["ingredientPicture"],
+                                 (int)reader["ingredientID"],
+                                 (string)reader["name"],
+                                 (string)reader["possibleUnits"],
+                                 0
+                                 
+
+
+                         );
+                        
+                        ingredients.Add(ingredient);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+
+                }
+
+            }
+
+            return ingredients;
+        }
+        public int GetAllIngredientsPageNum(int pageSize)
+        {
+            int pages = 0;
+			int totalIngredients = 0;
+			using (SqlConnection connection = new SqlConnection(Server_Connection))
+			{
+                try
+                {
+					connection.Open();
+
+					string countQuery = "SELECT COUNT(*) FROM Ingredient";
+					SqlCommand countCommand = new SqlCommand(countQuery, connection);
+					totalIngredients = (int)countCommand.ExecuteScalar();
+					pages = (int)Math.Ceiling((double)totalIngredients / pageSize);
+				}
+				
+                catch (SqlException e)
+                {
+					// Handle any errors that may have occurred.
+					System.Diagnostics.Debug.WriteLine(e.Message);
+				}
+			}
+
+			
+			return pages;
+
+		}
+
+        public Ingredient GetIngredientByName(string ingredientName)
+        {
+            Ingredient ingredient = null;
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = $"SELECT * FROM Ingredient WHERE name = @Name";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@Name", ingredientName);
+
+
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        ingredient = new Ingredient(
+                                 (byte[])reader["ingredientPicture"],
+                                 (int)reader["ingredientID"],
+                                 (string)reader["name"],
+                                 (string)reader["possibleUnits"],
+                                 0
+
+
+
+                         );
+
+
+                    }
+                }
+
+
+                catch (Exception e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+
+            return ingredient;
+        }
+
+        public List<Ingredient> GetAllIngredientsForRecipeId(int recipeId)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = $@"
+                SELECT i.ingredientID, i.ingredientPicture, i.name, ri.quantity, ri.measurementUnit
+                FROM RecipeIngredients ri
+                JOIN Ingredient i ON ri.ingredientID = i.ingredientID
+                WHERE ri.recipeID = @recipeID";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@recipeID", recipeId);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        byte[] ingredientPicture = reader["ingredientPicture"] as byte[];
+                        int ingredientId = Convert.ToInt32(reader["ingredientID"]);
+                        string ingredientName = reader["name"].ToString();
+                        float quantity = Convert.ToSingle(reader["quantity"]);
+                        string measurementUnit = reader["measurementUnit"].ToString();
+
+                        // Using the constructor correctly
+                        ingredients.Add(new Ingredient(
+                            ingredientPicture,
+                            ingredientId,
+                            ingredientName,
+                            quantity, 
+                            measurementUnit
+                        ));
+                    }
+                }
+            }
+
+            return ingredients;
+        }
+        public List<Recipe> GetAllRecipes(int page, int pageSize)
+        {
+            List<Recipe> recipes = new List<Recipe>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+                    string query = $@"
+                        SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
+                        FROM Recipes r
+                        ORDER BY r.recipeID
+                        OFFSET {(page - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int recipeId = (int)reader["recipeID"];
+                        List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
+
+                        Recipe recipe = new Recipe(
+                            (byte[])reader["recipePicture"],
+                            userManager.GetUserById((int)reader["creator"]),
+                            reader["recipeName"].ToString(),
+                            reader["description"].ToString(),
+                            ingredients,
+                            reader["cookingInstructions"].ToString(),
+                            (int)reader["cookingTime"],
+                            (int)reader["preparationTime"]
+                         );
+
+                        recipes.Add(recipe);
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+                }
+
+            }
+
+            return recipes;
+
+        }
+        public int GetAllRecipesPageNum(int pageSize)
+        {
+            int totalRecipes = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM Recipes";
+                SqlCommand command = new SqlCommand(query, connection);
+                totalRecipes = (int)command.ExecuteScalar();
+            }
+            return (int)Math.Ceiling((double)totalRecipes / pageSize);
+        }
+
+        public int GetRecipeID(Recipe recipe)
+        {
+            int recipeID = -1;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+                    string query = $"SELECT recipeID FROM {tableName} WHERE recipeName = @RecipeName AND creator = @Creator";
+                        
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@RecipeName ", recipe.RecipeName);
+                    command.Parameters.AddWithValue("@Creator", userManager.GetIdByUsername(recipe.Creator.Username));
+                    
+                    // Execute the query and attempt to read the data
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) // Checks if there are rows and moves to the first one
+                        {
+                            recipeID = (int)reader["recipeID"]; // Cast to int and read the recipeID
+                        }
+                    }
+
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+                }
+
+            }
+
+            return recipeID;
+
+
+        }
+
+        public Recipe GetRecipeById(int recipeID)
+        {
+            Recipe recipe = null;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+                    string query = $@"
+                        SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
+                        FROM Recipes r
+                        WHERE r.recipeID = @RecipeID";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@RecipeID", recipeID);
+
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        
+                        List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeID);
+
+                            recipe = new Recipe(
+                            (byte[])reader["recipePicture"],
+                            userManager.GetUserById((int)reader["creator"]),
+                            reader["recipeName"].ToString(),
+                            reader["description"].ToString(),
+                            ingredients,
+                            reader["cookingInstructions"].ToString(),
+                            (int)reader["cookingTime"],
+                            (int)reader["preparationTime"]
+                         );
+
+                        
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+                }
+
+            }
+
+            return recipe;
+
+        }
+        public bool AddComment(int userID,int recipeId, string userReaction, string comment )
+        {
+            bool isRecipeLike = userReaction == "like";
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = @"INSERT INTO UserRating (userID, recipeID, rating, comment, timestamp)
+                                    VALUES (@userID, @recipeID, @rating, @comment, @timestamp)";
+
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@userID", userID);
+                    command.Parameters.AddWithValue("@recipeID", recipeId);
+                    command.Parameters.AddWithValue("@rating", isRecipeLike);
+                    command.Parameters.AddWithValue("@comment", comment);
+                    command.Parameters.AddWithValue("@timestamp", DateTime.Now);
+
+                    int result = command.ExecuteNonQuery();  // Executes the command
+
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return false;
+                }
+            }
+        }
+
+        public List<Comment> GetCommentsByRecipeId(int recipeID, int page, int commentsPerPage)
+        {
+            List<Comment> comments = new List<Comment>();
+            // Calculate the starting point of the comments to fetch
+            int startRow = (page - 1) * commentsPerPage;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = @"SELECT * FROM UserRating WHERE  recipeID = @RecipeId 
+                                    ORDER BY timestamp DESC
+                                    OFFSET @StartRow ROWS
+                                    FETCH NEXT @CommentsPerPage ROWS ONLY;";
+
+
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@RecipeId", recipeID);
+                    command.Parameters.AddWithValue("@StartRow", startRow);
+                    command.Parameters.AddWithValue("@CommentsPerPage", commentsPerPage);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    
+                    while (reader.Read())
+                    {
+                        Comment comment = new Comment(
+                            userManager.GetUserById((int)reader["userID"]),
+                            (bool)reader["rating"],
+                            (string)reader["comment"],
+                            (DateTime)reader["timestamp"]
+                            );
+                        comments.Add(comment);
+                    }
+                    
+                    return comments;
+                }
+                catch (Exception e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return comments;
+                }
+            }
+        }
+
+        public (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = @"SELECT
+                                    SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) AS Likes,
+                                    SUM(CASE WHEN rating = 0 THEN 1 ELSE 0 END) AS Dislikes
+                                    FROM UserRating
+                                    WHERE recipeID = @RecipeId;";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@RecipeId", recipeId);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                int likes = reader["Likes"] != DBNull.Value ? Convert.ToInt32(reader["Likes"]) : 0;
+                                int dislikes = reader["Dislikes"] != DBNull.Value ? Convert.ToInt32(reader["Dislikes"]) : 0;
+                                return (likes, dislikes);
+                            }
+                        }
+                    }
+               
+                }catch (Exception e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return (0, 0);
+                }
+            }
+            return (0, 0);
+        }
+
+    }
+}

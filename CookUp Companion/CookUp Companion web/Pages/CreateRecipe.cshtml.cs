@@ -16,7 +16,7 @@ namespace CookUp_Companion_web.Pages
 
         [BindProperty]
         [StringLength(70, MinimumLength = 3, ErrorMessage = "The recipe name should be between 3 and 70 symbols!")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please enter a valid recipe name!")]
+        [RegularExpression(@"^[a-zA-Z\s'-]+$", ErrorMessage = "Please enter a valid recipe name!")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Recipe name is required!")]
         public string RecipeName { get;  set; }
 
@@ -64,7 +64,7 @@ namespace CookUp_Companion_web.Pages
         [BindProperty]
         public List<string> SelectedIngredientMeasurmentUnits { get; set; } = new List<string>();
         [BindProperty]
-        public List<int> IngredientQuanity { get; set; } = new List<int>();
+        public List<float> IngredientQuanity { get; set; } = new List<float>();
 
 
         public User _user { get; private set; }
@@ -79,12 +79,7 @@ namespace CookUp_Companion_web.Pages
             this.recipeManager = recipeManager;
             this.userManager = userManager;
         }
-        public class IngredientModel
-        {
-            public string IngredientName { get; set; }
-            public int Quantity { get; set; }
-            // Other properties...
-        }
+
 
 
         public void OnGet()
@@ -129,10 +124,10 @@ namespace CookUp_Companion_web.Pages
                 int ingredientId = IngredientId[i];
                 string ingredientName = IngredientName[i];
                 string measurmentUnits = SelectedIngredientMeasurmentUnits[i];
-                int ingredientQuantity = IngredientQuanity[i];
+                float ingredientQuantity = IngredientQuanity[i];
 
                 // Create an Ingredient object using the retrieved values
-                Ingredient ingredient = new Ingredient(ingredientPic, ingredientId, measurmentUnits, ingredientName, ingredientQuantity);
+                Ingredient ingredient = new Ingredient(ingredientPic, ingredientId, ingredientName, ingredientQuantity,measurmentUnits);
 
                 // Add the ingredient to the Ingredients list
                 Ingredients.Add(ingredient);

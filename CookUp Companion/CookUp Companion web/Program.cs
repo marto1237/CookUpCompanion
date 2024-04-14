@@ -1,10 +1,9 @@
 using InterfaceDAL;
 using InterfacesLL;
-using BusinessLogic;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using DAL;
-using CookUp_Companion_BusinessLogic;
+using CookUp_Companion_BusinessLogic.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
 
