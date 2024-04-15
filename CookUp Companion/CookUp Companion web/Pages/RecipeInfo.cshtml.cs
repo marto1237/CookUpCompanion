@@ -46,6 +46,10 @@ namespace CookUp_Companion_web.Pages
         [Required(AllowEmptyStrings = false, ErrorMessage = "Comment is required!")]
         public string UserComment { get; set; }
 
+        public bool IsFavorite { get; set; }
+
+        public string FavoriteIconClass => IsFavorite ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark";
+
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
 
@@ -72,6 +76,20 @@ namespace CookUp_Companion_web.Pages
             LoadComments(id.GetValueOrDefault(), CurrentPage);
             (Likes, Dislikes) = recipeManager.GetLikesAndDislikes(Convert.ToInt32(id));
             LikePercentage = (int)Math.Round(CalculateLikePercentage(Likes, Dislikes), 0);
+
+            // Retrieve the authenticated user's claims
+            var userClaims = HttpContext.User.Claims;
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            if (userEmailClaim != null)
+            {
+                _user = userManager.GetUserByEmail(userEmailClaim.Value);
+                IsFavorite = recipeManager.CheckIfFavorite(userManager.GetIdByUsername(_user.Username), Convert.ToInt32(id));
+            }
+            else
+            {
+                IsFavorite = false;
+            }
+            
 
         }
 
@@ -221,7 +239,10 @@ namespace CookUp_Companion_web.Pages
 
 
             }
-
+            else
+            {
+                return RedirectToPage("/Login");
+            }
             // Here you would add your logic to save these details to your database or process them as needed
             try
             {
@@ -256,5 +277,35 @@ namespace CookUp_Companion_web.Pages
             return (double)likes / (likes + dislikes) * 100;
         }
 
+        public IActionResult OnPostToggleFavorite(int recipeId)
+        {
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/Login");
+            }
+            // Retrieve the authenticated user's claims
+            var userClaims = HttpContext.User.Claims;
+
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            var userNameClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+            var roleClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+            if (userEmailClaim != null)
+            {
+                _user = userManager.GetUserByEmail(userEmailClaim.Value);
+
+
+            }
+            if (_user != null)
+            {
+                int userId = userManager.GetIdByUsername(_user.Username); // Implement this in your UserManager to get the current user's ID
+                bool isNowFavorite = recipeManager.ToggleFavoriteRecipe(userId, recipeId);
+                TempData["FavoriteUpdated"] = isNowFavorite ? "Added to favorites" : "Removed from favorites";
+            }
+
+
+            return RedirectToPage(new { id = recipeId });
+        }
     }
 }

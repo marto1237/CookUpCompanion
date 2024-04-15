@@ -86,16 +86,23 @@ namespace CookUp_Companion_web.Pages
                     ViewData["UsernameError"] = "The username is already in use by another user. Please choose a different username.";
                     return Page();
                 }
-                else
+                if (userManager.CheckExistingEmail(newUser.Email))
                 {
-                    //check the boolean
-                    userManager.CreateUser(newUser);
-
-                    return RedirectToPage("/Index");
-
+                    ViewData["EmailError"] = "The email is already in use. Please use a different email address.";
+                    return Page();
                 }
 
-
+                // Attempt to create the user
+                bool creationResult = userManager.CreateUser(newUser);
+                if (!creationResult)
+                {
+                    // Log the error or handle it appropriately
+                    ViewData["Error"] = "An error occurred while creating your account. Please try again.";
+                    return Page();
+                }
+                // If successful, redirect to the login page or a confirmation page
+                TempData["RegistrationSuccess"] = "You have successfully registered. You can now login.";
+                return RedirectToPage("/Login");
 
 
             }

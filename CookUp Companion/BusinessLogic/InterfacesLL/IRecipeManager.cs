@@ -18,5 +18,7 @@ namespace InterfacesLL
         bool AddComment(int userID, int recipeId, string userReaction, string comment);
         List<Comment> GetCommentsByRecipeId(int recipeID, int page, int commentsPerPage);
         (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId);
+        bool ToggleFavoriteRecipe(int userId, int recipeId);
+        bool CheckIfFavorite(int userId, int recipeId);
     }
 }

@@ -12,6 +12,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+    @if (TempData["FavoriteUpdated"] != null)
+    {
+        <div class="alert alert-dismissible @(TempData["FavoriteUpdated"].ToString().StartsWith("Removed") ? "alert-danger" : "alert-success")" role="alert">
+            @TempData["FavoriteUpdated"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="recipeInfoTop">
         <div class="wrapper-grid">
             <div class="card-recipeInfo">
@@ -32,7 +39,12 @@
 
         <div class="recipeInfoHeader">
             <div class="recipeCreator"><a href="#">@Model.recipe.Creator.Username</a>
-                <button class="saveButton"><i class="fa-regular fa-bookmark fa-lg" style="color: #ffffff;"></i> Save</button>
+                <form method="post" asp-page-handler="ToggleFavorite">
+                    <input type="hidden" name="recipeId" value="@Model.recipeId" />
+                    <button type="submit" class="saveButton"><i class="@Model.FavoriteIconClass" style="color: #ffffff;"></i>
+                        @(Model.IsFavorite ? "Remove" : "Save")
+                        </ button >
+                </form>
             </div>
             <h2>@Model.recipe.RecipeName</h2>
             <p>@Model.recipe.Description </p>
@@ -105,124 +117,39 @@
         </p>
         </div>
 
-        <div class="Instrution2">
-            <h6 class="stepId">Step 2</h6>
-            <p>
-                Add the seasoned chicken to the skillet and cook for a couple minutes on each side, or just until the outside gets some colour. The chicken does not need to be cooked through at this point.
-                Add the diced yellow onion to the skillet with more Cajun seasoning and continue to sauté for about two minutes more, or just until the onion begins to soften. 
-        </div>
-
-        <div class="Instrution2">
-            <h6 class="stepId">Step 3</h6>
-            <p>
-                Allow the moisture from the onion to dissolve any browned bits from the bottom of the skillet.
-                Next, add the pasta, fire roasted diced tomatoes (with the juices), salt and chicken broth to the skillet. Stir just until everything is evenly combined, then place a lid on top and allow the broth to come up to a boil.
-            </p>
-        </div>
     </div>
 
-    <div id="RecipeComments">
-        <div class="RatingHeader">
-            <h4>Rating Details</h4>
-            <div class="Ratings">
-                <div class="possitiveRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i> <p id="numbersOfLikes">@Model.Likes</p> <p>liked</p></div>
-                <div class="neggativeRatings"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i><p id="numbersOfDislikes">@Model.Dislikes</p> <p>disliked</p></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="RecipeComments">
-
-        <div class="Comment">
-            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-            <div class="CommentInfo">
-                <div class="CommentHeader">
-                    <p>Username</p>
-                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                </div>
-                <p>Comment Content Needed more liquid to cook pasta.</p>
-            </div>
-
-
-                
-        </div>
-    </div>
-        
-    @foreach (var comment in Model.Comments)
+    @if (Model.Comments.Any())
     {
-        <div id="RecipeComments">
+        foreach (var comment in Model.Comments)
+        {
+            <div id="RecipeComments">
 
-            <div class="Comment">
-                <img class="userPicture" src="@($"data:image/png;base64,{Convert.ToBase64String(comment.rater.ProfilePicture)}")" alt="img" />
-                <div class="CommentInfo">
-                    <div class="CommentHeader">
-                        <p>@comment.rater.Username</p>
-                        <p>@comment.timestamp</p>
-                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                <div class="Comment">
+                    <img class="userPicture" src="@($"data:image/png;base64,{Convert.ToBase64String(comment.rater.ProfilePicture)}")" alt="img" />
+                    <div class="CommentInfo">
+                        <div class="CommentHeader">
+                            <p>@comment.rater.Username</p>
+                            <p>@comment.timestamp</p>
+                            <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                        </div>
+                        <p>@comment.comment</p>
                     </div>
-                    <p>@comment.comment</p>
+
+
+
                 </div>
-
-
-
             </div>
+        }
+    }
+    else
+    {
+        <div class="NoComments">
+            <p>No comments yet. Be the first to comment!</p>
         </div>
     }
 
-    <div id="RecipeComments">
-
-        <div class="Comment">
-            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-            <div class="CommentInfo">
-                <div class="CommentHeader">
-                    <p>Username</p>
-                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                </div>
-                <p>Comment Content Needed more liquid to cook pasta.</p>
-            </div>
-
-
-                
-        </div>
-    </div>
-
-    <div id="RecipeComments">
-
-        <div class="Comment">
-            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg"  alt="img"/>
-                
-            <div class="CommentInfo">
-                <div class="CommentHeader">
-                    <p>Username</p>
-                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                </div>
-                <p>Comment Content Needed more liquid to cook pasta.</p>
-            </div>
-
-
-                
-        </div>
-    </div>
-
-    <div id="RecipeComments">
-
-        <div class="Comment">
-            <img class="userPicture" src="https://img.spoonacular.com/ingredients_100x100/apple.jpg" alt="img" />
-
-            <div class="CommentInfo">
-                <div class="CommentHeader">
-                    <p>Username</p>
-                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                </div>
-                <p>Comment Content Needed more liquid to cook pasta.</p>
-            </div>
-
-
-
-        </div>
-    </div>
+   
 </div>
 
 

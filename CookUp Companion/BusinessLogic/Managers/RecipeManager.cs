@@ -40,5 +40,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public bool AddComment(int userID, int recipeId, string userReaction, string comment) { return controller.AddComment(userID, recipeId, userReaction, comment); }
         public List<Comment> GetCommentsByRecipeId(int recipeID, int page, int commentsPerPage) { return controller.GetCommentsByRecipeId(recipeID, page, commentsPerPage); }
         public (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId) { return controller.GetLikesAndDislikes(recipeId); }
+        public bool ToggleFavoriteRecipe(int userId, int recipeId) { return controller.ToggleFavoriteRecipe(userId, recipeId); }
+        public bool CheckIfFavorite(int userId, int recipeId) { return controller.CheckIfFavorite(userId, recipeId); }
     }
 }

@@ -317,4 +317,6 @@ function toggleRate(choice) {
         document.getElementById('dislike_option').checked = true;
     }
 }
+
+
 // Write your JavaScript code.
