@@ -28,119 +28,140 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lbNumUser = new System.Windows.Forms.Label();
-            this.tbSearchUser = new System.Windows.Forms.TextBox();
-            this.pSearchIcon = new System.Windows.Forms.PictureBox();
-            this.lbImage = new System.Windows.Forms.Label();
-            this.lbTitle = new System.Windows.Forms.Label();
-            this.lbCreator = new System.Windows.Forms.Label();
-            this.lbTime = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pSearchIcon)).BeginInit();
-            this.SuspendLayout();
+            lbNumRecipes = new Label();
+            tbSearchRecipe = new TextBox();
+            pSearchIcon = new PictureBox();
+            lbImage = new Label();
+            lbTitle = new Label();
+            lbCreator = new Label();
+            lbTime = new Label();
+            lbCookingTime = new Label();
+            ((System.ComponentModel.ISupportInitialize)pSearchIcon).BeginInit();
+            SuspendLayout();
             // 
-            // lbNumUser
+            // lbNumRecipes
             // 
-            this.lbNumUser.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbNumUser.AutoSize = true;
-            this.lbNumUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumUser.Location = new System.Drawing.Point(94, 0);
-            this.lbNumUser.Name = "lbNumUser";
-            this.lbNumUser.Size = new System.Drawing.Size(102, 29);
-            this.lbNumUser.TabIndex = 17;
-            this.lbNumUser.Text = "Recipes";
+            lbNumRecipes.Anchor = AnchorStyles.None;
+            lbNumRecipes.AutoSize = true;
+            lbNumRecipes.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbNumRecipes.Location = new Point(348, 6);
+            lbNumRecipes.Name = "lbNumRecipes";
+            lbNumRecipes.Size = new Size(170, 29);
+            lbNumRecipes.TabIndex = 17;
+            lbNumRecipes.Text = "Recipes(1337)";
             // 
-            // tbSearchUser
+            // tbSearchRecipe
             // 
-            this.tbSearchUser.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tbSearchUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSearchUser.Location = new System.Drawing.Point(562, 3);
-            this.tbSearchUser.Name = "tbSearchUser";
-            this.tbSearchUser.Size = new System.Drawing.Size(496, 41);
-            this.tbSearchUser.TabIndex = 16;
+            tbSearchRecipe.Anchor = AnchorStyles.None;
+            tbSearchRecipe.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbSearchRecipe.Location = new Point(833, 6);
+            tbSearchRecipe.Margin = new Padding(3, 4, 3, 4);
+            tbSearchRecipe.Name = "tbSearchRecipe";
+            tbSearchRecipe.Size = new Size(496, 41);
+            tbSearchRecipe.TabIndex = 16;
+            tbSearchRecipe.TextChanged += tbSearchRecipe_TextChanged;
+            tbSearchRecipe.Enter += tbSearchRecipe_Enter;
+            tbSearchRecipe.Leave += tbSearchRecipe_Leave;
             // 
             // pSearchIcon
             // 
-            this.pSearchIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pSearchIcon.BackColor = System.Drawing.Color.White;
-            this.pSearchIcon.Image = global::CookUpCompanion.Properties.Resources.magnifying_glass;
-            this.pSearchIcon.Location = new System.Drawing.Point(520, 3);
-            this.pSearchIcon.Name = "pSearchIcon";
-            this.pSearchIcon.Size = new System.Drawing.Size(36, 41);
-            this.pSearchIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pSearchIcon.TabIndex = 18;
-            this.pSearchIcon.TabStop = false;
+            pSearchIcon.Anchor = AnchorStyles.None;
+            pSearchIcon.BackColor = Color.White;
+            pSearchIcon.Image = Properties.Resources.magnifying_glass;
+            pSearchIcon.Location = new Point(791, 6);
+            pSearchIcon.Margin = new Padding(3, 4, 3, 4);
+            pSearchIcon.Name = "pSearchIcon";
+            pSearchIcon.Size = new Size(36, 51);
+            pSearchIcon.SizeMode = PictureBoxSizeMode.Zoom;
+            pSearchIcon.TabIndex = 18;
+            pSearchIcon.TabStop = false;
+            pSearchIcon.Click += pSearchIcon_Click;
             // 
             // lbImage
             // 
-            this.lbImage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbImage.AutoSize = true;
-            this.lbImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbImage.Location = new System.Drawing.Point(109, 59);
-            this.lbImage.Name = "lbImage";
-            this.lbImage.Size = new System.Drawing.Size(54, 20);
-            this.lbImage.TabIndex = 19;
-            this.lbImage.Text = "Image";
+            lbImage.Anchor = AnchorStyles.None;
+            lbImage.AutoSize = true;
+            lbImage.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbImage.Location = new Point(40, 76);
+            lbImage.Name = "lbImage";
+            lbImage.Size = new Size(54, 20);
+            lbImage.TabIndex = 19;
+            lbImage.Text = "Image";
             // 
             // lbTitle
             // 
-            this.lbTitle.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbTitle.AutoSize = true;
-            this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTitle.Location = new System.Drawing.Point(388, 59);
-            this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(41, 20);
-            this.lbTitle.TabIndex = 20;
-            this.lbTitle.Text = "Title";
+            lbTitle.Anchor = AnchorStyles.None;
+            lbTitle.AutoSize = true;
+            lbTitle.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbTitle.Location = new Point(383, 76);
+            lbTitle.Name = "lbTitle";
+            lbTitle.Size = new Size(41, 20);
+            lbTitle.TabIndex = 20;
+            lbTitle.Text = "Title";
             // 
             // lbCreator
             // 
-            this.lbCreator.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbCreator.AutoSize = true;
-            this.lbCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCreator.Location = new System.Drawing.Point(669, 59);
-            this.lbCreator.Name = "lbCreator";
-            this.lbCreator.Size = new System.Drawing.Size(65, 20);
-            this.lbCreator.TabIndex = 21;
-            this.lbCreator.Text = "Creator";
+            lbCreator.Anchor = AnchorStyles.None;
+            lbCreator.AutoSize = true;
+            lbCreator.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbCreator.Location = new Point(727, 76);
+            lbCreator.Name = "lbCreator";
+            lbCreator.Size = new Size(65, 20);
+            lbCreator.TabIndex = 21;
+            lbCreator.Text = "Creator";
             // 
             // lbTime
             // 
-            this.lbTime.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbTime.AutoSize = true;
-            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTime.Location = new System.Drawing.Point(936, 59);
-            this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(46, 20);
-            this.lbTime.TabIndex = 22;
-            this.lbTime.Text = "Time";
+            lbTime.Anchor = AnchorStyles.None;
+            lbTime.AutoSize = true;
+            lbTime.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbTime.Location = new Point(990, 76);
+            lbTime.Name = "lbTime";
+            lbTime.Size = new Size(86, 20);
+            lbTime.TabIndex = 22;
+            lbTime.Text = "Prep Time";
+            // 
+            // lbCookingTime
+            // 
+            lbCookingTime.Anchor = AnchorStyles.None;
+            lbCookingTime.AutoSize = true;
+            lbCookingTime.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lbCookingTime.Location = new Point(1236, 76);
+            lbCookingTime.Name = "lbCookingTime";
+            lbCookingTime.Size = new Size(111, 20);
+            lbCookingTime.TabIndex = 23;
+            lbCookingTime.Text = "Cooking Time";
             // 
             // RecipeSearchBar
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lbTime);
-            this.Controls.Add(this.lbCreator);
-            this.Controls.Add(this.lbTitle);
-            this.Controls.Add(this.lbImage);
-            this.Controls.Add(this.pSearchIcon);
-            this.Controls.Add(this.lbNumUser);
-            this.Controls.Add(this.tbSearchUser);
-            this.Name = "RecipeSearchBar";
-            this.Size = new System.Drawing.Size(1116, 92);
-            ((System.ComponentModel.ISupportInitialize)(this.pSearchIcon)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(lbCookingTime);
+            Controls.Add(lbTime);
+            Controls.Add(lbCreator);
+            Controls.Add(lbTitle);
+            Controls.Add(lbImage);
+            Controls.Add(pSearchIcon);
+            Controls.Add(lbNumRecipes);
+            Controls.Add(tbSearchRecipe);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "RecipeSearchBar";
+            Size = new Size(1658, 118);
+            Load += RecipeSearchBar_Load;
+            ((System.ComponentModel.ISupportInitialize)pSearchIcon).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private System.Windows.Forms.PictureBox pSearchIcon;
-        private System.Windows.Forms.Label lbNumUser;
-        private System.Windows.Forms.TextBox tbSearchUser;
+        private System.Windows.Forms.Label lbNumRecipes;
+        private System.Windows.Forms.TextBox tbSearchRecipe;
         private System.Windows.Forms.Label lbImage;
         private System.Windows.Forms.Label lbTitle;
         private System.Windows.Forms.Label lbCreator;
         private System.Windows.Forms.Label lbTime;
+        private Label lbCookingTime;
     }
 }

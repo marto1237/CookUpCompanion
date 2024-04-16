@@ -1,5 +1,7 @@
-﻿ 
+﻿
+using CookUp_Companion_BusinessLogic.Manager;
 using CookUpCompanion.UserControls;
+using DAL;
 using InterfacesLL;
 using Logic;
 using System;
@@ -17,10 +19,13 @@ namespace CookUpCompanion.Forms
     public partial class MainForm : Form
     {
         private readonly IUserManager userManager;
+        private readonly IRecipeManager recipeManager;
         public MainForm(User user, LogIn login, IUserManager userManager)
         {
             InitializeComponent();
             this.userManager = userManager;
+            
+            recipeManager = new RecipeManager(new RecipeDal(userManager));
             // Load user's profile picture
             if (user.ProfilePicture != null && user.ProfilePicture.Length > 0)
             {
@@ -101,7 +106,7 @@ namespace CookUpCompanion.Forms
             MainPanel.Controls.Clear();
 
             // Create an instance of the Users form
-            Recipes recipeForm = new Recipes();
+            Recipes recipeForm = new Recipes(recipeManager);
             recipeForm.TopLevel = false;
 
             // Add the Users form to the panel

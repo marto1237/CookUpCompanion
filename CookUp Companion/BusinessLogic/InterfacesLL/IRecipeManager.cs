@@ -20,5 +20,6 @@ namespace InterfacesLL
         (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId);
         bool ToggleFavoriteRecipe(int userId, int recipeId);
         bool CheckIfFavorite(int userId, int recipeId);
+        List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize);
     }
 }

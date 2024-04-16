@@ -262,34 +262,42 @@ namespace DAL
                 try
                 {
                     connection.Open();
-                    string query = $@"
+                    // Ensure page is at least 1 and pageSize is positive
+                    int offset = Math.Max(0, (Math.Max(page, 1) - 1) * pageSize);
+
+                    string query = @"
                         SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
                         FROM Recipes r
                         ORDER BY r.recipeID
-                        OFFSET {(page - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
                     SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Offset", offset);
+                    command.Parameters.AddWithValue("@PageSize", pageSize);
 
                     //Execute the query and get the data
-                    using SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        int recipeId = (int)reader["recipeID"];
-                        List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
+                        while (reader.Read())
+                        {
+                            int recipeId = (int)reader["recipeID"];
+                            List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
 
-                        Recipe recipe = new Recipe(
-                            (byte[])reader["recipePicture"],
-                            userManager.GetUserById((int)reader["creator"]),
-                            reader["recipeName"].ToString(),
-                            reader["description"].ToString(),
-                            ingredients,
-                            reader["cookingInstructions"].ToString(),
-                            (int)reader["cookingTime"],
-                            (int)reader["preparationTime"]
-                         );
+                            Recipe recipe = new Recipe(
+                                (byte[])reader["recipePicture"],
+                                userManager.GetUserById((int)reader["creator"]),
+                                reader["recipeName"].ToString(),
+                                reader["description"].ToString(),
+                                ingredients,
+                                reader["cookingInstructions"].ToString(),
+                                (int)reader["cookingTime"],
+                                (int)reader["preparationTime"]
+                             );
 
-                        recipes.Add(recipe);
+                            recipes.Add(recipe);
+                        }
                     }
+                    
                 }
                 catch (SqlException e)
                 {
@@ -591,6 +599,63 @@ namespace DAL
                     return false;
                 }
             }
+        }
+        public List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize)
+        {
+            List<Recipe> recipes = new List<Recipe>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    int offset = Math.Max(0, (Math.Max(page, 1) - 1) * pageSize);
+
+                    string query = @"
+                         SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
+                         FROM Recipes r
+                         WHERE r.recipeName LIKE @SearchText
+                         ORDER BY r.recipeID
+                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@SearchText", "%" + searchRecipeName + "%");
+                    command.Parameters.AddWithValue("@Offset", offset);
+                    command.Parameters.AddWithValue("@PageSize", pageSize);
+
+                    //Execute the query and get the data
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int recipeId = (int)reader["recipeID"];
+                            List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
+
+                            Recipe recipe = new Recipe(
+                                (byte[])reader["recipePicture"],
+                                userManager.GetUserById((int)reader["creator"]),
+                                reader["recipeName"].ToString(),
+                                reader["description"].ToString(),
+                                ingredients,
+                                reader["cookingInstructions"].ToString(),
+                                (int)reader["cookingTime"],
+                                (int)reader["preparationTime"]
+                             );
+
+                            recipes.Add(recipe);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+
+
+            return recipes;
         }
     }
 }
