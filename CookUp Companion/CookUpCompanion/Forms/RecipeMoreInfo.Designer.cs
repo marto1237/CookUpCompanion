@@ -34,6 +34,9 @@
             rtbDescription = new RichTextBox();
             lbIngredients = new Label();
             flpIngredients = new FlowLayoutPanel();
+            rtbInstructions = new RichTextBox();
+            btnSave = new Button();
+            btnClose = new Button();
             ((System.ComponentModel.ISupportInitialize)pbRecipePicture).BeginInit();
             SuspendLayout();
             // 
@@ -41,7 +44,7 @@
             // 
             pbRecipePicture.Anchor = AnchorStyles.None;
             pbRecipePicture.Image = Properties.Resources.Logo;
-            pbRecipePicture.Location = new Point(42, 40);
+            pbRecipePicture.Location = new Point(42, 75);
             pbRecipePicture.Name = "pbRecipePicture";
             pbRecipePicture.Size = new Size(358, 338);
             pbRecipePicture.SizeMode = PictureBoxSizeMode.Zoom;
@@ -53,7 +56,7 @@
             lbCreator.Anchor = AnchorStyles.None;
             lbCreator.AutoSize = true;
             lbCreator.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbCreator.Location = new Point(522, 40);
+            lbCreator.Location = new Point(522, 75);
             lbCreator.Name = "lbCreator";
             lbCreator.Size = new Size(67, 28);
             lbCreator.TabIndex = 1;
@@ -64,7 +67,7 @@
             lbRecipeName.Anchor = AnchorStyles.None;
             lbRecipeName.AutoSize = true;
             lbRecipeName.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbRecipeName.Location = new Point(522, 105);
+            lbRecipeName.Location = new Point(522, 140);
             lbRecipeName.Name = "lbRecipeName";
             lbRecipeName.Size = new Size(221, 46);
             lbRecipeName.TabIndex = 2;
@@ -74,7 +77,7 @@
             // 
             rtbDescription.Anchor = AnchorStyles.None;
             rtbDescription.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            rtbDescription.Location = new Point(522, 181);
+            rtbDescription.Location = new Point(522, 216);
             rtbDescription.Name = "rtbDescription";
             rtbDescription.Size = new Size(572, 197);
             rtbDescription.TabIndex = 3;
@@ -85,7 +88,7 @@
             lbIngredients.Anchor = AnchorStyles.None;
             lbIngredients.AutoSize = true;
             lbIngredients.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbIngredients.Location = new Point(269, 409);
+            lbIngredients.Location = new Point(269, 444);
             lbIngredients.Name = "lbIngredients";
             lbIngredients.Size = new Size(203, 46);
             lbIngredients.TabIndex = 4;
@@ -98,11 +101,48 @@
             flpIngredients.Size = new Size(720, 471);
             flpIngredients.TabIndex = 5;
             // 
+            // rtbInstructions
+            // 
+            rtbInstructions.Location = new Point(781, 484);
+            rtbInstructions.Name = "rtbInstructions";
+            rtbInstructions.Size = new Size(471, 471);
+            rtbInstructions.TabIndex = 6;
+            rtbInstructions.Text = "";
+            // 
+            // btnSave
+            // 
+            btnSave.Anchor = AnchorStyles.None;
+            btnSave.BackColor = Color.Chartreuse;
+            btnSave.FlatStyle = FlatStyle.Popup;
+            btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSave.Location = new Point(541, 999);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(123, 44);
+            btnSave.TabIndex = 7;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = false;
+            // 
+            // btnClose
+            // 
+            btnClose.Anchor = AnchorStyles.None;
+            btnClose.BackColor = Color.OrangeRed;
+            btnClose.FlatStyle = FlatStyle.Popup;
+            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnClose.Location = new Point(750, 999);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(123, 44);
+            btnClose.TabIndex = 8;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = false;
+            // 
             // RecipeMoreInfo
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1307, 985);
+            ClientSize = new Size(1307, 1055);
+            Controls.Add(btnClose);
+            Controls.Add(btnSave);
+            Controls.Add(rtbInstructions);
             Controls.Add(flpIngredients);
             Controls.Add(lbIngredients);
             Controls.Add(rtbDescription);
@@ -125,5 +165,8 @@
         private RichTextBox rtbDescription;
         private Label lbIngredients;
         private FlowLayoutPanel flpIngredients;
+        private RichTextBox rtbInstructions;
+        private Button btnSave;
+        private Button btnClose;
     }
 }

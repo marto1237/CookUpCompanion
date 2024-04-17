@@ -27,6 +27,7 @@ namespace InterfacesLL
         List<User> GetUsersBySimilarUsername(string username);
         List<string> AllRoles();
         int GetRoleIdByRoleName(string roleName);
+        
 
     }
 }

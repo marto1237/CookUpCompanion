@@ -1,4 +1,5 @@
-﻿using CookUp_Companion_Classes;
+﻿using Azure;
+using CookUp_Companion_Classes;
 using Logic;
 using System;
 using System.Collections.Generic;
@@ -26,5 +27,6 @@ namespace InterfaceDAL
         bool ToggleFavoriteRecipe(int userId, int recipeId);
         bool CheckIfFavorite(int userId, int recipeId);
         List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize);
+        Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName);
     }
 }

@@ -43,5 +43,6 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public bool ToggleFavoriteRecipe(int userId, int recipeId) { return controller.ToggleFavoriteRecipe(userId, recipeId); }
         public bool CheckIfFavorite(int userId, int recipeId) { return controller.CheckIfFavorite(userId, recipeId); }
         public List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize) { return controller.SearchRecipesByName(searchRecipeName, page, pageSize); }
+        public Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName) { return controller.GetRecipeByNameAndCreator(recipeName, creatorName); }
     }
 }

@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\CookUp Companion BusinessLogic.csproj" />
+    <ProjectReference Include="..\DAL\DAL.csproj" />
     <ProjectReference Include="..\Logic\CookUp Companion Classes.csproj" />
   </ItemGroup>
 

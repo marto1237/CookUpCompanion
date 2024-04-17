@@ -78,7 +78,7 @@ namespace CookUpCompanion.Forms
                 foreach (Recipe recipe in recipes)
                 {
 
-                    RecipeControl recipeControl = new RecipeControl();
+                    RecipeControl recipeControl = new RecipeControl(recipeManager);
 
 
                     recipeControl.RecipePicture = recipe.Picture;

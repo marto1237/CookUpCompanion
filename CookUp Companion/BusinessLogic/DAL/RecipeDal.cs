@@ -1,4 +1,5 @@
-﻿using CookUp_Companion_Classes;
+﻿using Azure;
+using CookUp_Companion_Classes;
 using InterfaceDAL;
 using InterfacesLL;
 using Logic;
@@ -262,10 +263,9 @@ namespace DAL
                 try
                 {
                     connection.Open();
-                    // Ensure page is at least 1 and pageSize is positive
                     int offset = Math.Max(0, (Math.Max(page, 1) - 1) * pageSize);
 
-                    string query = @"
+                    string query = $@"
                         SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
                         FROM Recipes r
                         ORDER BY r.recipeID
@@ -276,28 +276,25 @@ namespace DAL
                     command.Parameters.AddWithValue("@PageSize", pageSize);
 
                     //Execute the query and get the data
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            int recipeId = (int)reader["recipeID"];
-                            List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
+                        int recipeId = (int)reader["recipeID"];
+                        List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
 
-                            Recipe recipe = new Recipe(
-                                (byte[])reader["recipePicture"],
-                                userManager.GetUserById((int)reader["creator"]),
-                                reader["recipeName"].ToString(),
-                                reader["description"].ToString(),
-                                ingredients,
-                                reader["cookingInstructions"].ToString(),
-                                (int)reader["cookingTime"],
-                                (int)reader["preparationTime"]
-                             );
+                        Recipe recipe = new Recipe(
+                            (byte[])reader["recipePicture"],
+                            userManager.GetUserById((int)reader["creator"]),
+                            reader["recipeName"].ToString(),
+                            reader["description"].ToString(),
+                            ingredients,
+                            reader["cookingInstructions"].ToString(),
+                            (int)reader["cookingTime"],
+                            (int)reader["preparationTime"]
+                         );
 
-                            recipes.Add(recipe);
-                        }
+                        recipes.Add(recipe);
                     }
-                    
                 }
                 catch (SqlException e)
                 {
@@ -603,28 +600,26 @@ namespace DAL
         public List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize)
         {
             List<Recipe> recipes = new List<Recipe>();
-
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
                 {
                     connection.Open();
-
                     int offset = Math.Max(0, (Math.Max(page, 1) - 1) * pageSize);
 
+                    // Modified query to include a WHERE clause with LIKE
                     string query = @"
-                         SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
-                         FROM Recipes r
-                         WHERE r.recipeName LIKE @SearchText
-                         ORDER BY r.recipeID
-                         OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+                SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
+                FROM Recipes r
+                WHERE r.recipeName LIKE @SearchText
+                ORDER BY r.recipeID
+                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
                     SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@SearchText", "%" + searchRecipeName + "%");
+                    command.Parameters.AddWithValue("@SearchText", "%" + searchRecipeName + "%"); // Add wildcard characters for partial match
                     command.Parameters.AddWithValue("@Offset", offset);
                     command.Parameters.AddWithValue("@PageSize", pageSize);
 
-                    //Execute the query and get the data
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -641,7 +636,7 @@ namespace DAL
                                 reader["cookingInstructions"].ToString(),
                                 (int)reader["cookingTime"],
                                 (int)reader["preparationTime"]
-                             );
+                            );
 
                             recipes.Add(recipe);
                         }
@@ -649,13 +644,60 @@ namespace DAL
                 }
                 catch (Exception e)
                 {
-                    // Handle any errors that may have occurred.
-                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    System.Diagnostics.Debug.WriteLine("Error searching recipes by name: " + e.Message);
+                    // Depending on your error handling policy you might want to rethrow the exception or handle it differently
                 }
             }
-
-
             return recipes;
+        }
+
+        public Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName)
+        {
+            Recipe recipe = null;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+                    string query = $@"
+                        SELECT recipeID, recipeName, recipePicture, creator, description, cookingInstructions, preparationTime, cookingTime, dateCreated
+                        FROM Recipes 
+                        WHERE creator = @Creator";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Creator", userManager.GetIdByUsername(creatorName));
+
+                    //Execute the query and get the data
+                    using SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int recipeId = (int)reader["recipeID"];
+                        List<Ingredient> ingredients = GetAllIngredientsForRecipeId(recipeId);
+
+                         recipe = new Recipe(
+                            (byte[])reader["recipePicture"],
+                            userManager.GetUserById((int)reader["creator"]),
+                            reader["recipeName"].ToString(),
+                            reader["description"].ToString(),
+                            ingredients,
+                            reader["cookingInstructions"].ToString(),
+                            (int)reader["cookingTime"],
+                            (int)reader["preparationTime"]
+                         );
+
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+
+                }
+
+            }
+
+            return recipe;
         }
     }
 }

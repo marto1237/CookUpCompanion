@@ -2,9 +2,8 @@ using InterfaceDAL;
 using InterfacesLL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using DAL;
 using CookUp_Companion_BusinessLogic.Manager;
-
+using DAL;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

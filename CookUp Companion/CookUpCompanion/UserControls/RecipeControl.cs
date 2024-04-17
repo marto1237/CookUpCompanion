@@ -1,5 +1,6 @@
 ﻿using CookUp_Companion_BusinessLogic.Manager;
 using CookUpCompanion.Forms;
+using InterfacesLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,9 +15,11 @@ namespace CookUpCompanion.UserControls
 {
     public partial class RecipeControl : UserControl
     {
-        public RecipeControl()
+        private readonly IRecipeManager recipeManager;
+        public RecipeControl(IRecipeManager recipeManager)
         {
             InitializeComponent();
+            this.recipeManager = recipeManager;
         }
 
         #region Properties
@@ -26,14 +29,6 @@ namespace CookUpCompanion.UserControls
         private string _recipeCreatorName;
         private int _prepTime;
         private int _cookTime;
-
-        private void btnMoreInfo_Click(object sender, EventArgs e)
-        {
-            RecipeControl recipeControl = new RecipeControl();
-            MoreOptionsMenuMenu.Visible = false;
-            //userMoreInfo.Show();
-        }
-
 
 
         private void MoreOptions_Click(object sender, EventArgs e)
@@ -51,6 +46,9 @@ namespace CookUpCompanion.UserControls
         private void btnMoreInfo_Click_1(object sender, EventArgs e)
         {
 
+            RecipeMoreInfo recipeMoreInfo = new RecipeMoreInfo(recipeManager, _recipeName, _recipeCreatorName);
+            MoreOptionsMenuMenu.Visible = false;
+            recipeMoreInfo.Show();
         }
 
         private void btnEditRecipe_Click(object sender, EventArgs e)

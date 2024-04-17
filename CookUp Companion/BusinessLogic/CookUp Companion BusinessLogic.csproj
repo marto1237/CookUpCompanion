@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\InterfaceDAL\InterfaceDAL.csproj" />
+    <ProjectReference Include="..\InterfacesLL\InterfacesLL.csproj" />
     <ProjectReference Include="..\Logic\CookUp Companion Classes.csproj" />
   </ItemGroup>
 
