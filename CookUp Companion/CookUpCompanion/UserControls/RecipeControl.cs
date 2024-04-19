@@ -51,14 +51,13 @@ namespace CookUpCompanion.UserControls
             recipeMoreInfo.Show();
         }
 
-        private void btnEditRecipe_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void btnDeleteRecipe_Click(object sender, EventArgs e)
         {
-
+            DeleteRecipe deleteRecipe= new DeleteRecipe(recipeManager, _recipeName, _recipeCreatorName);
+            MoreOptionsMenuMenu.Visible = false;
+            deleteRecipe.Show();
         }
 
         [Category("RecipeData")]

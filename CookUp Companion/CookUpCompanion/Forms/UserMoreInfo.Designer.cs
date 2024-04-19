@@ -41,6 +41,7 @@
             lbUserRecipes = new LinkLabel();
             lbUserComments = new LinkLabel();
             lbUsername = new Label();
+            btnClose = new Button();
             ((System.ComponentModel.ISupportInitialize)pbUserProfile).BeginInit();
             SuspendLayout();
             // 
@@ -147,7 +148,7 @@
             btnDeleteAccount.Anchor = AnchorStyles.None;
             btnDeleteAccount.BackColor = Color.Red;
             btnDeleteAccount.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteAccount.Location = new Point(1051, 50);
+            btnDeleteAccount.Location = new Point(635, 546);
             btnDeleteAccount.Name = "btnDeleteAccount";
             btnDeleteAccount.Size = new Size(207, 57);
             btnDeleteAccount.TabIndex = 10;
@@ -196,11 +197,26 @@
             lbUsername.TabIndex = 13;
             lbUsername.Text = "Userername";
             // 
+            // btnClose
+            // 
+            btnClose.Anchor = AnchorStyles.None;
+            btnClose.BackColor = Color.OrangeRed;
+            btnClose.FlatStyle = FlatStyle.Popup;
+            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnClose.Location = new Point(1127, 23);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(85, 48);
+            btnClose.TabIndex = 14;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = false;
+            btnClose.Click += btnClose_Click;
+            // 
             // UserMoreInfo
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1329, 605);
+            Controls.Add(btnClose);
             Controls.Add(lbUsername);
             Controls.Add(lbUserComments);
             Controls.Add(lbUserRecipes);
@@ -214,6 +230,7 @@
             Controls.Add(lbLastName);
             Controls.Add(lbFirstName);
             Controls.Add(pbUserProfile);
+            FormBorderStyle = FormBorderStyle.None;
             Name = "UserMoreInfo";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "UserMoreInfo";
@@ -237,5 +254,6 @@
         private LinkLabel lbUserRecipes;
         private LinkLabel lbUserComments;
         private Label lbUsername;
+        private Button btnClose;
     }
 }

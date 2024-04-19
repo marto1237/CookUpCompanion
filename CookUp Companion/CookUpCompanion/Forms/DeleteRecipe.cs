@@ -2,6 +2,7 @@
 using CookUpCompanion.UserControls;
 using InterfacesLL;
 using Logic;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,18 +12,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CookUpCompanion.Forms
 {
-    public partial class RecipeMoreInfo : Form
+    public partial class DeleteRecipe : Form
     {
         private readonly IRecipeManager recipeManager;
         private readonly string recipeName;
         private readonly string creatorName;
         private readonly Recipe recipe;
-        public RecipeMoreInfo(IRecipeManager recipeManager, string recipeName, string creatorName)
+        public DeleteRecipe(IRecipeManager recipeManager, string recipeName, string creatorName)
         {
             InitializeComponent();
             this.recipeManager = recipeManager;
@@ -35,9 +34,9 @@ namespace CookUpCompanion.Forms
                 pbRecipePicture.Image = Image.FromStream(ms);
             }
             lbCreator.Text = recipe.Creator.Username;
-            tbRecipeName.Text = recipe.RecipeName;
-            rtbDescription.Text = recipe.Description;
-            rtbInstructions.Text = recipe.Instructions;
+            LBtbRecipeName .Text = recipe.RecipeName;
+            lbDescription.Text = recipe.Description;
+            lbInstructions.Text = recipe.Instructions;
 
             foreach (Ingredient ingredient in recipe.Ingredients)
             {
@@ -50,7 +49,6 @@ namespace CookUpCompanion.Forms
 
                 flpIngredients.Controls.Add(ingredientInfo);
             }
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -58,25 +56,24 @@ namespace CookUpCompanion.Forms
             this.Close();
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnDeleteRecipe_Click(object sender, EventArgs e)
         {
-            if (tbRecipeName.Text != recipe.RecipeName || rtbDescription.Text !=  recipe.Description || rtbInstructions.Text != recipe.Instructions)
+            int recipeID = recipeManager.GetRecipeID(recipe);
+            if (recipeID != -1)
             {
-                string newRecipeName=  tbRecipeName.Text;
-                string newRecipeDescription= rtbDescription.Text;
-                string newInstructions = rtbInstructions.Text;
-                if(recipeManager.UpdateRecipe(recipe.Creator.Username, recipeName , newRecipeName, newRecipeDescription, newInstructions))
+                if (recipeManager.DeleteRecipe(recipe))
                 {
-                    MessageBox.Show("Recipe has been updated succefully");
+                    MessageBox.Show($"The recipe {recipe.RecipeName} has been unbanned succefully");
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Something when wrong");
+                    MessageBox.Show($"Something went wrong");
                 }
             }
             else
             {
-                MessageBox.Show("There is no new data to be updated");
+                MessageBox.Show("Reicpe have not been founded");
             }
         }
     }

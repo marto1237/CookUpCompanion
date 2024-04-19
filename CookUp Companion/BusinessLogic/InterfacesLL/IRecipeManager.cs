@@ -22,6 +22,8 @@ namespace InterfacesLL
         bool CheckIfFavorite(int userId, int recipeId);
         List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize);
         Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName);
+        bool UpdateRecipe(string creator, string recipeName, string newRecipeName, string newRecipeDescription, string newInstructions);
+        bool DeleteRecipe(Recipe recipe);
 
     }
 }

@@ -75,7 +75,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         {
             return controller.GetRole(user);
         }
-        private byte[] GenerateSalt()
+        public byte[] GenerateSalt()
         {
             byte[] salt = new byte[16]; // You can adjust the salt length as needed
             using (var rng = new RNGCryptoServiceProvider())
@@ -85,7 +85,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
             return salt;
         }
 
-        private string HashPassword(string password, byte[] salt, int iterations)
+        public string HashPassword(string password, byte[] salt, int iterations)
         {
             using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations))
             {

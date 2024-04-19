@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\CookUp Companion BusinessLogic.csproj" />
     <ProjectReference Include="..\Logic\CookUp Companion Classes.csproj" />
   </ItemGroup>
 

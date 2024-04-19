@@ -1,5 +1,4 @@
-﻿using Azure;
-using CookUp_Companion_Classes;
+﻿using CookUp_Companion_Classes;
 using InterfaceDAL;
 using InterfacesLL;
 using Logic;
@@ -698,6 +697,86 @@ namespace DAL
             }
 
             return recipe;
+        }
+        
+        public bool UpdateRecipe(string creator, string recipeName , string newRecipeName, string newRecipeDescription, string newInstructions)
+        {
+            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = $@"UPDATE Recipes SET recipeName = @NewRecipeName, description = @NewRecipeDescription,
+                    cookingInstructions = @NewInstructions WHERE  recipeName = @RecipeName AND creator = @CreatorId";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@CreatorId", userManager.GetIdByUsername(creator));
+                    command.Parameters.AddWithValue("@RecipeName", recipeName);
+                    command.Parameters.AddWithValue("@NewRecipeName", newRecipeName);
+                    command.Parameters.AddWithValue("@NewRecipeDescription", newRecipeDescription);
+                    command.Parameters.AddWithValue("@NewInstructions", newInstructions);
+
+                    // Execute the update command
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return false;
+
+                }
+            }
+        }
+
+        public bool DeleteRecipe(Recipe recipe)
+        {
+            int recipeID = GetRecipeID(recipe);
+
+            if (recipeID == -1)
+            {
+                System.Diagnostics.Debug.WriteLine("Recipe not found or error retrieving the recipe ID.");
+                return false;
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+
+                    string deleteIngredientsQuery = $"DELETE FROM RecipeIngredients WHERE recipeID = @RecipeID";
+                    SqlCommand ingredientCommand = new SqlCommand(deleteIngredientsQuery, connection);
+                    ingredientCommand.Parameters.AddWithValue("@RecipeID", recipeID);
+                    ingredientCommand.ExecuteNonQuery(); // Execute the query to delete ingredients
+
+                    // Next, delete the recipe itself
+                    string deleteRecipeQuery = $"DELETE FROM {tableName} WHERE recipeID = @RecipeID";
+                    SqlCommand recipeCommand = new SqlCommand(deleteRecipeQuery, connection);
+                    recipeCommand.Parameters.AddWithValue("@RecipeID", recipeID);
+                    int result = recipeCommand.ExecuteNonQuery(); // Execute the delete query for the recipe
+
+                    return result > 0;
+
+
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return false;
+                }
+                finally
+                {
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+
         }
     }
 }

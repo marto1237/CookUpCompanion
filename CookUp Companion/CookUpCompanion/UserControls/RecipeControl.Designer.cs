@@ -36,7 +36,6 @@
             MoreOptions = new PictureBox();
             MoreOptionsMenuMenu = new Panel();
             btnDeleteRecipe = new Button();
-            btnEditRecipe = new Button();
             btnMoreInfo = new Button();
             btnLogout = new Button();
             lbPrepTime = new Label();
@@ -124,13 +123,12 @@
             MoreOptionsMenuMenu.Anchor = AnchorStyles.None;
             MoreOptionsMenuMenu.BackColor = Color.FromArgb(64, 64, 64);
             MoreOptionsMenuMenu.Controls.Add(btnDeleteRecipe);
-            MoreOptionsMenuMenu.Controls.Add(btnEditRecipe);
             MoreOptionsMenuMenu.Controls.Add(btnMoreInfo);
             MoreOptionsMenuMenu.Controls.Add(btnLogout);
-            MoreOptionsMenuMenu.Location = new Point(9, 11);
+            MoreOptionsMenuMenu.Location = new Point(9, 21);
             MoreOptionsMenuMenu.Margin = new Padding(3, 4, 3, 4);
             MoreOptionsMenuMenu.Name = "MoreOptionsMenuMenu";
-            MoreOptionsMenuMenu.Size = new Size(160, 99);
+            MoreOptionsMenuMenu.Size = new Size(160, 79);
             MoreOptionsMenuMenu.TabIndex = 14;
             // 
             // btnDeleteRecipe
@@ -140,30 +138,14 @@
             btnDeleteRecipe.FlatAppearance.BorderSize = 0;
             btnDeleteRecipe.FlatStyle = FlatStyle.Flat;
             btnDeleteRecipe.ForeColor = SystemColors.ActiveCaptionText;
-            btnDeleteRecipe.Location = new Point(0, 69);
+            btnDeleteRecipe.Location = new Point(0, 39);
             btnDeleteRecipe.Margin = new Padding(3, 4, 3, 4);
             btnDeleteRecipe.Name = "btnDeleteRecipe";
-            btnDeleteRecipe.Size = new Size(160, 30);
+            btnDeleteRecipe.Size = new Size(160, 40);
             btnDeleteRecipe.TabIndex = 15;
             btnDeleteRecipe.Text = "Delete Recipe";
             btnDeleteRecipe.UseVisualStyleBackColor = false;
             btnDeleteRecipe.Click += btnDeleteRecipe_Click;
-            // 
-            // btnEditRecipe
-            // 
-            btnEditRecipe.BackColor = Color.White;
-            btnEditRecipe.BackgroundImageLayout = ImageLayout.Stretch;
-            btnEditRecipe.FlatAppearance.BorderSize = 0;
-            btnEditRecipe.FlatStyle = FlatStyle.Flat;
-            btnEditRecipe.ForeColor = SystemColors.ActiveCaptionText;
-            btnEditRecipe.Location = new Point(0, 39);
-            btnEditRecipe.Margin = new Padding(3, 4, 3, 4);
-            btnEditRecipe.Name = "btnEditRecipe";
-            btnEditRecipe.Size = new Size(160, 31);
-            btnEditRecipe.TabIndex = 14;
-            btnEditRecipe.Text = "Edit Recipe";
-            btnEditRecipe.UseVisualStyleBackColor = false;
-            btnEditRecipe.Click += btnEditRecipe_Click;
             // 
             // btnMoreInfo
             // 
@@ -238,7 +220,6 @@
         private PictureBox MoreOptions;
         private Panel MoreOptionsMenuMenu;
         private Button btnDeleteRecipe;
-        private Button btnEditRecipe;
         private Button btnMoreInfo;
         private Button btnLogout;
         private Label lbPrepTime;

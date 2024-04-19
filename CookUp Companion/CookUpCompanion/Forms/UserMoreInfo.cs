@@ -33,7 +33,7 @@ namespace CookUpCompanion.Forms
         }
 
         private void btnDeleteAccount_Click(object sender, EventArgs e)
-        { 
+        {
 
             int userID = userManager.GetIdByUsername(lbUsername.Text);
             bool IsAccounDeleted = userManager.DeleteUser(userID);
@@ -55,6 +55,11 @@ namespace CookUpCompanion.Forms
         private void lbUserComments_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
 
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
