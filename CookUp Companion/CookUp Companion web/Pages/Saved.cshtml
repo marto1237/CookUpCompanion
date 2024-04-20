@@ -18,6 +18,40 @@
     </div>
 
     <div class="wrapper-grid">
+
+        @for (int i = 0; i < Model.Recipes.Count; i++)
+        {
+            var recipe = Model.Recipes[i];
+
+            <div class="card-recipe">
+                <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
+                    <img class="card-img-top"
+                         src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
+
+                    <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
+                        <div class="card-top">
+                            <div class="card-left">
+                                <div class="like-container">
+                                    <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
+                                    <p>90%</p>
+                                </div>
+                            </div>
+                            <div class="card-right">
+                                <div class="bookmark-container">
+                                    <button class="savebtn" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showRemoveModal(event);"><i class="fa-solid fa-bookmark fa-lg" style="color: #FFD43B;"></i><span class="save-tooltip">Remove</span></button>
+                                    <p>36.5k</p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
+                            <div class="card-right"><button class="more" id="test" onclick="showOptionsMenu(this.id)"><i class="fa-solid fa-ellipsis"></i></button></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
         <div class="card-recipe">
             <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
             <div class="card-img-overlay">
@@ -171,64 +205,32 @@
 </div>
 
 <!-- Modal Remove-->
-<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="settingsModalLabel">Settings</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <button id="AccountButton" type="button" class="btn btn-light settingsbtn">
-                    <div class="leftSettings">Account  </div>
-                    <div class="rightSettings"> <!--User.Identity.Email -->user@gmail.com ></div>
-                </button>
-                <button id="ProfileButton" type="button" class="btn btn-light settingsbtn" onclick="openProfileModal()">
-                    <div class="leftSettings">Profile  </div>
-                    <div class="rightSettings"><!--User.Identity.FirstName--> <!--User.Identity.Email -->  FirstName LastName ></div>
-                    <button id="PreferencesButton" type="button" class="btn btn-light settingsbtn">
-                        <div class="leftSettings">Preferances  </div>
-                        <div class="rightSettings"> ></div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="removeSavedRecipeModal" tabindex="-1" aria-labelledby="removeSavedRecipeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="removeSavedRecipeModalLabel">Are you sure?</h1>
-            </div>
-            <div class="modal-body">
-                <p>Removing this recipe will delete it permanently from saved recipes and posts on your profile.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button id="confirmRemoveBtn" type="button" class="btn btn-danger">Remove</button>
-            </div>
+            <form method="post" asp-page-handler="RemoveSavedRecipe">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="removeSavedRecipeModalLabel">Are you sure?</h1>
+                </div>
+                <div class="modal-body">
+                    <p>Removing this recipe will delete it permanently from saved recipes and posts on your profile.</p>
+                    <input type="hidden" id="recipeIdToRemove" name="recipeId" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button id="confirmRemoveBtn" type="submit" class="btn btn-danger">Remove</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 @section Scripts {
     <script>
-        // Add event listeners to all unsave buttons
-        var unsaveButtons = document.querySelectorAll('.bookmark-container button.saved');
-        unsaveButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                // Show the modal when unsave button is clicked
-                $('#removeSavedRecipeModal').modal('show');
+        
 
-                // Add an event listener to the "Remove" button in the modal
-                document.getElementById('confirmRemoveBtn').addEventListener('click', function () {
-                    // Remove the corresponding recipe card
-                    button.closest('.card-recipe').remove();
+        
 
-                    // Close the modal after removing the recipe
-                    $('#removeSavedRecipeModal').modal('hide');
-                });
-            });
-        });
 
     </script>
 

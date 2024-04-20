@@ -141,5 +141,6 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public List<string> AllRoles() { return controller.AllRoles(); }
 
         public int GetRoleIdByRoleName(string roleName) { return controller.GetRoleIdByRoleName(roleName); }
+
     }
 }

@@ -318,5 +318,15 @@ function toggleRate(choice) {
     }
 }
 
+/* To prevent open recipe and show the modal for remove recipe from saved */
+function showRemoveModal(event) {
+    event.preventDefault();
+    event.stopPropagation();  // Prevent the click from affecting parent elements
+
+    var recipeId = event.currentTarget.dataset.recipeId;
+    document.getElementById('recipeIdToRemove').value = recipeId;
+    $('#removeSavedRecipeModal').modal('show');
+}
+
 
 // Write your JavaScript code.

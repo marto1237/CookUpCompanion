@@ -92,11 +92,11 @@
                         <div class="modal-body">
                         <button id="AccountButton" type="button" class="btn btn-light settingsbtn">
                                 <div class="leftSettings">Account  </div>
-                            <div class="rightSettings"> <!--User.Identity.Email -->user@gmail.com ></div>
+                            <div class="rightSettings"> <!--User.Identity.Email --> @User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value ></div>
                             </button>
                         <button id="ProfileButton" type="button" class="btn btn-light settingsbtn" onclick="openProfileModal()">
                                 <div class="leftSettings">Profile  </div>
-                            <div class="rightSettings"><!--User.Identity.FirstName--> <!--User.Identity.Email -->  FirstName LastName ></div>
+                            <div class="rightSettings"><!--User.Identity.FirstName--> <!--User.Identity.Email -->  @User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value ></div>
                             <button id="PreferencesButton" type="button" class="btn btn-light settingsbtn">
                                 <div class="leftSettings">Preferances  </div>
                                 <div class="rightSettings"> ></div>
@@ -117,7 +117,7 @@
                     <div class="modal-body">
                         <button id="editEmail" type="button" class="btn btn-light settingsbtn" >
                             <div class="leftSettings">Email  </div>
-                            <div class="rightSettings"> <!--User.Identity.Email -->user@gmail.com ></div>
+                            <div class="rightSettings"> <!--User.Identity.Email -->@User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value ></div>
                         </button>
                         <button id="editPassword" type="button" class="btn btn-light settingsbtn" >
                             <div class="leftSettings">Password  </div>

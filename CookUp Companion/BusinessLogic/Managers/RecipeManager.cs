@@ -46,7 +46,10 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName) { return controller.GetRecipeByNameAndCreator(recipeName, creatorName); }
         public bool UpdateRecipe(string creator, string recipeName, string newRecipeName, string newRecipeDescription, string newInstructions)
         { return controller.UpdateRecipe(creator, recipeName, newRecipeName, newRecipeDescription, newInstructions); }
-
         public bool DeleteRecipe(Recipe recipe) { return controller.DeleteRecipe(recipe); }
+        public List<Recipe> GetLikedRecipesByUser(int userId) { return controller.GetLikedRecipesByUser(userId); }
+        public List<Recipe> GetLikedRecipes(int page, int pageSize, int userId) { return controller.GetLikedRecipes(page, pageSize, userId); }
+        public bool RemoveSavedRecipe(int userId, int recipeId) { return controller.RemoveSavedRecipe(userId, recipeId); }
+        public List<Recipe> GetSavedRecipes(int page, int pageSize, int userId) { return  controller.GetSavedRecipes(page, pageSize, userId); } 
     }
 }

@@ -29,5 +29,9 @@ namespace InterfaceDAL
         Recipe GetRecipeByNameAndCreator(string recipeName, string creatorName);
         bool UpdateRecipe(string creator, string recipeName, string newRecipeName, string newRecipeDescription, string newInstructions);
         bool DeleteRecipe(Recipe recipe);
+        List<Recipe> GetLikedRecipesByUser(int userId);
+        List<Recipe> GetLikedRecipes(int page, int pageSize, int userId);
+        bool RemoveSavedRecipe(int userId, int recipeId);
+        List<Recipe> GetSavedRecipes(int page, int pageSize, int userId);
     }
 }
