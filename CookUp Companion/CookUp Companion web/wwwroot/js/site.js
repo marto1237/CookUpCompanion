@@ -328,5 +328,33 @@ function showRemoveModal(event) {
     $('#removeSavedRecipeModal').modal('show');
 }
 
+document.getElementById('filterRecipe').addEventListener('change', function () {
+    this.form.submit();
+});
 
+function switchTab(button) {
+    var tabName = button.getAttribute('data-tab');
+    document.querySelectorAll('.recipe-button').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    button.classList.add('selected');
+
+    var activityHasRecipes = document.getElementById('activityContent').querySelectorAll('.card-recipe').length > 0;
+    var createdHasRecipes = document.getElementById('createdContent').querySelectorAll('.card-recipe').length > 0;
+
+
+    document.getElementById('activityContent').style.display = (tabName === 'activity' && activityHasRecipes) ? 'flex' :
+        (tabName === 'activity' && !activityHasRecipes) ? 'block' : 'none';
+    document.getElementById('createdContent').style.display = (tabName === 'created' && createdHasRecipes) ? 'flex' :
+        (tabName === 'created' && !createdHasRecipes) ? 'block' : 'none';
+
+    window.history.pushState({ tab: tabName }, '', `?tab=${tabName}`);
+}
+function displaySelectedImage(event, imgId) {
+    var output = document.getElementById(imgId);
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function () {
+        URL.revokeObjectURL(output.src)
+    }
+}
 // Write your JavaScript code.

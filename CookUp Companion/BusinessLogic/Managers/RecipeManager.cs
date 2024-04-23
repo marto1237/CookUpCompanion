@@ -51,5 +51,12 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public List<Recipe> GetLikedRecipes(int page, int pageSize, int userId) { return controller.GetLikedRecipes(page, pageSize, userId); }
         public bool RemoveSavedRecipe(int userId, int recipeId) { return controller.RemoveSavedRecipe(userId, recipeId); }
         public List<Recipe> GetSavedRecipes(int page, int pageSize, int userId) { return  controller.GetSavedRecipes(page, pageSize, userId); } 
+        public int GetSaveCount(int recipeId) { return controller.GetSaveCount(recipeId); }
+        public List<Recipe> GetRecipesAlphabetically(int page, int pageSize) { return controller.GetRecipesAlphabetically(page, pageSize); }
+        public List<Recipe> GetRecipesByNewest(int page, int pageSize) { return controller.GetRecipesByNewest(page, pageSize); }
+        public List<Recipe> GetRecipesByOldest(int page, int pageSize) { return controller.GetRecipesByOldest(page, pageSize); }
+        public List<Recipe> GetRecipesByRating(int page, int pageSize) { return controller.GetRecipesByRating(page, pageSize); }
+        public List<Recipe> GetRecipesBySaves(int page, int pageSize) {  return controller.GetRecipesBySaves(page, pageSize); }
+        public List<Recipe> GetRecipesCreatedByUser(int page, int pageSize, int userId) {  return controller.GetRecipesCreatedByUser(page, pageSize, userId); }
     }
 }

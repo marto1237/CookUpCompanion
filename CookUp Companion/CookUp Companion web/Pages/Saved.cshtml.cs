@@ -1,6 +1,7 @@
 using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -11,6 +12,10 @@ namespace CookUp_Companion_web.Pages
     public class SavedModel : PageModel
     {
         public List<Recipe> Recipes;
+        public List<int> Likes { get; set; }
+        public List<int> Dislikes { get; set; }
+        public List<int> SaveCounts { get; set; }
+
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
         public const int PageSize = 24;
@@ -30,6 +35,9 @@ namespace CookUp_Companion_web.Pages
             CurrentPage = pageNum ?? 1;
             GetIngredients(CurrentPage);
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+            Likes = new List<int>();
+            Dislikes = new List<int>();
+            SaveCounts = new List<int>();
 
             // Retrieve the authenticated user's claims
             var userClaims = HttpContext.User.Claims;
@@ -49,7 +57,13 @@ namespace CookUp_Companion_web.Pages
 
                 foreach (var recipe in Recipes)
                 {
-                    bool isNowFavorite = recipeManager.CheckIfFavorite(userId, recipeManager.GetRecipeID(recipe));
+                    int recipeID = recipeManager.GetRecipeID(recipe);
+
+                    var (likes, dislikes) = recipeManager.GetLikesAndDislikes(recipeID);
+                    Likes.Add(likes);
+                    Dislikes.Add(dislikes);
+
+                    SaveCounts.Add(recipeManager.GetSaveCount(recipeID));
                 }
             }
             else
@@ -130,6 +144,15 @@ namespace CookUp_Companion_web.Pages
             return RedirectToPage();
         }
 
+        public static string FormatNumber(int num)
+        {
+            if (num >= 1000000)
+                return (num / 1000000D).ToString("0.#") + "M";
+            if (num >= 1000)
+                return (num / 1000D).ToString("0.#") + "K";
+
+            return num.ToString();
+        }
 
     }
 }

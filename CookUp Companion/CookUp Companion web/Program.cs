@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using CookUp_Companion_BusinessLogic.Manager;
 using DAL;
+using CookUp_Companion_BusinessLogic.InterfacesLL;
+using CookUp_Companion_BusinessLogic.Algoritam;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,6 +33,7 @@ builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IUserDALManager, UserDal>();
 builder.Services.AddTransient<IRecipeManager, RecipeManager>();
 builder.Services.AddTransient<IRecipeDALManager, RecipeDal>();
+builder.Services.AddTransient<IRecommendedRecipesAlgoritam ,RecommededRecipesAlgoritam>();
 
 var app = builder.Build();
 

@@ -203,6 +203,11 @@ namespace CookUp_Companion_web.Pages
         public async Task<IActionResult> OnPostCommentAsync()
         {
             recipeId = (int)TempData["recipeId"];
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Redirects to the login page if the user is not authenticated
+                return RedirectToPage("/Login");
+            }
 
             if (!ModelState.IsValid)
             {

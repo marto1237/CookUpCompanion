@@ -41,6 +41,11 @@ namespace CookUp_Companion_web.Pages
                 Response.Redirect("/Profile");
                 return;
             }
+            // Check if the UserEmail cookie exists
+            if (Request.Cookies["UserEmail"] != null)
+            {
+                Email = Request.Cookies["UserEmail"];
+            }
 
         }
 
@@ -81,6 +86,13 @@ namespace CookUp_Companion_web.Pages
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                    if (Request.Form["rememberMe"].Contains("on")) // assuming your checkbox has name="rememberMe"
+                    {
+                        CookieOptions options = new CookieOptions();
+                        options.Expires = DateTimeOffset.Now.AddDays(30); // Set expiration as needed
+                        Response.Cookies.Append("UserEmail", user.Email, options);
+                    }
+
                     // Assuming you have a method to store the appeal in the database
                     bool appealSent = true; //userManager.SendAppeal(userIdentity.Name, AppealMessage);
 
@@ -102,6 +114,10 @@ namespace CookUp_Companion_web.Pages
                     
                     // Sign in the user with the created identity
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    CookieOptions cookieOptions = new CookieOptions();
+                    cookieOptions.Expires = DateTime.Now.AddDays(1);
+                    Response.Cookies.Append("Email", user.Email, cookieOptions);
 
                     return RedirectToPage("/Index");
                 }

@@ -6,86 +6,206 @@
 
 <div class="profile">
     <div class="profile-bar">
-
-        <img class="rounded-circle" alt="avatar1" src=data:image/jpeg;base64,@Convert.ToBase64String(Model.UserProfilePicture) />
-
+        <img class="rounded-circle" alt="User Profile Picture" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.UserProfilePicture)}")" />
         <div id="profile-label">
-            <h1>@Model.FirstName</h1>
-            <h1>@Model.LastName</h1>
+            <h1>@Model.FirstName @Model.LastName</h1>
             <div id="editProfile">
-                <button id="editProfileButton" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profileModal"> Edit Profile</button>
+                <button id="editProfileButton" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profileModal">Edit Profile</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal for Editing Profile -->
     <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="profileModalLabel">Edit profile</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="modal-element">
-                        
+                <form method="post" asp-page-handler="ChangeUserProfile" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="profileModalLabel">Edit profile</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="image-container">
-                        <div class="d-flex justify-content-center mb-4">
-                            <img id="selectedAvatar" src=data:image/jpeg;base64,@Convert.ToBase64String(Model.UserProfilePicture)
-                                             class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder" />
-                                    </div>
-                        <div class="d-flex justify-content-center">
-                            <label for="uploadProfilePicture" class="btn btn-primary btn-rounded">
-                                Choose file
-                            </label>
-                            <input asp-for="UserProfilePicture" class="form-control d-none" id="uploadProfilePicture" type="file" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
-                            <span asp-validation-for="UserProfilePicture" class="text-danger"></span>
+                    <div class="modal-body">
+                        <div class="image-container">
+                            <div class="d-flex justify-content-center mb-4">
+                                <img id="selectedAvatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Selected Avatar"
+                                     src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.UserProfilePicture)}")" />
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <label for="uploadProfilePicture" class="btn btn-primary btn-rounded">Choose file</label>
+                                <input type="file" asp-for="userProfilePicture" class="form-control d-none" id="uploadProfilePicture" accept="image/png, image/jpeg" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                                <span asp-validation-for="userProfilePicture" class="text-danger"></span>
+                            </div>
                         </div>
-
+                        <div class="form-group">
+                            <label for="FName">First Name:</label>
+                            <input asp-for="FirstName" class="form-control" id="FName" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="LName">Last Name:</label>
+                            <input asp-for="LastName" class="form-control" id="LName" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Username">Username:</label>
+                            <input asp-for="Username" class="form-control" id="Username" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
                     </div>
-
-                    <div class="modal-element">
-                        <input type="text" id="FName" name="F_Name" placeholder="First Name" value=@Model.FirstName />
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
-                    <div class="modal-element">
-                        <input type="text" id="SName" name="S_Name" placeholder="Last Name" value=@Model.LastName />
-                    </div>
-                    <div class="modal-element">
-                        <input type="text" id="Username" name="Username" placeholder="Username" value=@Model.Username />
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-
-            
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- Tab Buttons -->
     <div class="recipe-tracking">
-        <button class="recipe-button selected" onclick="toggleButton(this)">Activity</button>
-        <button class="recipe-button" onclick="toggleButton(this)">Created</button>
-
+        <form method="post" asp-page-handler="SwitchTab" class="tab-form">
+            <input type="hidden" name="SelectedTab" value="activity" />
+            <button type="submit" class="recipe-button @(Model.ActiveTab == "activity" ? "selected" : "")">Activity</button>
+        </form>
+        <form method="post" asp-page-handler="SwitchTab" class="tab-form">
+            <input type="hidden" name="SelectedTab" value="created" />
+            <button type="submit" class="recipe-button @(Model.ActiveTab == "created" ? "selected" : "")">Created</button>
+        </form>
     </div>
 
-    <div class="border-top text-muted" id="createdContent" style="display: none;">
-        <hr />
-        <!-- Placeholder for the content to be displayed when "Created" is clicked -->
-        <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
-        <p>No recipres was found</p>
-        <button class="btn btn-primary" onclick="createNewRecipe()"> <a class="nav-link text-dark" asp-area="" asp-page="/CreateRecipe">Create New Recipe</a></button>
-    
+    <!-- Activity Content -->
+    <div id="activityContent" style="display: @(Model.ActiveTab == "activity" ? (Model.LikedRecipes != null && Model.LikedRecipes.Any() ? "flex" : "block") : "none");">
+        @if (Model.LikedRecipes != null && Model.LikedRecipes.Any() && Model.ActiveTab == "activity")
+        {
+            @for (int i = 0; i < Model.LikedRecipes.Count; i++)
+            {
+                var recipe = Model.LikedRecipes[i];
+                var isFavorite = Model.IsFavorite[i];
+                int totalSaves = Model.LikedSaveCounts[i];
+                int totalVotes = Model.LikedLikes[i] + Model.LikedDislikes[i];
+                double likePercentage = totalVotes > 0 ? (double)Model.LikedLikes[i] / totalVotes * 100 : 0;
+
+                <div class="card-recipe">
+                    <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
+                        <img class="card-img-top"
+                             src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
+
+                        <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
+                            <div class="card-top">
+                                <div class="card-left">
+                                    <div class="like-container">
+                                        <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
+                                        <p>@(likePercentage) %</p>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <div class="bookmark-container">
+                                        <button class="savebtn"><i class="@(isFavorite ? "fa-solid" : "fa-regular") fa-bookmark fa-lg" style="color: @(isFavorite ? "#FFD43B" : "#ffffff");"></i><span class="save-tooltip">@(isFavorite ? "Remove" : "Save")</span></button>
+                                        <p>@RecipeModel.FormatNumber(totalSaves)</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-bottom">
+                                <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
+                                <div class="card-right"><button class="more" id="test" onclick="showOptionsMenu(this.id)"><i class="fa-solid fa-ellipsis"></i></button></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <hr />
+            <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
+            <p>No liked recipes were found.</p>
+        }
     </div>
 
-    <div class="border-top text-muted" id="activityContent" >
-        <hr />
-        <!-- Placeholder for the content to be displayed when "Created" is clicked -->
-        <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
-        <p>Keep track of recipes you made</p>
-        <button class="btn btn-primary" asp-area="" asp-page="/CreateRecipe">Create New Recipe</button>
 
+    <!-- Created Content -->
+    <div id="createdContent" style="display: @(Model.ActiveTab == "created" ? (Model.CreatedRecipes != null && Model.CreatedRecipes.Any() ? "flex" : "block") : "none");">
+        @if (Model.CreatedRecipes != null && Model.CreatedRecipes.Any() && Model.ActiveTab == "created")
+        {
+            @for (int i = 0; i < Model.CreatedRecipes.Count; i++)
+            {
+                var recipe = Model.CreatedRecipes[i];
+                int totalSaves = Model.CreatedSaveCounts[i];
+                int totalVotes = Model.CreatedLikes[i] + Model.CreatedDislikes[i];
+                double likePercentage = totalVotes > 0 ? (double)Model.CreatedLikes[i] / totalVotes * 100 : 0;
+
+                <div class="card-recipe">
+                    <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
+                        <img class="card-img-top"
+                             src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
+
+                        <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
+                            <div class="card-top">
+                                <div class="card-left">
+                                    <div class="like-container">
+                                        <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
+                                        <p>@(likePercentage) %</p>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <div class="bookmark-container">
+                                        <button class="savebtn" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showRemoveModal(event);"><i class="fa-solid fa-bookmark fa-lg" style="color: #FFD43B;"></i><span class="save-tooltip">Remove</span></button>
+                                        <p>@RecipeModel.FormatNumber(totalSaves)</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-bottom">
+                                <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
+                                <div class="card-right"><button class="more" id="test" onclick="showOptionsMenu(this.id)"><i class="fa-solid fa-ellipsis"></i></button></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            
+        }
+        else
+        {
+            <hr />
+            <!-- Placeholder for the content to be displayed when "Created" is clicked -->
+            <img src="./images/774b1c8f2a87e981cf30.png" alt="Alternate Text" />
+            <p>No recipres was found</p>
+        }
     </div>
+    <div class="create-recipe-button-container" style="text-align: center; margin-top: 20px;">
+        <button class="btn btn-primary createRecipebtn" onclick="createNewRecipe()"> <a class="nav-link text-dark" asp-area="" asp-page="/CreateRecipe">Create New Recipe</a></button>
+    </div>
+                
 </div>
+
+
+
+
+@if (Model.ActiveTab == "activity" && Model.TotalPagesActivity > 1)
+{
+    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPagesActivity; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPageActivity ? "active" : "")">
+                    <a class="page-link" asp-page="/Profile" asp-route-pageNumActivity="@i" asp-route-pageNumCreated="@Model.CurrentPageCreated" asp-route-tab="activity">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+@if (Model.ActiveTab == "created" && Model.TotalPagesCreated > 1)
+{
+    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPagesCreated; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPageCreated ? "active" : "")">
+                    <a class="page-link" asp-page="/Profile" asp-route-pageNumActivity="@Model.CurrentPageActivity" asp-route-pageNumCreated="@i" asp-route-tab="created">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+

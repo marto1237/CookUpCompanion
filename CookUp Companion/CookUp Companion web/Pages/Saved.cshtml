@@ -22,6 +22,9 @@
         @for (int i = 0; i < Model.Recipes.Count; i++)
         {
             var recipe = Model.Recipes[i];
+            int totalSaves = Model.SaveCounts[i];
+            int totalVotes = Model.Likes[i] + Model.Dislikes[i];
+            double likePercentage = totalVotes > 0 ? (double)Model.Likes[i] / totalVotes * 100 : 0;
 
             <div class="card-recipe">
                 <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
@@ -33,13 +36,13 @@
                             <div class="card-left">
                                 <div class="like-container">
                                     <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                                    <p>90%</p>
+                                    <p>@(likePercentage) %</p>
                                 </div>
                             </div>
                             <div class="card-right">
                                 <div class="bookmark-container">
                                     <button class="savebtn" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showRemoveModal(event);"><i class="fa-solid fa-bookmark fa-lg" style="color: #FFD43B;"></i><span class="save-tooltip">Remove</span></button>
-                                    <p>36.5k</p>
+                                    <p>@RecipeModel.FormatNumber(totalSaves)</p>
 
                                 </div>
                             </div>
@@ -203,6 +206,17 @@
         </div>
     </div>
 </div>
+
+<nav aria-label="Page navigation" class="d-flex justify-content-center">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-page="/Saved" asp-route-pageNum="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
 
 <!-- Modal Remove-->
 

@@ -1,4 +1,5 @@
-﻿using InterfaceDAL;
+﻿using CookUp_Companion_BusinessLogic.InterfacesLL;
+using InterfaceDAL;
 using InterfacesLL;
 using Logic;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CookUp_Companion_BusinessLogic.Algoritam
 {
-    public class RecommededRecipesAlgoritam
+    public class RecommededRecipesAlgoritam : IRecommendedRecipesAlgoritam
     {
         private readonly IRecipeDALManager recipeManager;
         private readonly IUserManager userManager;
@@ -23,7 +24,7 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
         public List<Recipe> Recommend(User user)
         {
             // Get all recipes to check against user preferences
-            List<Recipe> allRecipes = recipeManager.GetAllRecipes(1, int.MaxValue); // Assuming paging can be bypassed or adjusted as needed
+            List<Recipe> allRecipes = recipeManager.GetAllRecipes(1, int.MaxValue); 
             int userId = userManager.GetIdByUsername(user.Username);
             List<Recipe> userLikedRecipes = GetUserLikedRecipes(userId);
 

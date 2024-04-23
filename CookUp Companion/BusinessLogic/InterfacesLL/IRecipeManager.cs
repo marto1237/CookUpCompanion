@@ -28,6 +28,12 @@ namespace InterfacesLL
         List<Recipe> GetLikedRecipes(int page, int pageSize, int userId);
         bool RemoveSavedRecipe(int userId, int recipeId);
         List<Recipe> GetSavedRecipes(int page, int pageSize, int userId);
-
+        int GetSaveCount(int recipeId);
+        List<Recipe> GetRecipesAlphabetically(int page, int pageSize);
+        List<Recipe> GetRecipesByNewest(int page, int pageSize);
+        List<Recipe> GetRecipesByOldest(int page, int pageSize);
+        List<Recipe> GetRecipesByRating(int page, int pageSize);
+        List<Recipe> GetRecipesBySaves(int page, int pageSize);
+        List<Recipe> GetRecipesCreatedByUser(int page, int pageSize, int userId);
     }
 }

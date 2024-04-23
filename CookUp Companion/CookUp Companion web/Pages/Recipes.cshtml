@@ -11,17 +11,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <form class="d-flex" method="post">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex" method="post" asp-page-handler="SearchRecipe">
+                        <input asp-for="SearchText" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
             </div>
         </div>
-        <form id="sortForm" method="post">
+        <form id="sortForm" method="get" >
         <label for="filterRecipe">Sort by: </label>
-        <select name="filterRecipe" id="filterRecipe">
-            <option value="relevance">Relevance</option>
+            <select asp-for="sortOrder" id="filterRecipe" onchange="this.submit();">
+             <option disable selected > -- select an option -- </option>
+            <option value="recommended">Recommended</option>
             <option value="alphabet">A to Z</option>
             <option value="newest">Newest</option>
             <option value="oldest">Oldest</option>
@@ -38,6 +39,8 @@
     {
         var recipe = Model.Recipes[i];
         var isFavorite = Model.IsFavorite[i];
+        int totalSaves = Model.SaveCounts[i];
+        double Score = Model.Score[i];
 
         <div class="card-recipe">
             <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
@@ -49,13 +52,13 @@
                         <div class="card-left">
                             <div class="like-container">
                                 <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                                <p>90%</p>
+                                <p>@(Score) %</p>
                             </div>
                         </div>
                         <div class="card-right">
                             <div class="bookmark-container">
                                 <button class="savebtn"><i class="@(isFavorite ? "fa-solid" : "fa-regular") fa-bookmark fa-lg" style="color: @(isFavorite ? "#FFD43B" : "#ffffff");"></i><span class="save-tooltip">@(isFavorite ? "Remove" : "Save")</span></button>
-                                <p>36.5k</p>
+                                <p>@RecipeModel.FormatNumber(totalSaves)</p>
 
                             </div>
                         </div>
@@ -313,12 +316,12 @@
     </div>
 </div>
 
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-page="/RecipeInfo" asp-route-pageNum="@i">@i</a>
+                <a class="page-link" asp-page="/Recipes" asp-route-pageNum="@i">@i</a>
             </li>
         }
     </ul>
