@@ -1293,6 +1293,54 @@ namespace DAL
 
             return recipes;
         }
+
+        public List<Recipe> GetSavedRecipesByUser(int userId)
+        {
+            List<Recipe> likedRecipes = new List<Recipe>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                SELECT r.recipeID, r.recipeName, r.recipePicture, r.creator, r.description, r.cookingInstructions, r.preparationTime, r.cookingTime, r.dateCreated
+                FROM Recipes r
+                JOIN UserFavorites uf ON r.recipeID = uf.recipeID
+                WHERE uf.userID = @UserId ";  // 1 represents 'true' for liked recipes
+
+                try
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserId", userId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Recipe recipe = new Recipe(
+                                    (byte[])reader["recipePicture"],
+                                    userManager.GetUserById((int)reader["creator"]),
+                                    reader["recipeName"].ToString(),
+                                    reader["description"].ToString(),
+                                    GetAllIngredientsForRecipeId((int)reader["recipeID"]),
+                                    reader["cookingInstructions"].ToString(),
+                                    (int)reader["cookingTime"],
+                                    (int)reader["preparationTime"]
+                                    );
+
+                                likedRecipes.Add(recipe);
+                            }
+                        }
+                    }
+                    return likedRecipes;
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return likedRecipes;
+                }
+            }
+        }
     }
 }
 

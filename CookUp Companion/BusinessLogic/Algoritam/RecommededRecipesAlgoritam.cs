@@ -27,10 +27,20 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
             List<Recipe> allRecipes = recipeManager.GetAllRecipes(1, int.MaxValue); 
             int userId = userManager.GetIdByUsername(user.Username);
             List<Recipe> userLikedRecipes = GetUserLikedRecipes(userId);
+            List<Recipe> userSavedRecipes = GetUserSavedRecipes(userId);
+
+            // Combine liked and saved recipes into a HashSet to avoid duplicates.
+            HashSet<string> excludedRecipeNames = new HashSet<string>(userLikedRecipes.Select(r => r.RecipeName));
+            excludedRecipeNames.UnionWith(userSavedRecipes.Select(r => r.RecipeName)); // Add saved recipes' names.
+
+
+            // Filter out recipes that the user has liked or saved from the list of all recipes.
+            List<Recipe> recipesToRecommend = allRecipes.Where(recipe => !excludedRecipeNames.Contains(recipe.RecipeName)).ToList();
+
 
             var recommendedRecipes = new HashSet<Recipe>();
 
-            foreach (var recipe in allRecipes)
+            foreach (var recipe in recipesToRecommend)
             {
                 if (IsMatchingUserPreferences(recipe, userLikedRecipes))
                 {
@@ -47,6 +57,10 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
             return recipeManager.GetLikedRecipesByUser(userId);
         }
 
+        private List<Recipe> GetUserSavedRecipes(int userId)
+        {
+            return recipeManager.GetSavedRecipesByUser(userId);
+        }
 
         private bool AreRecipesSimilar(Recipe one, Recipe two)
         {
@@ -60,7 +74,8 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
         private bool IsMatchingUserPreferences(Recipe recipe, List<Recipe> likedRecipes)
         {
             // Check if any liked recipe shares similar ingredients or other attributes
-            return likedRecipes.Any(likedRecipe => AreRecipesSimilar(recipe, likedRecipe));
+            return likedRecipes.Any(likedRecipe => 
+            AreRecipesSimilar(recipe, likedRecipe));
         }
 
 

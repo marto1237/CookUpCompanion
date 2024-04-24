@@ -2,3 +2,28 @@
 @model CookUp_Companion_web.Pages.ShoppingModel
 @{
 }
+
+<div class="tobuy-container box">
+    <form method="post" asp-page-handler="RemoveIngredient">
+
+        <div class="ingredientShoppingCart">
+            <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
+            <p>
+                <%= item.name %>
+            </p>
+        </div>
+        <input type="hidden" name="listName" value="<%= listTitle %>">
+
+    </form>
+
+    <% }) %>
+
+
+    <form method="post" asp-page-handler="AddIngredient">
+        <div class="newIngredient">
+            <input type="text" name="newIngredient" placeholder="New Ingredient" autocomplete="off">
+            <button type="submit" name="list" >+</button>
+        </div>
+    </form>
+
+</div>

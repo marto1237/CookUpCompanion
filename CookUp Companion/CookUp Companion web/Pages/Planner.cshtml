@@ -3,6 +3,30 @@
 @{
 }
 
+@if (TempData["IsAddRecipeSuccess"] != null && (bool)TempData["IsAddRecipeSuccess"])
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @if (ViewData["SuccessMessage"] != null)
+        {
+            <span class="text-success">@ViewData["SuccessMessage"]</span>
+        }
+
+        <br />
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["IsAddRecipeSuccess"] != null && (bool)TempData["IsAddRecipeSuccess"]== false)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <span class="text-danger">@ViewData["ErrorMessage"]</span>
+        }
+
+        <br />
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-interval="false">
     <div class="carousel-inner" role="listbox">
         @if (Model.Recipes != null && Model.Recipes.Count > 0)
@@ -54,62 +78,89 @@
 </div>
 
 <div class="wrapper-calendar">
-<div class="calendar-nav">
-    <div class="icons">
-        <span id="prev" class="material-symbols-rounded"><</span>
-        <p class="current-week"></p>
-        <span id="next" class="material-symbols-rounded">></span>
+    <div class="calendar-nav">
+        <div class="icons">
+            <span id="prev" class="material-symbols-rounded"><</span>
+            <p class="current-week"></p>
+            <span id="next" class="material-symbols-rounded">></span>
+            <form id="dateNavigationForm" method="get">
+                <!-- Hidden inputs to hold start and end date values -->
+                <input type="hidden" id="startDate" name="startDate" />
+                <input type="hidden" id="endDate" name="endDate" />
+            </form>
+        </div>
     </div>
-</div>
-<div class="calendar">
-    <ul class="weeks">
+    <div class="calendar">
+        <ul class="weeks">
                 
-        <li>Mon</li>
-        <li>Tue</li>
-        <li>Wed</li>
-        <li>Thu</li>
-        <li>Fri</li>
-        <li>Sat</li>
-        <li>Sun</li>
-    </ul>
-    <ul class="days"></ul>
-</div>
+            <li>Mon</li>
+            <li>Tue</li>
+            <li>Wed</li>
+            <li>Thu</li>
+            <li>Fri</li>
+            <li>Sat</li>
+            <li>Sun</li>
+        </ul>
+        <ul class="days"></ul>
+    </div>
+
+    @foreach (var dayPlan in Model.WeeklyPlan)
+    {
+        <div class="day-container" id="@dayPlan.Key">
+            <p>@dayPlan.Key</p>
+            <div class="recipes">
+                @foreach (var recipe in dayPlan.Value)
+                {
+                    <div class="recipe">
+                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="@recipe.RecipeName" />
+                        <p>@recipe.RecipeName</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 </div>
 
-<div class="container-days">
-<div class="Day-Monday day-container">
-    <p>Monday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Tuesday day-container">
-    <p>Tuesday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Wednesday day-container">
-    <p>Wednesday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Thursday day-container">
-    <p>Thursday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Friday day-container">
-    <p>Friday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Saturday day-container">
-    <p>Saturday</p>
-    <div class="recipes"></div>
-</div>
-<div class="Day-Sunday day-container">
-    <p>Sunday</p>
-    <div class="recipes"></div>
-</div>
-</div>
+<form method="post" asp-page-handler="SaveWeeklyPlan" id="weeklyPlanForm">
+    <div class="container-days">
+    <div class="Day-Monday day-container">
+        <p>Monday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Tuesday day-container">
+        <p>Tuesday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Wednesday day-container">
+        <p>Wednesday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Thursday day-container">
+        <p>Thursday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Friday day-container">
+        <p>Friday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Saturday day-container">
+        <p>Saturday</p>
+        <div class="recipes"></div>
+    </div>
+    <div class="Day-Sunday day-container">
+        <p>Sunday</p>
+        <div class="recipes"></div>
+    </div>
+    </div>
 
+    <button type="submit" form="weeklyPlanForm" class="btn btn-primary btn-lg submitCreateRecipe text-center"
+            style="padding-left: 2.5rem; padding-right: 2.5rem;">
+        Save Weekly Plan
+    </button>
+</form>
  
+
     @section Scripts {
-        <script type="text/javascript" src="/js/calendar.js"></script>
     <script>
         $(document).ready(function () {
             const recipes = document.querySelectorAll('.card-planner');
@@ -126,33 +177,106 @@
                     e.preventDefault();
                 });
 
+
                 day.addEventListener('drop', function (e) {
                     e.preventDefault();
                     const recipeID = e.dataTransfer.getData('text/plain');
-                    const dayName = day.getAttribute('data-day-name');
+                    const original = document.querySelector(`[data-recipe="${recipeID}"]`);
+                    if (original) {
+                        // Here, instead of always cloning, we should check if the recipe is already in the day container
 
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'SaveRecipeDay';
+                            const clone = original.cloneNode(true); // Clone the node deeply
+                            day.querySelector('.recipes').appendChild(clone);
 
-                    const recipeIdField = document.createElement('input');
-                    recipeIdField.type = 'hidden';
-                    recipeIdField.name = 'recipeId';
-                    recipeIdField.value = recipeID;
+                            // Prepare form input name using the day container's ID
+                            const inputName = `recipePlans[${day.id}][]`; // This will create an array for each day
 
-                    const dayField = document.createElement('input');
-                    dayField.type = 'hidden';
-                    dayField.name = 'day';
-                    dayField.value = dayName;
+                            // Create hidden input element for the recipe
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = inputName;
+                            input.value = recipeID;
 
-                    form.appendChild(recipeIdField);
-                    form.appendChild(dayField);
-                    document.body.appendChild(form);
-                    form.submit();
+                            // Append the input to the form
+                            document.getElementById('weeklyPlanForm').appendChild(input);
+                        
+                    }
                 });
             });
         });
     </script>
+    <script>
+        const daysTag = document.querySelector(".days");
+        const currentWeek = document.querySelector(".current-week");
+        const nextIcon = document.querySelector("#next");
+        const prevIcon = document.querySelector("#prev");
+
+        let startDate = new Date();
+        let dayOfWeek = startDate.getDay(); // Get the day of the week (0 - 6)
+        let diff = startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust when day is Sunday
+        startDate = new Date(startDate.setDate(diff)); // Set the startDate to Monday
+        let endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6); // End on Sunday
+
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const renderCalendar = () => {
+            const startDay = startDate.getDate();
+            const startMonth = startDate.getMonth();
+            const startYear = startDate.getFullYear();
+
+            currentWeek.innerText = `${startDay} ${months[startMonth]} - ${endDate.getDate()} ${months[endDate.getMonth()]}`;
+
+            let liTag = "";
+            let currentDate = new Date(startDate); // Create a new date object to manipulate without changing startDate
+
+            for (let i = 0; i < 7; i++) {
+                let isToday = currentDate.toDateString() === new Date().toDateString() ? "active" : "";
+
+                // Format the ID with the full date
+                let dateForId = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+                let dayName = currentDate.toLocaleString('en-us', { weekday: 'long' }); // Get the day name in the same format as the class name
+
+                // Find the day container by class name and set the id
+                let dayContainer = document.querySelector(`.Day-${dayName}`);
+                if (dayContainer) {
+                    dayContainer.id = `${dateForId}`;
+                }
+                liTag += `<li class="${isToday}" data-date="${dateForId}">${currentDate.getDate()}</li>`;
+
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            daysTag.innerHTML = liTag;
+
+        };
+
+
+        renderCalendar();
+
+        nextIcon.addEventListener("click", () => {
+            // Move the start date to the next week
+            startDate.setDate(startDate.getDate() + 7);
+            // Update the end date to be 6 days after the new start date
+            endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 6);
+            renderCalendar();
+            document.getElementById('dateNavigationForm').submit();
+        });
+
+        prevIcon.addEventListener("click", () => {
+            // Move the start date to the previous week
+            startDate.setDate(startDate.getDate() - 7);
+            // Update the end date to be 6 days after the new start date
+            endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + 6);
+            renderCalendar();
+            document.getElementById('dateNavigationForm').submit();
+        });
+        </script>
 
 
     }

@@ -146,6 +146,7 @@ namespace UnitTests.MockClasses
         {
             return users.Values.ToList();
         }
+
         public bool UpdateUserPassword(User user)
         {
             int userId = GetIdByUsername(user.Username);

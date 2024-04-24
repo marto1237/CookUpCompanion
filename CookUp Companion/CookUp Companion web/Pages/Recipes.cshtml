@@ -65,7 +65,7 @@
                     </div>
                     <div class="card-bottom">
                         <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
-                        <div class="card-right"><button class="more" id="test" onclick="showOptionsMenu(this.id)"><i class="fa-solid fa-ellipsis"></i></button></div>
+                        <div class="card-right"><button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)"><i class="fa-solid fa-ellipsis"></i></button></div>
                     </div>
                 </div>
             </a>
@@ -278,10 +278,12 @@
 
 </div>
 
+<!-- More Options Modal -->
 <div class="modal fade " id="moreOptionsModal" aria-hidden="true" aria-labelledby="moreOptionsModalLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
+                <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="">
                 <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="addToModal()" >
                     <div class="leftSettings"><i class="fa-solid fa-clipboard-list fa-2xl"></i></div>
                     <div class="rightSettings"> Add too ></div>
@@ -298,12 +300,15 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="AddToModal" aria-hidden="true" aria-labelledby="AddToModalLabel2" tabindex="-1">
+
+<!-- Add to  Modal -->
+<div class="modal fade" id="AddToModal" aria-hidden="true" aria-labelledby="AddToModalLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             
             <div class="modal-body">
-                <button id="AddTo" type="button" class="btn btn-light settingsbtn" >
+                <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="@Model.CurrentRecipeId">
+                <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="recipeIngredientsModal()">
                     <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
                     <div class="rightSettings"> Meal planer</div>
                 </button>
@@ -316,6 +321,29 @@
     </div>
 </div>
 
+<!-- RecipeIngredient Modal -->
+<div class="modal fade" id="RecipeIngredientsModal" aria-hidden="true" aria-labelledby="RecipeIngredientsModalLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form asp-page-handler="ShowIngredientsModal" method="get">
+                <div class="modal-body">
+                    <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="">
+                    @foreach (var ingredient in Model.GetRecipeIngredients(Model.CurrentRecipeId))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="ingredientIds" value="@ingredient.IngredientId" id="ingredient-@ingredient.IngredientId" checked>
+                            <label class="form-check-label" for="ingredient-@ingredient.IngredientId">
+                                @ingredient.IngredientName
+                            </label>
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-primary">Add Selected Ingredients</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">
         @for (int i = 1; i <= Model.TotalPages; i++)

@@ -40,5 +40,6 @@ namespace InterfaceDAL
         List<Recipe> GetRecipesByRating(int page, int pageSize);
         List<Recipe> GetRecipesBySaves(int page, int pageSize);
         List<Recipe> GetRecipesCreatedByUser(int page, int pageSize, int userId);
+        List<Recipe> GetSavedRecipesByUser(int userId);
     }
 }

@@ -1,3 +1,4 @@
+
 using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -21,21 +22,27 @@ namespace CookUp_Companion_web.Pages
 
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
+        private readonly IPlannerManager plannerManager;
 
         public User _user { get; private set; }
         private int userId;
 
-        public PlannerModel(IUserManager userManager, IRecipeManager recipeManager)
+        public Dictionary<string, List<Recipe>> WeeklyPlan { get; set; }
+
+        public PlannerModel(IUserManager userManager, IRecipeManager recipeManager, IPlannerManager plannerManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
+            this.plannerManager = plannerManager;
         }
-        public void OnGet(int? pageNum)
+        public void OnGet(int? pageNum, string startDate, string endDate)
         {
             CurrentPage = pageNum ?? 1;
+            
             GetIngredients(CurrentPage);
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
-            
+
+           
 
             // Retrieve the authenticated user's claims
             var userClaims = HttpContext.User.Claims;
@@ -50,7 +57,7 @@ namespace CookUp_Companion_web.Pages
             }
             if (_user != null)
             {
-                int userId = userManager.GetIdByUsername(_user.Username); // Implement this in your UserManager to get the current user's ID
+                userId = userManager.GetIdByUsername(_user.Username); // Implement this in your UserManager to get the current user's ID
 
 
                 foreach (var recipe in Recipes)
@@ -58,6 +65,23 @@ namespace CookUp_Companion_web.Pages
                     int recipeID = recipeManager.GetRecipeID(recipe);
 
                     
+                }
+
+                DateTime startDateTime;
+                DateTime endDateTime;
+
+                if (DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime))
+                {
+                    // If parsing is successful, use the parsed dates
+                    WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startDateTime, endDateTime);
+                }
+                else
+                {
+                    // If parsing fails, default to current week or handle the error
+                    var today = DateTime.Today;
+                    var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+                    var endOfWeek = startOfWeek.AddDays(6);
+                    WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startOfWeek, endOfWeek);
                 }
             }
             else
@@ -111,24 +135,81 @@ namespace CookUp_Companion_web.Pages
             //Leter when the user click the recipe check if the recipeID is not equal to 0
         }
 
-        public async Task<IActionResult> OnPostSaveRecipeDay(int recipeId, string day)
-        {
-            var result = true;
-            //var userId = _userManager.GetUserId(User); // Ensure you have a method to retrieve the currently logged-in user's ID
+        //public async Task<IActionResult> OnPostSaveRecipeDay(int recipeId, string day)
+        //{
+        //    var result = true;
+        //    //var userId = _userManager.GetUserId(User); // Ensure you have a method to retrieve the currently logged-in user's ID
 
-            //// Assume you have a method to save the data
-            //var result = await _context.SaveRecipeDayAsync(recipeId, day, userId);
-            if (result)
+        //    //// Assume you have a method to save the data
+        //    //var result = await _context.SaveRecipeDayAsync(recipeId, day, userId);
+        //    if (result)
+        //    {
+        //        TempData["SuccessMessage"] = "Recipe successfully added to the day!";
+        //    }
+        //    else
+        //    {
+        //        TempData["ErrorMessage"] = "Failed to add recipe.";
+        //    }
+
+        //    return RedirectToPage(); // Optionally redirect back to the same page or another confirmation page
+        //}
+        public async Task<IActionResult> OnPostSaveWeeklyPlan()
+        {
+            // Retrieve the authenticated user's claims
+            var userClaims = HttpContext.User.Claims;
+
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+
+            if (userEmailClaim != null)
             {
-                TempData["SuccessMessage"] = "Recipe successfully added to the day!";
+                _user = userManager.GetUserByEmail(userEmailClaim.Value);
+
+
+            }
+
+            userId = userManager.GetIdByUsername(_user.Username); // Implement this in your UserManager to get the current user's ID
+
+                Dictionary<string, List<int>> weeklyPlan = new Dictionary<string, List<int>>();
+
+            // Use the keys from the form to populate the weeklyPlan dictionary
+            foreach (var key in Request.Form.Keys.Where(k => k.StartsWith("recipePlans[")))
+            {
+                // Extract the dayId from the key
+                string dayId = key.Split('[', ']')[1];
+                List<int> recipeIds = Request.Form[key].Select(int.Parse).ToList();
+
+                weeklyPlan[dayId] = recipeIds;
+            }
+
+            bool addSuccess = plannerManager.AddWeeklyPlan(userId, weeklyPlan);
+
+
+            if (addSuccess)
+            {
+                TempData["SuccessMessage"] = "Weekly plan saved successfully!";
+                TempData["IsAddRecipeSuccess"] = true;
             }
             else
             {
-                TempData["ErrorMessage"] = "Failed to add recipe.";
+                TempData["ErrorMessage"] = "There was an error saving your weekly plan.";
+                TempData["IsAddRecipeSuccess"] = false;
             }
 
-            return RedirectToPage(); // Optionally redirect back to the same page or another confirmation page
+            LoadWeeklyPlan();
+
+            return RedirectToPage();
         }
+
+        private void LoadWeeklyPlan()
+        {
+            // Define the start of the week (Monday) and the end of the week (Sunday)
+            var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(6);
+
+            WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startOfWeek, endOfWeek);
+        }
+
+
 
     }
 }

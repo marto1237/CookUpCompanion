@@ -130,13 +130,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+// function to show the Options menu
+function showOptionsMenu(button) {
+    var recipeId = button.getAttribute('data-recipe-id');
 
-function showOptionsMenu(id) {
-    // Here, you could dynamically create a menu and append it to 'card'
-    // or use a pre-existing hidden menu in the HTML that you show and position appropriately.
-    $('#moreOptionsModal').modal('show')
-    console.log("Showing options for:", card);
-    // Implement showing the menu here. You might use a library like Popper.js for popups, or simple CSS.
+    // Store this ID in hidden inputs inside the modals
+    document.querySelectorAll('input[name="CurrentRecipeId"]').forEach(input => {
+        input.value = recipeId;
+    });
+
+    // Now show the modal
+    $('#moreOptionsModal').modal('show');
 }
 
 //function to close more Option modal to show add to modal
@@ -144,6 +148,11 @@ function showOptionsMenu(id) {
 function addToModal() {
     $('#moreOptionsModal').modal('hide'); // Hide the moreOption modal
     $('#AddToModal').modal('show'); // Show the settings modal
+}
+//function to show recipe ingredients modal in combo box
+function recipeIngredientsModal() {
+    $('#AddToModal').modal('hide'); // Hide the AddToModa modal
+    $('#RecipeIngredientsModal').modal('show'); // Show the ingredients modal
 }
 
 //function to show the picture  of the recipe when creating new one

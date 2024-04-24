@@ -34,6 +34,9 @@ builder.Services.AddTransient<IUserDALManager, UserDal>();
 builder.Services.AddTransient<IRecipeManager, RecipeManager>();
 builder.Services.AddTransient<IRecipeDALManager, RecipeDal>();
 builder.Services.AddTransient<IRecommendedRecipesAlgoritam ,RecommededRecipesAlgoritam>();
+builder.Services.AddTransient<IPlannerManager, PlannerManager>();
+builder.Services.AddTransient<IPlannerDALManager, PlannerDal>();
+
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-
+using CookUp_Companion_web.Pages;
 using CookUp_Companion_BusinessLogic.InterfacesLL;
 using InterfacesLL;
 using Logic;
@@ -23,6 +23,8 @@ namespace CookUp_Companion_web.Pages
         public string SearchText { get; set; }
         public const int PageSize = 24;
 
+        public List<Ingredient> SelectedRecipeIngredients = new List<Ingredient>();
+        public int CurrentRecipeId { get; set; }
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
         private readonly IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam;
@@ -180,6 +182,18 @@ namespace CookUp_Companion_web.Pages
             }
 
             PopulateRecipeInteractionData(); // Update other UI elements based on new data
+            return Page();
+        }
+
+        public List<Ingredient> GetRecipeIngredients(int recipeId)
+        {
+            return SelectedRecipeIngredients = recipeManager.GetAllIngredientsForRecipeId(recipeId);
+        }
+
+        public IActionResult OnGetShowIngredientsModal(int recipeId)
+        {
+            CurrentRecipeId = recipeId; // Ensure this is being set somewhere logically prior
+            List<Ingredient> ingredients = GetRecipeIngredients(recipeId); // Your method to fetch ingredients
             return Page();
         }
 
