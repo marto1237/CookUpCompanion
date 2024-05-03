@@ -22,9 +22,9 @@ namespace CookUp_Companion_web.Pages
         public int TotalPages { get; private set; }
         public string SearchText { get; set; }
         public const int PageSize = 24;
-
-        public List<Ingredient> SelectedRecipeIngredients = new List<Ingredient>();
         public int CurrentRecipeId { get; set; }
+        public Dictionary<int, List<Ingredient>> IngredientsByRecipeId { get; set; } = new Dictionary<int, List<Ingredient>>();
+        public List<Ingredient> SelectedRecipeIngredients = new List<Ingredient>();
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
         private readonly IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam;
@@ -63,6 +63,11 @@ namespace CookUp_Companion_web.Pages
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
             PopulateRecipeInteractionData();
 
+            foreach (var recipe in Recipes)
+            {
+                var recipeID = recipeManager.GetRecipeID(recipe);
+                IngredientsByRecipeId.Add(recipeManager.GetRecipeID(recipe), recipeManager.GetAllIngredientsForRecipeId(recipeID));
+            }
             return Page();
         }
 
@@ -185,17 +190,49 @@ namespace CookUp_Companion_web.Pages
             return Page();
         }
 
-        public List<Ingredient> GetRecipeIngredients(int recipeId)
+
+        public async Task<IActionResult> OnPostIngredientsForTheRecipeIDAsync()
         {
-            return SelectedRecipeIngredients = recipeManager.GetAllIngredientsForRecipeId(recipeId);
+            int currentRecipeId = int.Parse(Request.Form["CurrentRecipeId"]);
+            CurrentRecipeId = currentRecipeId;
+            // Fetch ingredients or perform action using the recipeId
+            List<Ingredient> ingredients = recipeManager.GetAllIngredientsForRecipeId(CurrentRecipeId);
+            SelectedRecipeIngredients = ingredients;
+            return Partial("_RecipeIngredientsPartial", this);
         }
 
-        public IActionResult OnGetShowIngredientsModal(int recipeId)
+        public async Task<IActionResult> OnPostSaveSelectedIngredientsAsync()
         {
-            CurrentRecipeId = recipeId; // Ensure this is being set somewhere logically prior
-            List<Ingredient> ingredients = GetRecipeIngredients(recipeId); // Your method to fetch ingredients
-            return Page();
-        }
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/Login");
+            }
 
+            // Retrieve the authenticated user's claims
+            var userClaims = HttpContext.User.Claims;
+
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+
+
+             _user = userManager.GetUserByEmail(userEmailClaim.Value);
+
+            int userId = userManager.GetIdByUsername(_user.Username);
+            try
+            {
+                foreach (var ingredientId in selectedIngredientIds)
+                {
+                    // Assume you have a method to save each ingredient for the user
+                    //await recipeManager.SaveIngredientForUserAsync(userId, ingredientId, CurrentRecipeId);
+                }
+
+                TempData["SuccessMessage"] = "Ingredients saved successfully!";
+                return RedirectToPage(); // Or wherever you want to redirect
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while saving ingredients: " + ex.Message);
+                return Page();
+            }
+        }
     }
 }

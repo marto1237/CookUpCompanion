@@ -392,6 +392,6 @@ namespace UnitTests.UserManagerTests
 
             Assert.Null(roleId);
         }
-         
+
     }
 }

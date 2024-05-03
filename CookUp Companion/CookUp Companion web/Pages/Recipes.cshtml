@@ -5,7 +5,8 @@
 
 
 
-<div class="recipeHeader"><h2>Recipes</h2>
+<div class="recipeHeader">
+    <h2>Recipes</h2>
     <div class="recipeShowFilter">
 
         <div class="container">
@@ -18,19 +19,19 @@
                 </div>
             </div>
         </div>
-        <form id="sortForm" method="get" >
-        <label for="filterRecipe">Sort by: </label>
+        <form id="sortForm" method="get">
+            <label for="filterRecipe">Sort by: </label>
             <select asp-for="sortOrder" id="filterRecipe" onchange="this.submit();">
-             <option disable selected > -- select an option -- </option>
-            <option value="recommended">Recommended</option>
-            <option value="alphabet">A to Z</option>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="topRated">Top rated</option>
-            <option value="topSaved">Top saved</option>
-        </select>
+                <option disable selected> -- select an option -- </option>
+                <option value="recommended">Recommended</option>
+                <option value="alphabet">A to Z</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="topRated">Top rated</option>
+                <option value="topSaved">Top saved</option>
+            </select>
         </form>
-           
+
     </div>
 </div>
 <div class="wrapper-grid">
@@ -45,10 +46,10 @@
         <div class="card-recipe">
             <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
                 <img class="card-img-top"
-                     src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")"  alt="Recipe Image">
+                     src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
 
                 <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
-                    <div class="card-top" >
+                    <div class="card-top">
                         <div class="card-left">
                             <div class="like-container">
                                 <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
@@ -270,10 +271,10 @@
         </a>
     </div>
 
-              
+
+</div>
     </div>
-    </div>
-        
+
 
 
 </div>
@@ -283,12 +284,12 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="">
-                <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="addToModal()" >
+                <input type="hidden" asp-for="CurrentRecipeId">
+                <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="addToModal()">
                     <div class="leftSettings"><i class="fa-solid fa-clipboard-list fa-2xl"></i></div>
                     <div class="rightSettings"> Add too ></div>
                 </button>
-                <button id="SendRecipe" type="button" class="btn btn-light settingsbtn" >
+                <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
                     <div class="leftSettings"><i class="fa-solid fa-share-from-square fa-2xl"></i></div>
                     <div class="rightSettings">Send Recipe </div>
                 </button>
@@ -305,13 +306,16 @@
 <div class="modal fade" id="AddToModal" aria-hidden="true" aria-labelledby="AddToModalLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            
-            <div class="modal-body">
-                <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="@Model.CurrentRecipeId">
-                <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="recipeIngredientsModal()">
-                    <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
-                    <div class="rightSettings"> Meal planer</div>
-                </button>
+
+            <div class="modal-body" id="addModal">
+                <form method="post" asp-page-handler="IngredientsForTheRecipeID">
+                    <input type="hidden" asp-for="CurrentRecipeId">
+                    <button type="submit" class="btn btn-light settingsbtn">
+                        <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
+                        <div class="rightSettings">Meal planer</div>
+                    </button>
+                </form>
+
                 <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
                     <div class="leftSettings"><i class="fa-regular fa-rectangle-list fa-2xl"></i></div>
                     <div class="rightSettings">Shopping list </div>
@@ -321,7 +325,7 @@
     </div>
 </div>
 
-<!-- RecipeIngredient Modal -->
+@* <!-- RecipeIngredient Modal -->
 <div class="modal fade" id="RecipeIngredientsModal" aria-hidden="true" aria-labelledby="RecipeIngredientsModalLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -343,7 +347,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> *@
 <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">
         @for (int i = 1; i <= Model.TotalPages; i++)
@@ -355,7 +359,7 @@
     </ul>
 </nav>
 <!--Function to change the show recipes by selected option -->
-    
+
 <script>
     // Function to save selected option in local storage
     document.getElementById('filterRecipe').addEventListener('change', function () {
@@ -370,4 +374,13 @@
             document.getElementById('filterRecipe').value = selectedOption;
         }
     });
+
+    document.getElementById('addModal').addEventListener('click', function () {
+        localStorage.setItem('CurrentRecipeId', this.value);
+        this.form.submit();
+    });
+    function setRecipeId(recipeId) {
+        document.getElementById('CurrentRecipeId').value = recipeId;
+    }
+   
 </script>

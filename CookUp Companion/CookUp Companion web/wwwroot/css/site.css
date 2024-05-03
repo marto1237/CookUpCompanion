@@ -1003,3 +1003,45 @@ input[type="radio"] {
     padding-bottom: 6px;
     border-width: 0;
 }
+.ingredients-list {
+    display: flex; /* Use flexbox to manage layout */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Align items to the left */
+    justify-content: center; /* Center the items vertically (if needed) */
+    width: 100%; /* Full width of the container */
+    max-width: 640px; /* Maximum width of the ingredient list */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.form-check {
+    width: 100%; /* Ensures the checkboxes take full width of their container */
+    display: flex;
+    justify-content: flex-start; /* Align the checkbox and label to the start (left) */
+    align-items: center;
+    margin-bottom: 1rem; /* Space between checkboxes */
+}
+
+.form-check-input {
+    margin-right: 1rem; /* Space between the checkbox and the label */
+}
+
+.Ingredient {
+    display: flex;
+    align-items: center; /* Vertical alignment */
+    justify-content: flex-start; /* Horizontal alignment to the start */
+}
+
+.Ingredient img {
+    height: 6vw;
+    width: 6vw;
+    margin-right: 1rem; /* Margin between image and text */
+}
+
+.Ingredient p {
+    margin: 0; /* Remove default margins */
+}
+
+.ingredients-list button{
+    align-items: center;
+    justify-content: center;
+}

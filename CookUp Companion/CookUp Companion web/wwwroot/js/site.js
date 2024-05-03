@@ -124,24 +124,26 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();  // Prevent navigating if it's in an anchor tag.
             event.stopPropagation(); // Stop the event from bubbling up to parent elements.
 
-            const card = button.closest('.card-recipe'); // Find closest parent '.card-recipe'
-           
-            showOptionsMenu(id);
+            const recipeId = button.getAttribute('data-recipe-id');
+            document.getElementById('CurrentRecipeId').value = recipeId;
+            showOptionsMenu(recipeId);
         });
     });
 });
 // function to show the Options menu
-function showOptionsMenu(button) {
-    var recipeId = button.getAttribute('data-recipe-id');
-
-    // Store this ID in hidden inputs inside the modals
+function showOptionsMenu(recipeId) {
+    // Update hidden input fields
     document.querySelectorAll('input[name="CurrentRecipeId"]').forEach(input => {
         input.value = recipeId;
     });
 
+    // Debugging output to ensure value is set
+    console.log('CurrentRecipeId set to:', recipeId);
+
     // Now show the modal
     $('#moreOptionsModal').modal('show');
 }
+
 
 //function to close more Option modal to show add to modal
 

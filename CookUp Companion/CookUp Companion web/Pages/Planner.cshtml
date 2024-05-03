@@ -85,8 +85,8 @@
             <span id="next" class="material-symbols-rounded">></span>
             <form id="dateNavigationForm" method="get">
                 <!-- Hidden inputs to hold start and end date values -->
-                <input type="hidden" id="startDate" name="startDate" />
-                <input type="hidden" id="endDate" name="endDate" />
+                <input type="hidden" id="startDate" name="startDate" value="@Model.StartDate" />
+                <input type="hidden" id="endDate" name="endDate" value="@Model.EndDate" />
             </form>
         </div>
     </div>
@@ -104,21 +104,7 @@
         <ul class="days"></ul>
     </div>
 
-    @foreach (var dayPlan in Model.WeeklyPlan)
-    {
-        <div class="day-container" id="@dayPlan.Key">
-            <p>@dayPlan.Key</p>
-            <div class="recipes">
-                @foreach (var recipe in dayPlan.Value)
-                {
-                    <div class="recipe">
-                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="@recipe.RecipeName" />
-                        <p>@recipe.RecipeName</p>
-                    </div>
-                }
-            </div>
-        </div>
-    }
+    
 </div>
 
 <form method="post" asp-page-handler="SaveWeeklyPlan" id="weeklyPlanForm">
@@ -157,8 +143,40 @@
             style="padding-left: 2.5rem; padding-right: 2.5rem;">
         Save Weekly Plan
     </button>
+
+    @foreach (var dayPlan in Model.WeeklyPlan)
+    {
+        <div class="day-container" id="@dayPlan.Key">
+            <p>@dayPlan.Key</p>
+            <div class="recipes">
+                @foreach (var recipe in dayPlan.Value)
+                {
+                    <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
+                        <div class="card-planner" data-recipe="@Model.GetRecipeID(recipe)" draggable="true">
+                            <div class="card-body">
+                                <img src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
+                                <div class="card-img-overlay">
+                                    <div class="card-top">
+                                        <div class="card-right">
+                                            <button class="more" onclick="showOptionsMenu(this.id)">
+                                                <i class="fa-solid fa-ellipsis"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-bottom">
+                                        <p>@recipe.RecipeName</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
 </form>
  
+
 
     @section Scripts {
     <script>
@@ -252,6 +270,8 @@
 
             daysTag.innerHTML = liTag;
 
+            document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+            document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
         };
 
 

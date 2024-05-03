@@ -18,6 +18,9 @@ namespace CookUp_Companion_web.Pages
 
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
+
+        public string StartDate { get;  set; }
+        public string EndDate { get;  set; }
         public const int PageSize = 24;
 
         private readonly IRecipeManager recipeManager;
