@@ -1,10 +1,11 @@
-
+using System.Globalization;
 using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace CookUp_Companion_web.Pages
 {
@@ -18,8 +19,9 @@ namespace CookUp_Companion_web.Pages
 
         public int CurrentPage { get; private set; }
         public int TotalPages { get; private set; }
-
+        [BindProperty]
         public string StartDate { get;  set; }
+        [BindProperty]
         public string EndDate { get;  set; }
         public const int PageSize = 24;
 
@@ -38,11 +40,23 @@ namespace CookUp_Companion_web.Pages
             this.recipeManager = recipeManager;
             this.plannerManager = plannerManager;
         }
-        public void OnGet(int? pageNum, string startDate, string endDate)
+        public void OnGet(int? pageNum, string startDate, string endDate, string navigation)
         {
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                StartDate = startDate;
+                EndDate = endDate;
+            }
+            else
+            {
+                SetCurrentWeek(); // Sets to current week if no dates are specified
+            }
+
+            // Adjust dates based on navigation input (previous or next)
+            AdjustWeekDates(navigation);
+
             CurrentPage = pageNum ?? 1;
-            
-            GetIngredients(CurrentPage);
+            GetSavedRecipes(CurrentPage);
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
 
            
@@ -72,19 +86,18 @@ namespace CookUp_Companion_web.Pages
 
                 DateTime startDateTime;
                 DateTime endDateTime;
-
-                if (DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime))
+                StartDate= startDate; EndDate= endDate;
+                if (startDate != null && endDate != null)
                 {
+                    startDateTime =  DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    endDateTime =  DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
                     // If parsing is successful, use the parsed dates
                     WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startDateTime, endDateTime);
                 }
                 else
                 {
-                    // If parsing fails, default to current week or handle the error
-                    var today = DateTime.Today;
-                    var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
-                    var endOfWeek = startOfWeek.AddDays(6);
-                    WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startOfWeek, endOfWeek);
+                    LoadWeeklyPlan();
                 }
             }
             else
@@ -95,7 +108,7 @@ namespace CookUp_Companion_web.Pages
 
         }
 
-        public void GetIngredients(int page)
+        public void GetSavedRecipes(int page)
         {
             try
             {
@@ -138,24 +151,6 @@ namespace CookUp_Companion_web.Pages
             //Leter when the user click the recipe check if the recipeID is not equal to 0
         }
 
-        //public async Task<IActionResult> OnPostSaveRecipeDay(int recipeId, string day)
-        //{
-        //    var result = true;
-        //    //var userId = _userManager.GetUserId(User); // Ensure you have a method to retrieve the currently logged-in user's ID
-
-        //    //// Assume you have a method to save the data
-        //    //var result = await _context.SaveRecipeDayAsync(recipeId, day, userId);
-        //    if (result)
-        //    {
-        //        TempData["SuccessMessage"] = "Recipe successfully added to the day!";
-        //    }
-        //    else
-        //    {
-        //        TempData["ErrorMessage"] = "Failed to add recipe.";
-        //    }
-
-        //    return RedirectToPage(); // Optionally redirect back to the same page or another confirmation page
-        //}
         public async Task<IActionResult> OnPostSaveWeeklyPlan()
         {
             // Retrieve the authenticated user's claims
@@ -205,14 +200,64 @@ namespace CookUp_Companion_web.Pages
 
         private void LoadWeeklyPlan()
         {
+            // Get today's date
+            DateTime today = DateTime.Today;
+
+            // Calculate how many days to subtract to get to Monday (assuming Monday as the first day of the week)
+            int daysToSubtract = (int)today.DayOfWeek - (int)DayOfWeek.Monday;
+            if (daysToSubtract < 0)
+            {
+                // This means today is Sunday, which in the default culture has a DayOfWeek value of 0
+                daysToSubtract += 7; // Adjust to go back to the previous Monday
+            }
+
+            // Get the start of the week
+            DateTime startWeek = today.AddDays(-daysToSubtract);
+            DateTime endWeek = startWeek.AddDays(6); ;
+
+            // Convert to string in the format "year-month-day"
+            string formattedStarDate = startWeek.ToString("yyyy-MM-dd");
+            string formattedEndDate = startWeek.ToString("yyyy-MM-dd");
+            StartDate = formattedStarDate;
+            EndDate = formattedEndDate;
+
             // Define the start of the week (Monday) and the end of the week (Sunday)
             var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
             var endOfWeek = startOfWeek.AddDays(6);
+            //StartDate = startOfWeek; EndDate = startOfWeek;
 
             WeeklyPlan = plannerManager.GetWeeklyPlan(userId, startOfWeek, endOfWeek);
         }
 
+        private void SetCurrentWeek()
+        {
+            DateTime today = DateTime.Today;
+            int daysToSubtract = (int)today.DayOfWeek - (int)DayOfWeek.Monday;
+            daysToSubtract = daysToSubtract < 0 ? daysToSubtract + 7 : daysToSubtract;
+            DateTime startOfWeek = today.AddDays(-daysToSubtract);
+            StartDate = startOfWeek.ToString("yyyy-MM-dd");
+            EndDate = startOfWeek.AddDays(6).ToString("yyyy-MM-dd");
+        }
 
+        private void AdjustWeekDates(string navigation)
+        {
+            DateTime startDateTime = DateTime.ParseExact(StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime endDateTime = DateTime.ParseExact(EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            if (navigation == "next")
+            {
+                startDateTime = endDateTime.AddDays(1);
+                endDateTime = startDateTime.AddDays(6);
+            }
+            else if (navigation == "prev")
+            {
+                startDateTime = startDateTime.AddDays(-7);
+                endDateTime = startDateTime.AddDays(6);
+            }
+
+            StartDate = startDateTime.ToString("yyyy-MM-dd");
+            EndDate = endDateTime.ToString("yyyy-MM-dd");
+        }
 
     }
 }
