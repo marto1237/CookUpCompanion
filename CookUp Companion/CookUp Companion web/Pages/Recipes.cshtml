@@ -3,7 +3,23 @@
 @{
 }
 
+@if (TempData["IsSuccess"] != null && (bool)TempData["IsSuccess"])
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    TempData.Remove("IsSuccess"); // Clear TempData after displaying
+}
 
+@if (TempData["IsError"] != null && (bool)TempData["IsError"])
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    TempData.Remove("IsError"); // Clear TempData after displaying
+}
 
 <div class="recipeHeader">
     <h2>Recipes</h2>
@@ -308,46 +324,28 @@
         <div class="modal-content">
 
             <div class="modal-body" id="addModal">
-                <form method="post" asp-page-handler="IngredientsForTheRecipeID">
-                    <input type="hidden" asp-for="CurrentRecipeId">
-                    <button type="submit" class="btn btn-light settingsbtn">
-                        <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
-                        <div class="rightSettings">Meal planer</div>
+                    <form method="post" asp-page-handler="IngredientsForTheRecipeID">
+                        <input type="hidden" asp-for="CurrentRecipeId">
+                    <button class="btn btn-light settingsbtn">
+                        <div class="leftSettings"><i class="fa-regular fa-rectangle-list fa-2xl"></i></div>
+                        <div class="rightSettings">Shopping list </div>
                     </button>
                 </form>
 
-                <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
-                    <div class="leftSettings"><i class="fa-regular fa-rectangle-list fa-2xl"></i></div>
-                    <div class="rightSettings">Shopping list </div>
-                </button>
+                <form method="post" asp-page-handler="IngredientsForTheRecipeID">
+                <input type="hidden" asp-for="CurrentRecipeId">
+                    <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
+                        <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
+                        <div class="rightSettings">Meal planner</div>
+                    </button>
+
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-@* <!-- RecipeIngredient Modal -->
-<div class="modal fade" id="RecipeIngredientsModal" aria-hidden="true" aria-labelledby="RecipeIngredientsModalLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form asp-page-handler="ShowIngredientsModal" method="get">
-                <div class="modal-body">
-                    <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="">
-                    @foreach (var ingredient in Model.GetRecipeIngredients(Model.CurrentRecipeId))
-                    {
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="ingredientIds" value="@ingredient.IngredientId" id="ingredient-@ingredient.IngredientId" checked>
-                            <label class="form-check-label" for="ingredient-@ingredient.IngredientId">
-                                @ingredient.IngredientName
-                            </label>
-                        </div>
-                    }
-                    <button type="submit" class="btn btn-primary">Add Selected Ingredients</button>
 
-                </div>
-            </form>
-        </div>
-    </div>
-</div> *@
 <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">
         @for (int i = 1; i <= Model.TotalPages; i++)

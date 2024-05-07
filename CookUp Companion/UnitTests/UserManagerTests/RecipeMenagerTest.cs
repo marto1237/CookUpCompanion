@@ -17,12 +17,7 @@ namespace UnitTests.UserManagerTests
         private RecipeManager recipeManager;
         private FakeRecipeDal fakeDal;
 
-        public RecipeMenagerTest()
-        {
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-        }
+      
 
         private void SetupFakeData()
         {
@@ -39,6 +34,7 @@ namespace UnitTests.UserManagerTests
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             fakeDal.InsertUser(user);
         }
+
         private void CreateRecipe(string username, string email, string password, string firstName, string lastName, int roleId)
         {
             User creator = new User(null, "testuser", "testuser@example.com", "testuser123", "Test", "User", 1, null);
@@ -57,7 +53,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetAllIngredients_ShouldReturnTrue_WhenIngredientsDoesNotExist()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
 
@@ -72,7 +71,10 @@ namespace UnitTests.UserManagerTests
         public void CreateRecipe_ShouldReturnTrue_WhenRecipeIsCreatedSuccessfully()
         {
 
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             User creator = new User(null, "testuser", "testuser@example.com", "testuser123", "Test", "User", 1, null);
 
             List<Ingredient> recipeIngredients = new List<Ingredient>
@@ -91,7 +93,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetInputIngredient_ShouldReturnTrue_WhenIngredientExist()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string ingredientName = "egg";
 
             // Act
@@ -105,7 +110,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetInputIngredient_ShouldReturnTrue_WhenIngredientDoesNotExist()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string ingredientName = "vanilla";
 
             // Act
@@ -119,7 +127,11 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetAllIngredients_ShouldReturnTrue_WhenIngredientsExist()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
+
             int page = 1;
             int pageSize = 10;
 
@@ -133,7 +145,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetAllIngredientsPageNum_ShouldReturnTrue_WhenValidPageNum()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int pageSize = 10;
 
             // Act
@@ -145,7 +160,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetAllIngredientsPageNum_ShouldReturnTrue_WhenUnvalidPageNum()
         {
-            // Arrange
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int pageSize = -10;
 
             // Act
@@ -160,6 +178,9 @@ namespace UnitTests.UserManagerTests
         public void GetIngredientByName_WithValidIngrediensName()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string ingredientName = "egg";
 
             // Act
@@ -173,6 +194,9 @@ namespace UnitTests.UserManagerTests
         public void GetIngredientByName_WithUnvalidIngrediensName()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string ingredientName = "notexistinigIngredient";
 
             // Act
@@ -187,6 +211,9 @@ namespace UnitTests.UserManagerTests
         public void GetAllRecipes_WithValidData()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
             int recipeNum;
@@ -202,8 +229,6 @@ namespace UnitTests.UserManagerTests
             // Act
             bool result = recipeManager.CreateRecipe(new Recipe(null, creator, "recipeName", "recipeDescription", recipeIngredients, "recipeIncrutions", 10, 15));
 
-
-            //Act
             if (result)
             {
                 List<Recipe> allRecipes = recipeManager.GetAllRecipes(page, pageSize);
@@ -222,6 +247,9 @@ namespace UnitTests.UserManagerTests
         public void GetAllRecipesPageNum_WithValidPagesize()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int pageSize = 1;
             int recipeNum;
             User creator = new User(null, "testuser", "testuser@example.com", "testuser123", "Test", "User", 1, null);
@@ -235,8 +263,6 @@ namespace UnitTests.UserManagerTests
             // Act
             bool result = recipeManager.CreateRecipe(new Recipe(null, creator, "recipeName", "recipeDescription", recipeIngredients, "recipeIncrutions", 10, 15));
 
-
-            //Act
             if (result)
             {
                
@@ -254,6 +280,9 @@ namespace UnitTests.UserManagerTests
         public void GetAllRecipesPageNum_WithInvalidPagesize()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int pageSize = -1;
 
 
@@ -268,6 +297,9 @@ namespace UnitTests.UserManagerTests
         public void GetAllIngredientsForRecipeId_WithValidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int searchReicpeId = 1;
 
             //Act
@@ -281,6 +313,9 @@ namespace UnitTests.UserManagerTests
         public void GetAllIngredientsForRecipeId_WithInvalidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int searchReicpeId = 10;
 
             //Act
@@ -294,6 +329,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipeID_WithValidId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             User testUser = new User(null, "testuser", "testuser@example.com", null, "Test", "User", 1, null);
             List<Ingredient> recipeIngredients = new List<Ingredient>
                 {
@@ -316,6 +354,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipeById_WithValidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipId = 1;
 
             //Act 
@@ -329,6 +370,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipeById_WithUnvalidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipId = 99;
 
             //Act 
@@ -342,6 +386,9 @@ namespace UnitTests.UserManagerTests
         public void AddComment_WithValidUserAndRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
             //Act 
@@ -355,6 +402,9 @@ namespace UnitTests.UserManagerTests
         public void AddComment_WithInvalidRecipeAndRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = -1;
             int recipeId = -1;
             //Act 
@@ -367,6 +417,9 @@ namespace UnitTests.UserManagerTests
         public void GetCommentsByRecipeId_WithValidIds()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipeId = 1;
             int page = 1;
             int commentsPerPage = 10;
@@ -382,6 +435,9 @@ namespace UnitTests.UserManagerTests
         public void GetCommentsByRecipeId_WithInvalidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipeId = 99;
             int page = 1;
             int commentsPerPage = 10;
@@ -397,6 +453,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikesAndDislikes_WithValid_RecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipeId = 1;
 
             //Act
@@ -411,6 +470,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikesAndDislikes_WithUnvalid_RecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int recipeId = 99;
 
             //Act
@@ -425,6 +487,9 @@ namespace UnitTests.UserManagerTests
         public void ToggleFavoriteRecipe_WithValidRecipeAndUserId_Favourite()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -439,6 +504,9 @@ namespace UnitTests.UserManagerTests
         public void ToggleFavoriteRecipe_WithValidRecipeAndUserId_Unfavourite()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -454,6 +522,9 @@ namespace UnitTests.UserManagerTests
         public void CheckIfFavorite_WhenRecipeIsFavourite()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -469,6 +540,9 @@ namespace UnitTests.UserManagerTests
         public void CheckIfFavorite_WhenRecipeIsUnfavourite()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -485,6 +559,9 @@ namespace UnitTests.UserManagerTests
         public void SearchRecipesByName_WithValidRecipeName()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string searchRecipeName = "recipeName";
             int page = 1;
             int pageSize = 10;
@@ -500,6 +577,9 @@ namespace UnitTests.UserManagerTests
         public void SearchRecipesByName_WithUnvalidRecipeName()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string searchRecipeName = "somenotexistingNAME";
             int page = 1;
             int pageSize = 10;
@@ -515,6 +595,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipeByNameAndCreator_WithValidNames()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string searchRecipename = "recipeName";
             string creatorName = "testuser";
 
@@ -529,6 +612,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipeByNameAndCreator_WithInvalidNames()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string searchRecipename = "fakerecipeName";
             string creatorName = "fakeuser";
 
@@ -543,6 +629,9 @@ namespace UnitTests.UserManagerTests
         public void UpdateRecipe_WithValidData()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string creator = "testuser";
             string recipeName = "recipeName";
             string newRecipeName = "newRecipeName";
@@ -561,6 +650,9 @@ namespace UnitTests.UserManagerTests
         public void UpdateRecipe_WithInvalidData()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             string creator = "somenotexistingNAME";
             string recipeName = "fakerecipeName";
             string newRecipeName = "newRecipeName";
@@ -578,7 +670,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void DeleteRecipe()
         {
-            //Arrange 
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             User deleteUser = new User(null, "deleteuser", "deleteuser@example.com", null, "Delete", "User", 1, null);
             fakeDal.InsertUser(deleteUser);
             List<Ingredient> recipeIngredients = new List<Ingredient>
@@ -602,6 +697,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikedRecipesByUse_WithValidUserID()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -617,6 +715,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikedRecipesByUser_WithInvalidUserID()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -632,6 +733,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikedRecipes_WithValidUserID()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
             int userId = 1;
@@ -651,6 +755,9 @@ namespace UnitTests.UserManagerTests
         public void GetLikedRecipes_WithInvalidUserID()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
             int userId = 1;
@@ -670,6 +777,9 @@ namespace UnitTests.UserManagerTests
         public void RemoveSavedRecipe_WithValidIDS()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -685,6 +795,9 @@ namespace UnitTests.UserManagerTests
         public void RemoveSavedRecipe_WithInvalidIDS()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -701,6 +814,9 @@ namespace UnitTests.UserManagerTests
         public void GetSavedRecipes_WithValidUserId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1; 
             int pageSize = 10; 
             int userId = 1;
@@ -718,6 +834,9 @@ namespace UnitTests.UserManagerTests
         public void GetSavedRecipes_WithInvalidUserId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
             int userId = 1;
@@ -736,6 +855,9 @@ namespace UnitTests.UserManagerTests
         public void GetSaveCount_WithValidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -751,6 +873,9 @@ namespace UnitTests.UserManagerTests
         public void GetSaveCount_WithInvalidRecipeId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -766,6 +891,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipesCreatedByUser_WithValidUserId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 1;
             int userId = 1;
@@ -781,6 +909,9 @@ namespace UnitTests.UserManagerTests
         public void GetRecipesCreatedByUser_WithInvalidUserId()
         {
             //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 1;
             int userId = 1;
@@ -795,7 +926,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetSavedRecipesByUser_WithValidUserId()
         {
-            //Arrange 
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -810,7 +944,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetSavedRecipesByUser_WithInvalidUserId()
         {
-            //Arrange 
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
@@ -826,6 +963,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetRecipesByNewest()
         {
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
 
@@ -839,6 +980,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetRecipesByOldest()
         {
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
 
@@ -852,6 +997,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetRecipesBySaves()
         {
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
 
@@ -864,6 +1013,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetRecipesAlphabetically()
         {
+            //Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
             int page = 1;
             int pageSize = 10;
 

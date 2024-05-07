@@ -1039,9 +1039,25 @@ input[type="radio"] {
 
 .Ingredient p {
     margin: 0; /* Remove default margins */
+    padding: 0.5rem;
 }
 
 .ingredients-list button{
     align-items: center;
     justify-content: center;
+}
+.form-check{
+    padding-left: 0;
+}
+.tobuy-container box button{
+    align-items:center;
+    justify-content: center;
+}
+.form-group button{
+    margin: 2rem;
+    padding: 1rem;
+}
+.ingredients-list button {
+    margin: 2rem;
+    padding: 1rem;
 }

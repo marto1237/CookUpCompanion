@@ -3,12 +3,16 @@
     public class Ingredient
     {
         public byte[] IngredientPicture { get; private set; }
-        public int IngredientId { get; private set; }
-        public string IngredientName { get; private set; }
-        public List<string> MeasurementUnits { get; private set; }
-        public float Quantity { get; private set; }
-        public string SelectedUnit { get; private set; }
+        public int IngredientId { get;  set; }
+        public string IngredientName { get;  set; }
+        public List<string> MeasurementUnits { get; set; }
+        public float Quantity { get;  set; }
+        public string SelectedUnit { get;  set; }
+        public bool IsSelected { get; set; }
 
+        public Ingredient()
+        {
+        }
 
         public Ingredient(byte[] ingredientPicture, int ingredientId,string ingredientName, string measurementUnits, float quantity)
         {
@@ -38,5 +42,13 @@
             return string.Empty;
         }
 
-    }
+        public void ChangeQuantity(float newquantity)
+		{
+			Quantity = newquantity;
+		}
+		public void ChangeSelectedUnit(string newSelectedUnit)
+		{
+			SelectedUnit = newSelectedUnit;
+		}
+	}
 }

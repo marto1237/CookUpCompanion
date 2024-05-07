@@ -24,19 +24,23 @@ namespace CookUp_Companion_web.Pages
         public const int PageSize = 24;
         public int CurrentRecipeId { get; set; }
         public Dictionary<int, List<Ingredient>> IngredientsByRecipeId { get; set; } = new Dictionary<int, List<Ingredient>>();
-        public List<Ingredient> SelectedRecipeIngredients = new List<Ingredient>();
+        [BindProperty]
+        public List<Ingredient> SelectedRecipeIngredients { get; set; }
+
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
         private readonly IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam;
+        private readonly IShoppingCartManager shoppingCartManager;
 
         public User _user { get; private set; }
 
         public string sortOrder { get; set; }
-        public RecipeModel(IUserManager userManager, IRecipeManager recipeManager, IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam)
+        public RecipeModel(IUserManager userManager, IRecipeManager recipeManager, IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam, IShoppingCartManager shoppingCartManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
             this.recommendedRecipesAlgoritam = recommendedRecipesAlgoritam;
+            this.shoppingCartManager = shoppingCartManager;
         }
         public IActionResult OnGet(int? pageNum, string sortOrder)
         {
@@ -61,6 +65,7 @@ namespace CookUp_Companion_web.Pages
             ViewData["CurrentSort"] = sortOrder;
             Recipes = GetSortedRecipes(sortOrder, CurrentPage, PageSize);
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+            SelectedRecipeIngredients = new List<Ingredient>();
             PopulateRecipeInteractionData();
 
             foreach (var recipe in Recipes)
@@ -119,7 +124,7 @@ namespace CookUp_Companion_web.Pages
             {
 
                 // Add a model error that you can display in the view
-                ModelState.AddModelError("", $"Failed to load recipes: {ex.Message}"); 
+                ModelState.AddModelError("", $"Failed to load recipes: {ex.Message}");
                 return;
             }
 
@@ -128,7 +133,7 @@ namespace CookUp_Companion_web.Pages
         public int GetRecipeID(Recipe recipe)
         {
             int recipeID = recipeManager.GetRecipeID(recipe);
-            if (recipeID  != -1)
+            if (recipeID != -1)
             {
                 return recipeID;
             }
@@ -164,9 +169,9 @@ namespace CookUp_Companion_web.Pages
                 case "topSaved":
                     return recipeManager.GetRecipesBySaves(pageNumber, pageSize);
                 case "recommended":
-                        return recommendedRecipesAlgoritam.Recommend(_user);
+                    return recommendedRecipesAlgoritam.Recommend(_user);
                 default:
-                    return  recipeManager.GetAllRecipes(pageNumber, pageSize);
+                    return recipeManager.GetAllRecipes(pageNumber, pageSize);
             }
         }
 
@@ -182,7 +187,7 @@ namespace CookUp_Companion_web.Pages
             }
             catch (Exception ex)
             {
-                
+
                 ModelState.AddModelError("", "Failed to load search results. Please try again.");
             }
 
@@ -208,31 +213,50 @@ namespace CookUp_Companion_web.Pages
                 return RedirectToPage("/Login");
             }
 
-            // Retrieve the authenticated user's claims
             var userClaims = HttpContext.User.Claims;
-
             var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-
-
-             _user = userManager.GetUserByEmail(userEmailClaim.Value);
-
+            _user = userManager.GetUserByEmail(userEmailClaim.Value);
             int userId = userManager.GetIdByUsername(_user.Username);
-            try
-            {
-                foreach (var ingredientId in selectedIngredientIds)
-                {
-                    // Assume you have a method to save each ingredient for the user
-                    //await recipeManager.SaveIngredientForUserAsync(userId, ingredientId, CurrentRecipeId);
-                }
 
-                TempData["SuccessMessage"] = "Ingredients saved successfully!";
-                return RedirectToPage(); // Or wherever you want to redirect
-            }
-            catch (Exception ex)
+            int userCartId = shoppingCartManager.GetCartIdByUserId(userId);
+            if (userCartId == -1)
             {
-                ModelState.AddModelError("", "An error occurred while saving ingredients: " + ex.Message);
-                return Page();
+                bool isCartCreated = shoppingCartManager.CreateCart(userId);
+                if (isCartCreated)
+                {
+                    userCartId = shoppingCartManager.GetCartIdByUserId(userId); // Attempt to get the new cart ID
+                    if (userCartId == -1)
+                    {
+                        TempData["IsError"] = true;
+                        TempData["ErrorMessage"] = "Failed to create a new cart.";
+                        return RedirectToPage(); // Redirect with an error message
+                    }
+                }
+                else
+                {
+                    TempData["IsError"] = true;
+                    TempData["ErrorMessage"] = "Failed to create a new cart.";
+                    return RedirectToPage(); // Redirect with an error message
+                }
             }
+
+
+
+            foreach (Ingredient ingredient in SelectedRecipeIngredients)
+            {
+                // Your logic to save each ingredient
+                int ingredientID = recipeManager.GetIngredientIdByName(ingredient.IngredientName);
+                bool IsAdded = shoppingCartManager.AddIngredientToCart(userCartId, ingredientID, ingredient.Quantity, ingredient.SelectedUnit);
+                if (!IsAdded)
+                {
+                    TempData["IsError"] = true;
+                    TempData["ErrorMessage"] = $"Failed to save the {ingredient.IngredientName} in the cart.";
+                }
+            }
+            TempData["IsSuccess"] = true;
+            TempData["SuccessMessage"] = "Ingredients added to the shopping cart successfully!";
+            return RedirectToPage(); 
         }
+
     }
 }

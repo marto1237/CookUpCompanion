@@ -425,8 +425,15 @@ namespace UnitTests.MockClasses
             return false;
             
         }
-        
 
-       
-    }
+		public Ingredient GetIngredientById(int ingredientId)
+		{
+			// Simulate fetching an ingredient by ID from the preloaded list
+			return AllIngredients.FirstOrDefault(ingredient => ingredient.IngredientId == ingredientId);
+		}
+        public int GetIngredientIdByName(string ingredientName)
+        {
+            return AllIngredients.FirstOrDefault(ingredient => ingredient.IngredientName == ingredientName).IngredientId;
+        }
+	}
 }

@@ -8,7 +8,7 @@
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @if (ViewData["SuccessMessage"] != null)
         {
-            <span class="text-success">@ViewData["SuccessMessage"]</span>
+            @TempData["SuccessMessage"]
         }
 
         <br />
@@ -20,7 +20,7 @@
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @if (ViewData["ErrorMessage"] != null)
         {
-            <span class="text-danger">@ViewData["ErrorMessage"]</span>
+            @TempData["ErrorMessage"]
         }
 
         <br />

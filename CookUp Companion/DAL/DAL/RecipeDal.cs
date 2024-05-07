@@ -1341,6 +1341,76 @@ namespace DAL
                 }
             }
         }
+		public Ingredient GetIngredientById(int ingredientId)
+		{
+			using (SqlConnection connection = new SqlConnection(ConnectionString))
+			{
+				Ingredient ingredient = null;
+				try
+				{
+					connection.Open();
+					string query = @"
+                    SELECT ingredientID, ingredientPicture, name, possibleUnits
+                    FROM Ingredient
+                    WHERE ingredientID = @IngredientID";
+
+					SqlCommand command = new SqlCommand(query, connection);
+					command.Parameters.AddWithValue("@IngredientID", ingredientId);
+
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read()) // Ensures that we read only if there is data
+						{
+							byte[] ingredientPicture = (byte[])reader["ingredientPicture"];
+							string name = reader["name"].ToString();
+							string possibleUnits = reader["possibleUnits"].ToString(); // Assuming this is stored correctly in your DB
+
+							ingredient = new Ingredient(
+								ingredientPicture,
+                                ingredientId,
+                                name,
+                                possibleUnits,
+                                0 // Quantity might not be relevant here unless this is specific context
+							);
+						}
+					}
+				}
+				catch (SqlException e)
+				{
+					System.Diagnostics.Debug.WriteLine(e.Message);
+				}
+				return ingredient;
+			}
+		}
+
+        public int GetIngredientIdByName(string ingredientName)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT ingredientId FROM Ingredient WHERE name = @IngredientName";
+
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@IngredientName", ingredientName);
+
+                    var result = command.ExecuteScalar(); 
+                    if (result != null)
+                    {
+                        return Convert.ToInt32(result); // Convert the result to int and return it
+                    }
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Error: " + e.Message);
+                }
+                return -1; // Return -1 or another indicator to denote not found/error
+            }
+        }
+
+
+
     }
 }
 

@@ -157,6 +157,7 @@ function recipeIngredientsModal() {
     $('#RecipeIngredientsModal').modal('show'); // Show the ingredients modal
 }
 
+
 //function to show the picture  of the recipe when creating new one
 function displaySelectedImage(event, elementId) {
     const selectedImage = document.getElementById(elementId);

@@ -13,12 +13,7 @@ namespace UnitTests.UserManagerTests
         private UserManager userManager;
         private FakeUserDALManager fakeDal;
 
-        public UserManagerTest()
-        {
-            fakeDal = new FakeUserDALManager();
-            userManager = new UserManager(fakeDal);
-            SetupFakeUsers();
-        }
+        
 
         private void SetupFakeUsers()
         {
@@ -31,15 +26,7 @@ namespace UnitTests.UserManagerTests
             CreateUser("admin", "admin@example.com", "adminPass123", "Admin", "User", 3); 
             CreateUser("userToBan", "userToBan@example.com", "userPass123", "ToBan", "User", 1);
         }
-        [Fact]
-        public void GetAll_ShouldReturnAllUsers_WhenThereIsNotUser()
-        {
-            // Act
-            var result = userManager.GetAllUsers();
 
-            // Assert
-            Assert.True(result.Count > 0);
-        }
         private void CreateUser(string username, string email, string password, string firstName, string lastName, int roleId)
         {
             byte[] salt = userManager.GenerateSalt();
@@ -48,10 +35,30 @@ namespace UnitTests.UserManagerTests
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             fakeDal.InsertUser(user);
         }
+        [Fact]
+        public void GetAll_ShouldReturnAllUsers_WhenThereIsUsers()
+        {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var result = userManager.GetAllUsers();
+
+            // Assert
+            Assert.True(result.Count > 0);
+        }
+        
 
         [Fact]
         public void InsertUser_ShouldReturnTrue_WhenUserIsCreatedSuccessfully()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
             // Act
             var result = userManager.CreateUser(new User(null, "newUser", "new@example.com", "newPassword", "FirstName", "LastName", 1, null));
 
@@ -65,6 +72,11 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void Login_Successful_ReturnsUser()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
             // Act
             User result = userManager.Login("logIn@example.com", "password1234");
 
@@ -75,6 +87,11 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void Login_Failed_WithIncorrectPassword()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
             // Act
             User result = userManager.Login("logIn@example.com", "wrongPassword");
 
@@ -86,7 +103,11 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void CheckExistingUsername_ShouldReturnTrue_WhenUsernameExists()
         {
-           
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
             // Act
             bool doesExist = userManager.CheckExistingUsername("checkExistingUser");
 
@@ -97,6 +118,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void CheckExistingUsername_ShouldReturnFalse_WhenUsernameDoesNotExist()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
             // Act
             bool doesNotExist = userManager.CheckExistingUsername("nonExistentUser");
@@ -108,6 +133,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void CheckExistingEmail_ShouldReturnTrue_WhenUsernameExists()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
             // Act
             bool doesExist = userManager.CheckExistingEmail("checkExisting@example.com");
@@ -120,7 +149,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void CheckExistingEmail_ShouldReturnFalse_WhenUsernameDoesNotExist()
         {
-            // Arrange is already done in the setup
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
             // Act
             bool doesNotExist = userManager.CheckExistingEmail("nonExistentEmail@gmail.com");
@@ -133,7 +165,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void UpdateUserPassword_ShouldReturnTrue_WhenPasswordIsUpdated()
         {
-            // Arrange
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             string newPassword = "newSecurePassword123";
             User userToUpdate = userManager.GetUserByEmail("logIn@example.com");
 
@@ -149,6 +184,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetAll_ShouldReturnAllUsers_WhenThereIsUser()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             // Act
             var result = userManager.GetAllUsers();
 
@@ -159,6 +198,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetUserByEmail_ShouldRetrieveCorrectUser()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             // Act
             User user = userManager.GetUserByEmail("logIn@example.com");
 
@@ -170,7 +213,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void UpdatePassword_ShouldFail_WhenUserDoesNotExist()
         {
-            // Arrange
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             User nonExistingUser = new User(null, "nonExist", "nonexist@example.com", "hash", "Non", "Exist", 1, null);
             bool insertUser = userManager.CreateUser(nonExistingUser);
             // Act
@@ -183,7 +229,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void BanUser_ShouldSuccessfullyBanUser()
         {
-            // Arrange
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             User userToBan = userManager.GetUserByEmail("userToBan@example.com");
             User adminUser = userManager.GetUserByEmail("admin@example.com");
 
@@ -198,7 +247,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void BannedUser_ShouldReturnTrue_WhenUserIsBanned()
         {
-            // Arrange
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             User adminUser = userManager.GetUserByEmail("admin@example.com");
             User userToBan = userManager.GetUserByEmail("userToBan@example.com");
 
@@ -216,7 +268,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void BannedUser_ShouldReturnFalse_WhenUserIsNotBanned()
         {
-            // Arrange
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             var normalUser = userManager.GetUserByEmail("normal@example.com");
 
             // Act
@@ -229,7 +284,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void UnbanUser_ShouldUnban_WhenUserIsBanned()
         {
-            // Arrange - Assume the user is already banned
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             User bannedUser = userManager.GetUserByEmail("userToBan@example.com");
             User banningUser = userManager.GetUserByEmail("admin@example.com");
             bool ban= userManager.BanningUser(banningUser, bannedUser, "Violation", 1);
@@ -245,7 +303,10 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void Get_UserRole_WhenUserExist()
         {
-            // Arrange - Assume the user is already banned
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             User user = userManager.GetUserByEmail("logIn@example.com");
 
             // Act
@@ -259,9 +320,12 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void Login_Successful_ReturnCurrentUser()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
             // Act
             User result = userManager.Login("logIn@example.com", "password1234");
-
             User current = userManager.CurrentUser();
             // Assert
             Assert.NotNull(current);
@@ -270,53 +334,101 @@ namespace UnitTests.UserManagerTests
         [Fact]
         public void GetUserById_ShouldReturnUser_WhenIdExists()
         {
-            User user = userManager.GetUserById(1); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            User user = userManager.GetUserById(1);
+            // Assert
             Assert.NotNull(user);
         }
 
         [Fact]
         public void GetUserById_ShouldReturnNull_WhenIdDoesNotExist()
         {
-            var user = userManager.GetUserById(-1); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var user = userManager.GetUserById(-1);
+            // Assert
             Assert.Null(user);
         }
 
         [Fact]
         public void GetBySearch_ShouldReturnUsers_WhenSearchMatches()
         {
-            var users = userManager.GetBySearch("User"); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var users = userManager.GetBySearch("User");
+            // Assert
             Assert.True(users.Count > 0);
         }
 
         [Fact]
         public void GetBySearch_ShouldReturnEmpty_WhenNoMatch()
         {
-            var users = userManager.GetBySearch("xyz123"); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var users = userManager.GetBySearch("xyz123");
+            // Assert
             Assert.Empty(users);
         }
 
         [Fact]
         public void DeleteUser_ShouldReturnTrue_WhenUserExists()
         {
-            var result = userManager.DeleteUser(1); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var result = userManager.DeleteUser(1);
+            // Assert
             Assert.True(result);
         }
 
         [Fact]
         public void DeleteUser_ShouldReturnFalse_WhenUserDoesNotExist()
         {
-            var result = userManager.DeleteUser(-1); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            //Act
+            var result = userManager.DeleteUser(-1);
+            // Assert
             Assert.False(result);
         }
         [Fact]
         public void GetBanReason_ShouldReturnReason_WhenUserIsBanned()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
             User bannedUser = userManager.GetUserByEmail("userToBan@example.com");
             User banningUser = userManager.GetUserByEmail("admin@example.com");
             bool ban = userManager.BanningUser(banningUser, bannedUser, "Violation", 1);
-
             int userId = userManager.GetIdByUsername(bannedUser.Username);
             var reason = userManager.GetBanReason(userId);
+            // Assert
             Assert.Equal("Violation", reason);
         }
 
@@ -324,39 +436,70 @@ namespace UnitTests.UserManagerTests
         public void GetBanReason_ShouldReturnNull_WhenUserIsNotBanned()
         {
 
-            var reason = userManager.GetBanReason(2); 
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var reason = userManager.GetBanReason(2);
+            // Assert
             Assert.Null(reason);
         }
 
         [Fact]
         public void GetUsersBySimilarUsernames_WithValidSearch()
         {
-            List<User> similarUsernames= userManager.GetUsersBySimilarUsername("user");
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<User> similarUsernames= userManager.GetUsersBySimilarUsername("user");
+            // Assert
             Assert.NotNull(similarUsernames);
         }
 
         [Fact]
         public void GetUsersBySimilarUsernames_WithInvalidSearch()
         {
-            List<User> similarUsernames = userManager.GetUsersBySimilarUsername("notexistingrearch");
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<User> similarUsernames = userManager.GetUsersBySimilarUsername("notexistingrearch");
+            // Assert
             Assert.True(similarUsernames.Count == 0);
         }
 
         [Fact]
         public void GetUsersBySimilarEmails_WithValidSearch()
         {
-            List<User> similarUsernames = userManager.GetUsersBySimilarEmail("user");
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<User> similarUsernames = userManager.GetUsersBySimilarEmail("user");
+            // Assert
             Assert.NotNull(similarUsernames);
         }
 
         [Fact]
         public void GetUsersBySimilarEmails_WithInvalidSearch()
         {
-            List<User> similarEmails = userManager.GetUsersBySimilarEmail("notexistingrearch");
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<User> similarEmails = userManager.GetUsersBySimilarEmail("notexistingrearch");
+            // Assert
             Assert.True(similarEmails.Count == 0);
         }
 
@@ -364,8 +507,14 @@ namespace UnitTests.UserManagerTests
 
         public void GetAllRoles()
         {
-            List<string> roles = userManager.AllRoles();
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<string> roles = userManager.AllRoles();
+            // Assert
             Assert.NotNull(roles);
         }
 
@@ -373,24 +522,44 @@ namespace UnitTests.UserManagerTests
 
         public void GetAllBannedUsers()
         {
-            List<User> bannedUser = userManager.GetBannedUsers();
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            List<User> bannedUser = userManager.GetBannedUsers();
+            // Assert
             Assert.NotNull(bannedUser);
         }
 
         [Fact]
         public void GetRoleIdByRoleName_WithValidRoleName()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
             int roleId = userManager.GetRoleIdByRoleName("Admin");
 
+            // Assert
             Assert.NotNull(roleId);
         }
-
+        [Fact]
         public void GetRoleIdByRoleName_WithNotValidRoleName()
         {
+            //Arange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
             int roleId = userManager.GetRoleIdByRoleName("FakeRole");
 
-            Assert.Null(roleId);
+            // Assert
+            Assert.True(roleId == 0);
         }
 
     }

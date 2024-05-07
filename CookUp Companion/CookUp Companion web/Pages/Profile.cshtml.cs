@@ -46,7 +46,7 @@ namespace CookUp_Companion_web.Pages
         public int CurrentPageCreated { get; set; }
         public int TotalPagesCreated { get; set; }
         public string SearchText { get; set; }
-        public const int PageSize = 1;
+        public const int PageSize = 4;
 
         public int userId {  get; set; }
         public string ActiveTab { get; set; }

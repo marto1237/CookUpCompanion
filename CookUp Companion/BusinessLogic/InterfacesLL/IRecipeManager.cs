@@ -36,5 +36,9 @@ namespace InterfacesLL
         List<Recipe> GetRecipesBySaves(int page, int pageSize);
         List<Recipe> GetRecipesCreatedByUser(int page, int pageSize, int userId);
         List<Recipe> GetSavedRecipesByUser(int userId);
+        Ingredient GetIngredientById(int ingredientId);
+        int GetIngredientIdByName(string ingredientName);
+
+
     }
 }

@@ -6,6 +6,8 @@ using CookUp_Companion_BusinessLogic.Manager;
 using DAL;
 using CookUp_Companion_BusinessLogic.InterfacesLL;
 using CookUp_Companion_BusinessLogic.Algoritam;
+using CookUp_Companion_BusinessLogic.Managers;
+using CookUp_Companion_BusinessLogic.InterfacesDal;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,7 +38,8 @@ builder.Services.AddTransient<IRecipeDALManager, RecipeDal>();
 builder.Services.AddTransient<IRecommendedRecipesAlgoritam ,RecommededRecipesAlgoritam>();
 builder.Services.AddTransient<IPlannerManager, PlannerManager>();
 builder.Services.AddTransient<IPlannerDALManager, PlannerDal>();
-
+builder.Services.AddTransient<IShoppingCartManager, ShoppingCartManager>();
+builder.Services.AddTransient<IShoppingCartDALManager, ShoppingCartDal>();
 
 var app = builder.Build();
 
@@ -52,6 +55,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 // Add authentication middleware
 app.UseAuthentication();
