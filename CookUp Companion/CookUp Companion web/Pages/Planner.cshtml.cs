@@ -40,7 +40,7 @@ namespace CookUp_Companion_web.Pages
             this.recipeManager = recipeManager;
             this.plannerManager = plannerManager;
         }
-        public void OnGet(int? pageNum, string startDate, string endDate, string navigation)
+        public void OnGet(int? pageNum, string startDate, string endDate)
         {
             if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
             {
@@ -52,8 +52,6 @@ namespace CookUp_Companion_web.Pages
                 SetCurrentWeek(); // Sets to current week if no dates are specified
             }
 
-            // Adjust dates based on navigation input (previous or next)
-            AdjustWeekDates(navigation);
 
             CurrentPage = pageNum ?? 1;
             GetSavedRecipes(CurrentPage);
@@ -239,25 +237,7 @@ namespace CookUp_Companion_web.Pages
             EndDate = startOfWeek.AddDays(6).ToString("yyyy-MM-dd");
         }
 
-        private void AdjustWeekDates(string navigation)
-        {
-            DateTime startDateTime = DateTime.ParseExact(StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            DateTime endDateTime = DateTime.ParseExact(EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-            if (navigation == "next")
-            {
-                startDateTime = endDateTime.AddDays(1);
-                endDateTime = startDateTime.AddDays(6);
-            }
-            else if (navigation == "prev")
-            {
-                startDateTime = startDateTime.AddDays(-7);
-                endDateTime = startDateTime.AddDays(6);
-            }
-
-            StartDate = startDateTime.ToString("yyyy-MM-dd");
-            EndDate = endDateTime.ToString("yyyy-MM-dd");
-        }
+        
 
     }
 }
