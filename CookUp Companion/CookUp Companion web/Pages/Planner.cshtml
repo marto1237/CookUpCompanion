@@ -221,6 +221,11 @@
             let startDate = new Date(document.getElementById('startDate').value);
             let endDate = new Date(document.getElementById('endDate').value);
 
+            if (startDate.getDate() === endDate.getDate()) {
+                endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6); // Set end date to 6 days after start date
+            }
+
             const months = [
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"

@@ -369,4 +369,30 @@ function displaySelectedImage(event, imgId) {
         URL.revokeObjectURL(output.src)
     }
 }
+document.getElementById('addModal').addEventListener('click', function () {
+    localStorage.setItem('CurrentRecipeId', this.value);
+    this.form.submit();
+});
+function setRecipeId(recipeId) {
+    document.getElementById('CurrentRecipeId').value = recipeId;
+}
+
+// Function to dynamicly show searched ingredients
+function searchIngredients() {
+    var query = document.getElementById('searchInput').value;
+    fetch(`?handler=SearchIngredients&query=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            var container = document.getElementById('resultsContainer');
+            container.innerHTML = ''; // Clear previous results
+            data.forEach(ing => {
+                var element = document.createElement('div');
+                element.innerHTML = `<img src="${ing.imagePath}" alt="${ing.name}" style="height:20px; width:20px;"> ${ing.name}`;
+                element.classList.add('search-result');
+                element.onclick = function () { addDislike(ing.id); };
+                container.appendChild(element);
+            });
+        });
+}
+
 // Write your JavaScript code.

@@ -9,6 +9,6 @@ namespace CookUp_Companion_BusinessLogic.InterfacesLL
 {
     public interface IRecommendedRecipesAlgoritam
     {
-        List<Recipe> Recommend(User user);
+        List<Recipe> Recommend(User user, int pageNumber, int pageSize);
     }
 }

@@ -169,7 +169,7 @@ namespace CookUp_Companion_web.Pages
                 case "topSaved":
                     return recipeManager.GetRecipesBySaves(pageNumber, pageSize);
                 case "recommended":
-                    return recommendedRecipesAlgoritam.Recommend(_user);
+                    return recommendedRecipesAlgoritam.Recommend(_user, pageNumber, pageSize); ;
                 default:
                     return recipeManager.GetAllRecipes(pageNumber, pageSize);
             }

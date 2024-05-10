@@ -21,6 +21,8 @@ namespace UnitTests.MockClasses
         private List<Ingredient> AllIngredients = new List<Ingredient>();
         private Dictionary<int, User> users = new Dictionary<int, User>();
         private Dictionary<int, DateTime> recipeCreationDates = new Dictionary<int, DateTime>();
+        private Dictionary<int, List<int>> userDislikes = new Dictionary<int, List<int>>();
+
 
         private int nextRecipeId = 1;
         private int nextUserId = 1;
@@ -435,5 +437,47 @@ namespace UnitTests.MockClasses
         {
             return AllIngredients.FirstOrDefault(ingredient => ingredient.IngredientName == ingredientName).IngredientId;
         }
-	}
+        public bool SaveUserDislike(int userId, int ingredientId)
+        {
+            if (!userDislikes.ContainsKey(userId))
+            {
+                userDislikes[userId] = new List<int>();
+            }
+
+            if (!userDislikes[userId].Contains(ingredientId))
+            {
+                userDislikes[userId].Add(ingredientId);
+                return true;
+            }
+
+            return false;
+        }
+        public bool RemoveUserDislike(int userId, int ingredientId)
+        {
+            if (userDislikes.ContainsKey(userId) && userDislikes[userId].Contains(ingredientId))
+            {
+                userDislikes[userId].Remove(ingredientId);
+                return true;
+            }
+
+            return false;
+        }
+        public List<Ingredient> GetUserDislikes(int userId)
+        {
+            List<Ingredient> dislikes = new List<Ingredient>();
+            if (userDislikes.ContainsKey(userId))
+            {
+                foreach (int ingredientId in userDislikes[userId])
+                {
+                    Ingredient ingredient = GetIngredientById(ingredientId);
+                    if (ingredient != null)
+                    {
+                        dislikes.Add(ingredient);
+                    }
+                }
+            }
+            return dislikes;
+        }
+
+    }
 }

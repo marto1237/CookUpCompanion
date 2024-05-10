@@ -38,7 +38,9 @@ namespace InterfacesLL
         List<Recipe> GetSavedRecipesByUser(int userId);
         Ingredient GetIngredientById(int ingredientId);
         int GetIngredientIdByName(string ingredientName);
-
+        bool SaveUserDislike(int userId, int ingredientId);
+        List<Ingredient> GetUserDislikes(int userId);
+        bool RemoveUserDislike(int userId, int ingredientId);
 
     }
 }

@@ -49,163 +49,16 @@
                         </div>
                         <div class="card-bottom">
                             <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
-                            <div class="card-right"><button class="more" id="test" onclick="showOptionsMenu(this.id)"><i class="fa-solid fa-ellipsis"></i></button></div>
+                        <div class="card-right"><button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)"><i class="fa-solid fa-ellipsis"></i></button></div>
                         </div>
                     </div>
                 </a>
             </div>
         }
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>91%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-recipe">
-            <img class="card-img-top" src="./images/bucatini-with-mushroom-ragu-dandelion-greens-and-tarragon-FT-RECIPE0421-3a5f0d29f7264f5e9952d4a3a51f5f58.jpg" alt="Card image">
-            <div class="card-img-overlay">
-                <div class="card-top">
-                    <div class="card-left">
-                        <div class="like-container">
-                            <button id="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                            <p>90%</p>
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="bookmark-container">
-                            <button id="savebtn" class="saved"><i class="fa-bookmark fa-lg fa-solid" style="color: rgb(255, 212, 59);" aria-hidden="true"></i><span class="save-tooltip">Remove</span></button>
-                            <p>36.5k</p>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-left"><button id="creator">creator username</button></div>
-                    <div class="card-right"><button id="more"><i class="fa-solid fa-ellipsis"></i></button></div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
+
 
 <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">
@@ -218,27 +71,8 @@
     </ul>
 </nav>
 
-<!-- Modal Remove-->
 
-<div class="modal fade" id="removeSavedRecipeModal" tabindex="-1" aria-labelledby="removeSavedRecipeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form method="post" asp-page-handler="RemoveSavedRecipe">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="removeSavedRecipeModalLabel">Are you sure?</h1>
-                </div>
-                <div class="modal-body">
-                    <p>Removing this recipe will delete it permanently from saved recipes and posts on your profile.</p>
-                    <input type="hidden" id="recipeIdToRemove" name="recipeId" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button id="confirmRemoveBtn" type="submit" class="btn btn-danger">Remove</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 @section Scripts {
     <script>
         

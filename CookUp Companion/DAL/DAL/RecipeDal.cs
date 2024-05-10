@@ -1409,7 +1409,89 @@ namespace DAL
             }
         }
 
+        public bool SaveUserDislike(int userId, int ingredientId)
+        {
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "INSERT INTO UserPreferences (userID, dislikedIngredient) VALUES (@UserId, @IngredientId)";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@IngredientId", ingredientId);
 
+                    int result = command.ExecuteNonQuery();
+                    return result > 0;
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Error: " + e.Message);
+                    return false;
+                }
+            }
+        }
+
+        public List<Ingredient> GetUserDislikes(int userId)
+        {
+            List<Ingredient> dislikes = new List<Ingredient>();
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = @"
+                    SELECT i.ingredientID, i.name FROM Ingredient i
+                    INNER JOIN UserPreferences u ON i.ingredientID = u.dislikedIngredient
+                    WHERE u.userID = @UserId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Ingredient ingredient = new Ingredient(
+                                (byte[])reader["ingredientPicture"], 
+                                reader.GetInt32(reader.GetOrdinal("ingredientID")),
+                                reader.GetString(reader.GetOrdinal("name")),
+                                0, // Quantity not relevant here
+                                ""// Measurement unit not relevant here
+                                );
+                            dislikes.Add(ingredient);
+                        }
+                    }
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Error: " + e.Message);
+                }
+            }
+            return dislikes;
+        }
+
+        public bool RemoveUserDislike(int userId, int ingredientId)
+        {
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "DELETE FROM UserPreferences WHERE userID = @UserId AND dislikedIngredient = @IngredientId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@IngredientId", ingredientId);
+
+                    int result = command.ExecuteNonQuery();
+                    return result > 0;
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Error: " + e.Message);
+                    return false;
+                }
+            }
+        }
 
     }
 }

@@ -61,6 +61,9 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public List<Recipe> GetSavedRecipesByUser(int userId) { return controller.GetSavedRecipesByUser(userId); }
         public Ingredient GetIngredientById(int ingredientId) { return controller.GetIngredientById(ingredientId); }
         public int GetIngredientIdByName(string ingredientName) { return controller.GetIngredientIdByName(ingredientName); }
+        public bool SaveUserDislike(int userId, int ingredientId) { return controller.SaveUserDislike(userId, ingredientId); }
+        public List<Ingredient> GetUserDislikes(int userId) { return controller.GetUserDislikes(userId); }
+        public bool RemoveUserDislike(int userId, int ingredientId) { return controller.RemoveUserDislike(userId, ingredientId); }
 
 
     }

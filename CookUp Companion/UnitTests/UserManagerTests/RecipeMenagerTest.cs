@@ -1027,5 +1027,77 @@ namespace UnitTests.UserManagerTests
             Assert.True((recipes.Count() > 0));
         }
 
+        [Fact]
+        public void SaveUserDislike_ShouldReturnTrue_WhenDislikeIsNew()
+        {
+            // Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
+            int userId = 1;
+            int ingredientId = 2;  // Assuming ingredient with ID 2 exists
+
+            // Act
+            bool result = recipeManager.SaveUserDislike(userId, ingredientId);
+
+            // Assert
+            Assert.True(result, "Dislike should be successfully saved when it is new.");
+        }
+
+        [Fact]
+        public void SaveUserDislike_ShouldReturnFalse_WhenDislikeAlreadyExists()
+        {
+            // Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
+            int userId = 1;
+            int ingredientId = 2;  // Assuming ingredient with ID 2 exists
+
+            // Act
+            bool firstAttempt = recipeManager.SaveUserDislike(userId, ingredientId);
+            bool secondAttempt = recipeManager.SaveUserDislike(userId, ingredientId);
+
+            // Assert
+            Assert.False(secondAttempt, "Dislike should not be saved again if it already exists.");
+        }
+
+        [Fact]
+        public void RemoveUserDislike_ShouldReturnTrue_WhenDislikeExists()
+        {
+            // Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
+            int userId = 1;
+            int ingredientId = 2;  // Assuming ingredient with ID 2 exists
+
+            // Setup initial dislike
+            recipeManager.SaveUserDislike(userId, ingredientId);
+
+            // Act
+            bool result = recipeManager.RemoveUserDislike(userId, ingredientId);
+
+            // Assert
+            Assert.True(result, "Dislike should be removed successfully if it exists.");
+        }
+
+        [Fact]
+        public void RemoveUserDislike_ShouldReturnFalse_WhenDislikeDoesNotExist()
+        {
+            // Arrange
+            fakeDal = new FakeRecipeDal();
+            recipeManager = new RecipeManager(fakeDal);
+            SetupFakeData();
+            int userId = 1;
+            int ingredientId = 2;  // Assuming ingredient with ID 2 exists, but not disliked initially
+
+            // Act
+            bool result = recipeManager.RemoveUserDislike(userId, ingredientId);
+
+            // Assert
+            Assert.False(result, "Should return false when trying to remove a dislike that does not exist.");
+        }
+
     }
 }
