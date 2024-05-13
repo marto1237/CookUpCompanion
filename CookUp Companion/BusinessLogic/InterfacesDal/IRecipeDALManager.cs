@@ -46,6 +46,7 @@ namespace InterfaceDAL
         bool SaveUserDislike(int userId, int ingredientId);
         List<Ingredient> GetUserDislikes(int userId);
         bool RemoveUserDislike(int userId, int ingredientId);
+        DateTime GetRecipeCreateDate(int recipeID);
 
 
     }

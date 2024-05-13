@@ -64,6 +64,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public bool SaveUserDislike(int userId, int ingredientId) { return controller.SaveUserDislike(userId, ingredientId); }
         public List<Ingredient> GetUserDislikes(int userId) { return controller.GetUserDislikes(userId); }
         public bool RemoveUserDislike(int userId, int ingredientId) { return controller.RemoveUserDislike(userId, ingredientId); }
+        public DateTime GetRecipeCreateDate(int recipeID) { return controller.GetRecipeCreateDate(recipeID);}
 
 
     }

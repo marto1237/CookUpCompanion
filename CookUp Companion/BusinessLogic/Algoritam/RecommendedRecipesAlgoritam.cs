@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CookUp_Companion_BusinessLogic.Algoritam
 {
-    public class RecommendedRecipesAlgoritam : IRecommendedRecipesAlgoritam
+    public class RecommendedRecipesAlgoritam /*: IRecommendedRecipesAlgoritam*/
     {
         private readonly IRecipeDALManager recipeManager;
         private readonly IUserManager userManager;

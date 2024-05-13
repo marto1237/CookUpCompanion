@@ -1,32 +1,35 @@
-﻿@model CookUp_Companion_web.Pages.RecipeModel
+﻿
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/CookUp_Companion_web.styles.css" asp-append-version="true" />
 
-@{
-    Layout = "_Layout";
-}
+        <!-- Fontawsome kit-->
+    <script src="https://kit.fontawesome.com/df0ff9c732.js" crossorigin="anonymous"></script>
 <div class="ingredients-list">
     <h3>Ingredients</h3>
     <div class="tobuy-container box">
-    <form method="post" asp-page-handler="SaveSelectedIngredients" id="addToShoppingCart">
-        @for (int i = 0; i < Model.SelectedRecipeIngredients.Count; i++)
-        {
-            <div class="ingredientShoppingCart">
-                <input type="checkbox" asp-for="@Model.SelectedRecipeIngredients[i].IsSelected" class="form-check-input" checked>
-                <input type="hidden" asp-for="@Model.SelectedRecipeIngredients[i].IngredientId">
-                <input type="hidden" asp-for="@Model.SelectedRecipeIngredients[i].IngredientName" />
-                <input type="hidden" asp-for="@Model.SelectedRecipeIngredients[i].Quantity" />
-                <input type="hidden" asp-for="@Model.SelectedRecipeIngredients[i].SelectedUnit" />
-                <label class="form-check-label">
-                    <div class="Ingredient">
-                        <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.SelectedRecipeIngredients[i].IngredientPicture)}")" alt="Ingredient Image">
-                        <p>@Model.SelectedRecipeIngredients[i].IngredientName</p>
-                        <p>@Model.SelectedRecipeIngredients[i].Quantity</p>
-                        <p>@Model.SelectedRecipeIngredients[i].SelectedUnit</p>
-                    </div>
-                </label>
-            </div>
-        }
-       
-    </form>
+        <form method="post" asp-page-handler="SaveSelectedIngredients" id="addToShoppingCart">
+            @for (int i = 0; i < Model.SelectedRecipeIngredients.Count; i++)
+            {
+                var ingredient = Model.SelectedRecipeIngredients[i];
+                <div class="ingredientShoppingCart">
+                    <input type="checkbox" id="SelectedRecipeIngredients@(i)IsSelected" name="SelectedRecipeIngredients[@i].IsSelected" class="form-check-input" checked>
+                    <input type="hidden" id="SelectedRecipeIngredients@(i)IngredientId" name="SelectedRecipeIngredients[@i].IngredientId" value="@ingredient.IngredientId">
+                    <input type="hidden" id="SelectedRecipeIngredients@(i)IngredientName" name="SelectedRecipeIngredients[@i].IngredientName" value="@ingredient.IngredientName" />
+                    <input type="hidden" id="SelectedRecipeIngredients@(i)Quantity" name="SelectedRecipeIngredients[@i].Quantity" value="@ingredient.Quantity" />
+                    <input type="hidden" id="SelectedRecipeIngredients@(i)SelectedUnit" name="SelectedRecipeIngredients[@i].SelectedUnit" value="@ingredient.SelectedUnit" />
+                    <label class="form-check-label">
+                        <div class="Ingredient">
+                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(ingredient.IngredientPicture)}")" alt="Ingredient Image">
+                            <p>@ingredient.IngredientName</p>
+                            <p>@ingredient.Quantity</p>
+                            <p>@ingredient.SelectedUnit</p>
+                        </div>
+                    </label>
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary">Save Selected Ingredients</button>
+        </form>
     </div>
-    <button type="submit" form="addToShoppingCart" class="btn btn-primary">Save Selected Ingredients</button>
 </div>

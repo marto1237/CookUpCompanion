@@ -5,6 +5,7 @@
     string[] daysOfWeek = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 }
 
+
 @if (TempData["IsAddRecipeSuccess"] != null && (bool)TempData["IsAddRecipeSuccess"])
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -43,9 +44,8 @@
                                 <img src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
                                 <div class="card-img-overlay">
                                     <div class="card-top">
-                                        <div class="card-right">
-                                            <button class="more" onclick="showOptionsMenu(this.id)">
-                                                <i class="fa-solid fa-ellipsis"></i>
+                                        <div class="card-right"><button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)">.
+                                            <i class="fa-solid fa-ellipsis"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -137,9 +137,9 @@
                                                     <div class="card-img-overlay">
                                                         <div class="card-top">
                                                             <div class="card-right">
-                                                                <button class="more" onclick="showOptionsMenu(this.id)">
+                                                                <button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)">
                                                                     <i class="fa-solid fa-ellipsis"></i>
-                                                                </button>
+                                                                    </button>
                                                             </div>
                                                         </div>
                                                         <div class="card-bottom">
@@ -167,6 +167,7 @@
 
 </form>
  
+@await Html.PartialAsync("_MoreOptionsModal")
 
 
     @section Scripts {

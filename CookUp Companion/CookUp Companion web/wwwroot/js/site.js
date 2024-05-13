@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 //function to show the more option to the recipe 
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.card-recipe .more').forEach(button => {
+    document.querySelectorAll('.more').forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault();  // Prevent navigating if it's in an anchor tag.
             event.stopPropagation(); // Stop the event from bubbling up to parent elements.

@@ -262,20 +262,7 @@ namespace UnitTests.MockClasses
             int recipeID = recipes.FirstOrDefault(rec => rec.Value == recipe).Key;
             return recipes.Remove(recipeID);
         }
-        //public List<Recipe> GetLikedRecipesByUser(int userId, int recipeId)
-        //{
-
-        //    var likedRecipeIds = likesAndDislikes.Where(kvp => kvp.Value.Likes > 0).Select(kvp => kvp.Key);
-        //    return recipes.Values.Where(r => likedRecipeIds.Contains(recipeId)).ToList();
-        //}
-        //public List<Recipe> GetLikedRecipesByUser(int userId, int recipeId)
-        //{
-            
-        //     List<int> likedRecipeIds = userLikes[userId] ;
-           
-            
-        //    return recipes.Values.Where(r => likedRecipeIds.Contains(recipeId)).ToList();
-        //}
+       
 
         public List<Recipe> GetLikedRecipes(int page, int pageSize, int userId)
         {
@@ -478,6 +465,9 @@ namespace UnitTests.MockClasses
             }
             return dislikes;
         }
-
+        public DateTime GetRecipeCreateDate(int recipeID)
+        {
+            return DateTime.Now;
+        }
     }
 }

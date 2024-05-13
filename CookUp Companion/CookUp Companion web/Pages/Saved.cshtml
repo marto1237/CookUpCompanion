@@ -5,6 +5,23 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+@if (TempData["IsSuccess"] != null && (bool)TempData["IsSuccess"])
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    TempData.Remove("IsSuccess"); // Clear TempData after displaying
+}
+
+@if (TempData["IsError"] != null && (bool)TempData["IsError"])
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    TempData.Remove("IsError"); // Clear TempData after displaying
+}
 <div class="">
     <div class="container">
         <div class="row">
@@ -59,6 +76,7 @@
     </div>
 </div>
 
+@await Html.PartialAsync("_MoreOptionsModal")
 
 <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination">

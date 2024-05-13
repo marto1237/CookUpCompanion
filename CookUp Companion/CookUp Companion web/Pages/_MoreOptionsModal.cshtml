@@ -1,0 +1,52 @@
+﻿
+    <!-- More Options Modal -->
+    <div class="modal fade " id="moreOptionsModal" aria-hidden="true" aria-labelledby="moreOptionsModalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="0">
+                    <button id="AddTo" type="button" class="btn btn-light settingsbtn" onclick="addToModal()">
+                        <div class="leftSettings"><i class="fa-solid fa-clipboard-list fa-2xl"></i></div>
+                        <div class="rightSettings"> Add too ></div>
+                    </button>
+                    <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
+                        <div class="leftSettings"><i class="fa-solid fa-share-from-square fa-2xl"></i></div>
+                        <div class="rightSettings">Send Recipe </div>
+                    </button>
+                    <button id="PreferencesButton" type="button" class="btn btn-light settingsbtn">
+                        <div class="leftSettings"><i class="fa-solid fa-triangle-exclamation fa-2xl"></i></div>
+                        <div class="rightSettings"> Report </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add to  Modal -->
+    <div class="modal fade" id="AddToModal" aria-hidden="true" aria-labelledby="AddToModalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-body" id="addModal">
+                    <form method="post" asp-page-handler="IngredientsForTheRecipeID">
+                        <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="0">
+                        <button class="btn btn-light settingsbtn">
+                            <div class="leftSettings"><i class="fa-regular fa-rectangle-list fa-2xl"></i></div>
+                            <div class="rightSettings">Shopping list </div>
+                        </button>
+                    </form>
+
+                    <form method="post" asp-page-handler="IngredientsForTheRecipeID">
+                        <input type="hidden" id="CurrentRecipeId" name="CurrentRecipeId" value="0">
+                        <button id="SendRecipe" type="button" class="btn btn-light settingsbtn">
+                            <div class="leftSettings"><i class="fa-regular fa-calendar fa-2xl"></i></div>
+                            <div class="rightSettings">Meal planner</div>
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

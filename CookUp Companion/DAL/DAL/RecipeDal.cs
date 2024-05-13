@@ -1493,6 +1493,41 @@ namespace DAL
             }
         }
 
+        public DateTime GetRecipeCreateDate(int recipeID)
+        {
+            DateTime creationDate = new DateTime();
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT dateCreated FROM Recipes WHERE recipeID = @RecipeID";
+                    SqlCommand command = new SqlCommand(query, connection);
+
+                    command.Parameters.AddWithValue("@RecipeID", recipeID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Check if a record was found
+                        if (reader.Read())
+                        {
+                            creationDate = reader.GetDateTime(0); // The index (0) represents the first column in the query result
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("SQL Error: " + ex.Message);
+
+                }
+            }
+
+            return creationDate;
+        }
+
     }
 }
 

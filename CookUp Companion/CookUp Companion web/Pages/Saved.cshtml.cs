@@ -1,3 +1,5 @@
+using CookUp_Companion_BusinessLogic.InterfacesLL;
+using CookUp_Companion_BusinessLogic.Managers;
 using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -22,19 +24,26 @@ namespace CookUp_Companion_web.Pages
 
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
+        private readonly IShoppingCartManager shoppingCartManager;
 
         public User _user { get; private set; }
         private int userId;
-        public SavedModel(IUserManager userManager, IRecipeManager recipeManager)
+        public int CurrentRecipeId { get; set; }
+        [BindProperty]
+        public List<Ingredient> SelectedRecipeIngredients { get; set; }
+
+        public SavedModel(IUserManager userManager, IRecipeManager recipeManager, IShoppingCartManager shoppingCartManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
+            this.shoppingCartManager = shoppingCartManager;
         }
         public void OnGet(int? pageNum)
         {
             CurrentPage = pageNum ?? 1;
             GetIngredients(CurrentPage);
             TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+            SelectedRecipeIngredients = new List<Ingredient>();
             Likes = new List<int>();
             Dislikes = new List<int>();
             SaveCounts = new List<int>();
@@ -154,5 +163,67 @@ namespace CookUp_Companion_web.Pages
             return num.ToString();
         }
 
+        
+        public async Task<IActionResult> OnPostIngredientsForTheRecipeIDAsync()
+        {
+            int currentRecipeId = int.Parse(Request.Form["CurrentRecipeId"]);
+            CurrentRecipeId = currentRecipeId;
+            // Fetch ingredients or perform action using the recipeId
+            List<Ingredient> ingredients = recipeManager.GetAllIngredientsForRecipeId(CurrentRecipeId);
+            SelectedRecipeIngredients = ingredients;
+            return Partial("_RecipeIngredientsPartial", this);
+        }
+
+        public async Task<IActionResult> OnPostSaveSelectedIngredientsAsync()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/Login");
+            }
+
+            var userClaims = HttpContext.User.Claims;
+            var userEmailClaim = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            _user = userManager.GetUserByEmail(userEmailClaim.Value);
+            int userId = userManager.GetIdByUsername(_user.Username);
+
+            int userCartId = shoppingCartManager.GetCartIdByUserId(userId);
+            if (userCartId == -1)
+            {
+                bool isCartCreated = shoppingCartManager.CreateCart(userId);
+                if (isCartCreated)
+                {
+                    userCartId = shoppingCartManager.GetCartIdByUserId(userId); // Attempt to get the new cart ID
+                    if (userCartId == -1)
+                    {
+                        TempData["IsError"] = true;
+                        TempData["ErrorMessage"] = "Failed to create a new cart.";
+                        return RedirectToPage(); // Redirect with an error message
+                    }
+                }
+                else
+                {
+                    TempData["IsError"] = true;
+                    TempData["ErrorMessage"] = "Failed to create a new cart.";
+                    return RedirectToPage(); // Redirect with an error message
+                }
+            }
+
+
+
+            foreach (Ingredient ingredient in SelectedRecipeIngredients)
+            {
+                // Your logic to save each ingredient
+                int ingredientID = recipeManager.GetIngredientIdByName(ingredient.IngredientName);
+                bool IsAdded = shoppingCartManager.AddIngredientToCart(userCartId, ingredientID, ingredient.Quantity, ingredient.SelectedUnit);
+                if (!IsAdded)
+                {
+                    TempData["IsError"] = true;
+                    TempData["ErrorMessage"] = $"Failed to save the {ingredient.IngredientName} in the cart.";
+                }
+            }
+            TempData["IsSuccess"] = true;
+            TempData["SuccessMessage"] = "Ingredients added to the shopping cart successfully!";
+            return RedirectToPage();
+        }
     }
 }

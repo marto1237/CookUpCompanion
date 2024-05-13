@@ -34,22 +34,7 @@ namespace UnitTests.UserManagerTests
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             fakeDal.InsertUser(user);
         }
-
-        private void CreateRecipe(string username, string email, string password, string firstName, string lastName, int roleId)
-        {
-            User creator = new User(null, "testuser", "testuser@example.com", "testuser123", "Test", "User", 1, null);
-
-            List<Ingredient> recipeIngredients = new List<Ingredient>
-            {
-                new Ingredient(null, 1, "egg", 2, "large" ),
-                new Ingredient(null, 2, "butter", 1, "knob"),
-                new Ingredient(null, 3, "cream", 6, "tablespoon")
-            };
-            // Act
-            bool isAdded = recipeManager.CreateRecipe(new Recipe(null, creator, "recipeName", "recipeDescription", recipeIngredients, "recipeIncrutions", 10, 15));
-            Recipe newrecipe = recipeManager.GetRecipeByNameAndCreator("recipeName", creator.Username);
-            fakeDal.InsertRecipe(newrecipe);
-        }
+ 
         [Fact]
         public void GetAllIngredients_ShouldReturnTrue_WhenIngredientsDoesNotExist()
         {
