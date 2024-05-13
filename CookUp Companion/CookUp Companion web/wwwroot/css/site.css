@@ -1065,3 +1065,17 @@ input[type="radio"] {
 .dislikeIngerdients{
 
 }
+/* Forgot password form*/
+#forgotPassword {
+    max-width: 500px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+
+}
+.form-group{
+    padding: 12px;
+}
