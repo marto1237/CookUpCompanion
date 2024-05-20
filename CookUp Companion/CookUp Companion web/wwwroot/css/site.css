@@ -25,6 +25,7 @@ body {
     margin: auto;
     justify-content: center;
     margin-bottom: 60px;
+    overflow-x: hidden;
     background-image: url("../images/body.jpg")
 }
 /* Navigation bar  design */
@@ -35,7 +36,196 @@ body {
     text-underline-offset: 8px;
 }
 
+#logo {
+    width: 100px; /* Set the width as per your requirement */
+    height: auto; /* Maintains the aspect ratio */
+}
+ 
+/*Index page */
 
+.IndexPage {
+    background-color: #fff;
+    width: 100%; /* Cover full width */
+    min-height: 100vh; /* Cover at least the full height of the viewport */
+    overflow: hidden; /* Clear any floated elements */
+}
+.hpanel {
+    position: relative; /* Changed from absolute for better responsiveness */
+    width: 50%; /* Sets each panel to take half of the screen width */
+    height: 100vh; /* Full viewport height */
+    float: left; /* Aligns panels side by side */
+    overflow: hidden; /* Hides any content that overflows its div boundaries */
+}
+
+.leftpan {
+    width: 45%;
+    -webkit-transform: skew(-8deg);
+    -moz-transform: skew(-8deg);
+    -o-transform: skew(-8deg);
+}
+
+.rightpan {
+    right: -5%;
+    width: 55%;
+    -webkit-transform: skew(-8deg);
+    -moz-transform: skew(-8deg);
+    -o-transform: skew(-8deg);
+}
+
+.rightpan .background-img-right {
+    background-image: url(/images/IndexPicture.jpg);
+}
+
+.background-img-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.leftpan .content-area {
+    -webkit-transform: skew(-8deg);
+    -moz-transform: skew(-8deg);
+    -o-transform: skew(-8deg);
+}
+
+.rightpan .content-area {
+    -webkit-transform: skew(-8deg);
+    -moz-transform: skew(-8deg);
+    -o-transform: skew(-8deg);
+}
+
+.content-area {
+    text-align: center;
+    margin: 20vh auto;
+    width: 350px
+}
+
+    .content-area h2 {
+        font-size: 2.8rem;
+        margin-bottom: 50px
+    }
+
+.btn-area {
+    margin-top: 50px
+}
+
+.btn-area a {
+    padding: 13px 0;
+    width: 70%;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 50px;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #000;
+    letter-spacing: 1px;
+}
+
+.container-index {
+    top: -50%;
+    background-color: #fff;
+    color: #333;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+    .container-index .header {
+        background-size: cover;
+        background-position: center;
+        padding: 30px 20px;
+    }
+
+.index-right {
+    width: 250px;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+}
+
+.container-index .discount {
+    background-color: #ff872c;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    margin-bottom: 20px;
+}
+
+.container-index h1 {
+    margin: 20px 0;
+}
+
+.container-index p {
+    margin: 20px 0 30px;
+}
+
+.container-index .buttons button {
+    background-color: #ff872c;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+    .container-index .buttons button:hover {
+        background-color: #e76e00;
+    }
+
+.container-index .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+}
+
+.container-index .stat img {
+    width: 50px;
+    height: auto;
+}
+
+.container-index .number {
+    display: block;
+    color: #333;
+    font-size: 1.2em;
+    margin-top: 5px;
+}
+
+@media (max-width: 968px) {
+    .hpanel {
+        width: 100%; /* Full width for smaller screens */
+        float: none;
+        position: relative;
+    }
+
+    .leftpan, .rightpan {
+        width: 100%; /* Adjusts each panel to full width on smaller screens */
+    }
+
+    .content-area {
+        margin: 10vh auto; /* Adjusts vertical margin on smaller screens */
+        width: 90%; /* More padding on smaller screens */
+    }
+}
+
+.leftpan .content-area, .rightpan .content-area {
+    position: absolute;
+    top: 25%; /* Centers vertically */
+    transform: translateY(-50%); /* Offset the top positioning */
+    width: 100%; /* Adjust width to prevent overflow */
+    padding: 20px; /* Adds padding inside the content area */
+    box-sizing: border-box; /* Includes padding in the width */
+}
 
 /* Dropmenu */
 .icon-img {
@@ -199,6 +389,10 @@ body {
 
 /*Login page */
 
+.card-login{
+    background-color: #fff;
+    padding: 1.2rem;
+}
 .divider:after,
 .divider:before {
     content: "";
