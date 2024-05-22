@@ -28,6 +28,5 @@ namespace InterfacesLL
         List<string> AllRoles();
         int GetRoleIdByRoleName(string roleName);
         
-
     }
 }

@@ -10,6 +10,7 @@ namespace UnitTests.UserManagerTests
 {
     public class UserManagerTest
     {
+        const int hashIterations = 10000;
         private UserManager userManager;
         private FakeUserDALManager fakeDal;
 
@@ -30,7 +31,7 @@ namespace UnitTests.UserManagerTests
         private void CreateUser(string username, string email, string password, string firstName, string lastName, int roleId)
         {
             byte[] salt = userManager.GenerateSalt();
-            string hashedPassword = userManager.HashPassword(password, salt, 10000);
+            string hashedPassword = userManager.HashPassword(password, salt);
             var user = new User(null, username, email, hashedPassword, firstName, lastName, roleId, null);
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             fakeDal.InsertUser(user);

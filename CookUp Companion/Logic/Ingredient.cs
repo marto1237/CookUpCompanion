@@ -3,19 +3,27 @@
     public class Ingredient
     {
         public byte[] IngredientPicture { get; private set; }
-        public int IngredientId { get;  set; }
-        public string IngredientName { get;  set; }
+        public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
         public List<string> MeasurementUnits { get; set; }
-        public float Quantity { get;  set; }
-        public string SelectedUnit { get;  set; }
+        public float Quantity { get; set; }
+        public string SelectedUnit { get; set; }
         public bool IsSelected { get; set; }
 
         public Ingredient()
         {
         }
 
-        public Ingredient(byte[] ingredientPicture, int ingredientId,string ingredientName, string measurementUnits, float quantity)
+        public Ingredient(byte[] ingredientPicture, int ingredientId, string ingredientName, string measurementUnits, float quantity)
         {
+            if (string.IsNullOrWhiteSpace(ingredientName))
+                throw new ArgumentException("Ingredient name must not be empty.", nameof(ingredientName));
+
+            if (quantity < 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must not be negative.");
+
+            if (string.IsNullOrWhiteSpace(measurementUnits))
+                throw new ArgumentException("Measurement unit must not be empty.", nameof(measurementUnits));
             IngredientPicture = ingredientPicture;
             IngredientId = ingredientId;
             IngredientName = ingredientName;
@@ -24,8 +32,16 @@
             SelectedUnit = null;
         }
         //This is for saving ingredient for the recipes
-        public Ingredient(byte[] ingredientPicture, int ingredientId, string ingredientName, float quantity, string measurementUnit )
+        public Ingredient(byte[] ingredientPicture, int ingredientId, string ingredientName, float quantity, string measurementUnit)
         {
+            if (string.IsNullOrWhiteSpace(ingredientName))
+                throw new ArgumentException("Ingredient name must not be empty.", nameof(ingredientName));
+
+            if (quantity < 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must not be negative.");
+
+            if (string.IsNullOrWhiteSpace(measurementUnit))
+                throw new ArgumentException("Measurement unit must not be empty.", nameof(measurementUnit));
             IngredientPicture = ingredientPicture;
             IngredientId = ingredientId;
             IngredientName = ingredientName;
@@ -43,12 +59,14 @@
         }
 
         public void ChangeQuantity(float newquantity)
-		{
-			Quantity = newquantity;
-		}
-		public void ChangeSelectedUnit(string newSelectedUnit)
-		{
-			SelectedUnit = newSelectedUnit;
-		}
-	}
+        {
+            if (newquantity < 0)
+                throw new ArgumentOutOfRangeException(nameof(newquantity), "New quantity must not be negative.");
+            Quantity = newquantity;
+        }
+        public void ChangeSelectedUnit(string newSelectedUnit)
+        {
+            SelectedUnit = newSelectedUnit;
+        }
+    }
 }

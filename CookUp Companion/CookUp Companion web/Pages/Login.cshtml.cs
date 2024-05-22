@@ -25,7 +25,6 @@ namespace CookUp_Companion_web.Pages
 
         public string AppealMessage { get; set; }
 
-        List<Claim> claims = new List<Claim>();
 
         private readonly IUserManager userManager;
         public LoginModel(IUserManager userManager)
@@ -90,7 +89,8 @@ namespace CookUp_Companion_web.Pages
                     {
                         CookieOptions options = new CookieOptions();
                         options.Expires = DateTimeOffset.Now.AddDays(30); // Set expiration as needed
-                        Response.Cookies.Append("UserEmail", user.Email, options);
+                        /*"UserEmail"*/
+                        Response.Cookies.Append(nameof(user.Email), user.Email, options);
                     }
 
                     // Assuming you have a method to store the appeal in the database
@@ -115,9 +115,6 @@ namespace CookUp_Companion_web.Pages
                     // Sign in the user with the created identity
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    CookieOptions cookieOptions = new CookieOptions();
-                    cookieOptions.Expires = DateTime.Now.AddDays(1);
-                    Response.Cookies.Append("Email", user.Email, cookieOptions);
 
                     return RedirectToPage("/Index");
                 }

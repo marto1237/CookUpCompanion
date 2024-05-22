@@ -63,12 +63,12 @@ namespace CookUp_Companion_web.Pages
             this.userManager = userManager; 
             this.recipeManager = recipeManager;
         }
-        public async Task OnGetAsync(int? id, int page = 1)
+        public async Task<IActionResult> OnGetAsync(int? id, int page = 1)
         {
-            if(!id.HasValue || id == 0)
+            if(!id.HasValue ||  id <= 0 )
             {
                 ModelState.AddModelError("error", "id is required");
-                return;
+                return RedirectToPage("/Recipes");
             }
             
             await GetRecipe(Convert.ToInt32(id));
@@ -89,7 +89,7 @@ namespace CookUp_Companion_web.Pages
             {
                 IsFavorite = false;
             }
-            
+            return Page();
 
         }
 

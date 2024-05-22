@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace CookUp_Companion_BusinessLogic.Manager
 {
+    
     public class UserManager : IUserManager
     {
+        const int hashIterations = 10000;
         private User currentUser;
 
         IUserDALManager controller;
@@ -25,7 +27,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         {
             // Retrieve user from database
             User user = controller.GetUserByEmail(email);
-            if (user != null && VerifyPassword(password, user.Password, user.PasswordSalt, 10000))
+            if (user != null && VerifyPassword(password, user.Password, user.PasswordSalt))
             {
                 currentUser = user;
                 return user;
@@ -44,7 +46,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         {
             // Generate salt and hash password
             byte[] salt = GenerateSalt();
-            string hashedPassword = HashPassword(user.Password, salt, 10000);
+            string hashedPassword = HashPassword(user.Password, salt);
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             user.ChangePassword(hashedPassword);
 
@@ -85,21 +87,21 @@ namespace CookUp_Companion_BusinessLogic.Manager
             return salt;
         }
 
-        public string HashPassword(string password, byte[] salt, int iterations)
+        public string HashPassword(string password, byte[] salt)
         {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations))
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, hashIterations))
             {
                 return Convert.ToBase64String(pbkdf2.GetBytes(32)); // Generate a 256-bit (32-byte) hash
             }
         }
 
-        private bool VerifyPassword(string password, string hashedPassword, string salt, int iterations)
+        private bool VerifyPassword(string password, string hashedPassword, string salt)
         {
             // Convert the salt from string to byte array
             byte[] saltBytes = Convert.FromBase64String(salt);
 
             // Hash the provided password with the stored salt and compare it with the stored hashed password
-            string inputHashedPassword = HashPassword(password, saltBytes, iterations);
+            string inputHashedPassword = HashPassword(password, saltBytes);
             return inputHashedPassword == hashedPassword;
         }
 
@@ -115,7 +117,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         {
             byte[] salt = Convert.FromBase64String(user.PasswordSalt);
 
-            string hashedPassword = HashPassword(newPassword, salt, 10000);
+            string hashedPassword = HashPassword(newPassword, salt);
             user.ChangePassword(hashedPassword);
 
             // Update user in the database

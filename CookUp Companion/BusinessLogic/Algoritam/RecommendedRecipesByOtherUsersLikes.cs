@@ -107,7 +107,7 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
                 .Select(g => g.First())
                 .ToList();
         }
-        public double CalculateTrendScore(Recipe recipe, DateTime referenceDate)
+        public double CalculateTrendScore(Recipe recipe, DateTime referenceDate) 
         {
             // Updated implementation to use interface methods...
             int recipeID = GetRecipeId(recipe);
