@@ -166,5 +166,18 @@ namespace UnitTests.MockClasses
         {
             return users.Values.Where(u => u.Username.Contains(search) || u.FirstName.Contains(search) || u.LastName.Contains(search)).ToList();
         }
+
+        public (User, bool, string) GetUserAndBanInfo(string email)
+        {
+            User user = users.Values.FirstOrDefault(u => u.Email == email);
+            if (user != null)
+            {
+                int userId = users.FirstOrDefault(u => u.Value.Email == email).Key;
+                bool isBanned = bannedUsers.ContainsKey(userId);
+                string banReason = isBanned ? bannedUsers[userId] : null;
+                return (user, isBanned, banReason);
+            }
+            return (null, false, null);
+        }
     }
 }

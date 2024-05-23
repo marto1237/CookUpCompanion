@@ -36,6 +36,11 @@ namespace CookUp_Companion_BusinessLogic.Manager
             return null;
 
         }
+
+        public (User, bool, string) GetUserAndBanInfo(string email)
+        {
+            return controller.GetUserAndBanInfo(email);
+        }
         public User CurrentUser()
         {
             return currentUser;

@@ -1,3 +1,4 @@
+using CookUp_Companion_web.Model;
 using InterfacesLL;
 using Logic;
 using Microsoft.AspNetCore.Authentication;
@@ -15,14 +16,9 @@ namespace CookUp_Companion_web.Pages
     {
 
         [BindProperty]
-        [EmailAddress(ErrorMessage = "Enter a valid email address!")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required!")]
-        public string? Email { get; set; }
+        public LoginDto Login { get; set; }
 
-        [BindProperty]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required!")]
-        public string? Password { get; set; }
-
+        
         public string AppealMessage { get; set; }
 
 
@@ -30,6 +26,7 @@ namespace CookUp_Companion_web.Pages
         public LoginModel(IUserManager userManager)
         {
             this.userManager = userManager;
+            Login = new LoginDto();
         }
 
         public void OnGet()
@@ -41,9 +38,9 @@ namespace CookUp_Companion_web.Pages
                 return;
             }
             // Check if the UserEmail cookie exists
-            if (Request.Cookies["UserEmail"] != null)
+            if (Request.Cookies[nameof(Login.Email)] != null)
             {
-                Email = Request.Cookies["UserEmail"];
+                Login.Email = Request.Cookies[nameof(Login.Email)];
             }
 
         }
@@ -55,24 +52,24 @@ namespace CookUp_Companion_web.Pages
                 ViewData["Error"] = "Oops Something went wrong!";
                 return Page();
             }
+            if (Login == null)
+            {
+                Login = new LoginDto();
+            }
 
             try
             {
-                
+                (User user, bool isBanned, string banReason) = userManager.GetUserAndBanInfo(Login.Email);
 
-                User user = userManager.Login(Email, Password);
                 if (user != null)
                 {
-                    if (userManager.BannedUser(user))
+                    if (isBanned)
                     {
-                        int userID = userManager.GetIdByUsername(user.Username);
-                        string reason = userManager.GetBanReason(userID);
                         TempData["IsBanned"] = true;
-                        TempData["BanReason"] = reason;
-
-
+                        TempData["BanReason"] = banReason;
                         return Page();
                     }
+
                     // Get the appeal message from the form submission
                     string appealMessage = AppealMessage;
 
@@ -85,12 +82,11 @@ namespace CookUp_Companion_web.Pages
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    if (Request.Form["rememberMe"].Contains("on")) // assuming your checkbox has name="rememberMe"
+                    if (Login.RememberMe) // assuming your checkbox has name="rememberMe"
                     {
                         CookieOptions options = new CookieOptions();
                         options.Expires = DateTimeOffset.Now.AddDays(30); // Set expiration as needed
-                        /*"UserEmail"*/
-                        Response.Cookies.Append(nameof(user.Email), user.Email, options);
+                        Response.Cookies.Append(nameof(Login.Email), user.Email, options);
                     }
 
                     // Assuming you have a method to store the appeal in the database

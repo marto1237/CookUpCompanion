@@ -271,7 +271,52 @@ namespace DAL
 
             return null;
 		}
-		public string GetRole(User user)
+
+        public (User, bool, string) GetUserAndBanInfo(string email)
+        {
+            User user = null;
+            bool isBanned = false;
+            string banReason = null;
+
+            using (SqlConnection connection = new SqlConnection(Server_Connection))
+            {
+                connection.Open();
+                string query = @"
+                SELECT u.*, b.reason AS BanReason
+                FROM Users u
+                LEFT JOIN BannedPeople b ON u.userID = b.userID
+                WHERE u.email = @Email";
+
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", email);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        user = new User(
+                            (byte[])reader["profilePicture"],
+                            (string)reader["username"],
+                            (string)reader["email"],
+                            (string)reader["password"],
+                            (string)reader["firstName"],
+                            (string)reader["lastName"],
+                            (int)reader["roleID"],
+                            null
+                        );
+                        user.GetSaltForDb(reader["passwordSalt"].ToString());
+
+                        if (reader["BanReason"] != DBNull.Value)
+                        {
+                            isBanned = true;
+                            banReason = (string)reader["BanReason"];
+                        }
+                    }
+                }
+            }
+            return (user, isBanned, banReason);
+        }
+        public string GetRole(User user)
 		{
 			using(SqlConnection connection = new SqlConnection(Server_Connection))
 			{

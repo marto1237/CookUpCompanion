@@ -17,6 +17,7 @@ namespace InterfaceDAL
 
 
         User Login(string username, string password);
+        (User, bool, string) GetUserAndBanInfo(string email);
         User GetUserByEmail(string email);
         bool IsUserBanned(User bannedUser);
 

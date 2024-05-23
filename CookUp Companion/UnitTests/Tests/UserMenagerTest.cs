@@ -562,6 +562,56 @@ namespace UnitTests.UserManagerTests
             // Assert
             Assert.True(roleId == 0);
         }
+        [Fact]
+        public void GetUserAndBanInfo_ShouldReturnUserAndBanDetails_WhenUserIsBanned()
+        {
+            // Arrange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
 
+            // Act
+            fakeDal.BanUser(fakeDal.GetUserByEmail("admin@example.com"), fakeDal.GetUserByEmail("bannedUser@example.com"), "Violation of terms", 1);
+            var (user, isBanned, banReason) = fakeDal.GetUserAndBanInfo("bannedUser@example.com");
+
+            // Assert
+            Assert.NotNull(user);
+            Assert.True(isBanned);
+            Assert.Equal("Violation of terms", banReason);
+        }
+
+        [Fact]
+        public void GetUserAndBanInfo_ShouldReturnUserAndNoBanDetails_WhenUserIsNotBanned()
+        {
+            // Arrange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var (user, isBanned, banReason) = fakeDal.GetUserAndBanInfo("logIn@example.com");
+
+            // Assert
+            Assert.NotNull(user);
+            Assert.False(isBanned);
+            Assert.Null(banReason);
+        }
+
+        [Fact]
+        public void GetUserAndBanInfo_ShouldReturnNull_WhenUserDoesNotExist()
+        {
+            // Arrange
+            fakeDal = new FakeUserDALManager();
+            userManager = new UserManager(fakeDal);
+            SetupFakeUsers();
+
+            // Act
+            var (user, isBanned, banReason) = fakeDal.GetUserAndBanInfo("nonexistent@example.com");
+
+            // Assert
+            Assert.Null(user);
+            Assert.False(isBanned);
+            Assert.Null(banReason);
+        }
     }
 }

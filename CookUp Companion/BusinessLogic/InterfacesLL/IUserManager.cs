@@ -8,6 +8,7 @@ namespace InterfacesLL
         bool CheckExistingUsername(string username);
         bool CheckExistingEmail(string email);
         User Login(string email, string password);
+        (User, bool, string) GetUserAndBanInfo(string email);
         User GetUserByEmail(string email);
         string GetRole(User user);
         User CurrentUser();

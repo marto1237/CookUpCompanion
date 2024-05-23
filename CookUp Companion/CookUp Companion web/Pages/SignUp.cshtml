@@ -26,12 +26,12 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <span  asp-validation-for="Username" class="text-danger"></span>
+                      <span  asp-validation-for="SignUp.Username" class="text-danger"></span>
                       @if (ViewData["UsernameError"] != null)
                         {
                             <span class="text-danger">@ViewData["UsernameError"]</span>
                         }
-                      <input type="text" asp-for="Username" id="name"  class="form-control" />
+                      <input type="text" asp-for="SignUp.Username" id="name"  class="form-control" />
                       <label class="form-label" for="name">Your Username</label>
                       
                     </div>
@@ -40,8 +40,8 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <span  asp-validation-for="FirstName" class="text-danger"></span>
-                      <input type="text" asp-for="FirstName" id="name"  class="form-control" />
+                      <span  asp-validation-for="SignUp.FirstName" class="text-danger"></span>
+                      <input type="text" asp-for="SignUp.FirstName" id="name"  class="form-control" />
                       <label class="form-label" for="name">Your First name</label>
                       
                     </div>
@@ -50,8 +50,8 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <span  asp-validation-for="LastName" class="text-danger"></span>
-                      <input type="text" asp-for="LastName" id="name"  class="form-control" />
+                      <span  asp-validation-for="SignUp.LastName" class="text-danger"></span>
+                      <input type="text" asp-for="SignUp.LastName" id="name"  class="form-control" />
                       <label class="form-label" for="name">Your Last Name</label>
                       
                     </div>
@@ -59,12 +59,12 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span asp-validation-for="SignUp.Email" class="text-danger"></span>
                         @if (ViewData["EmailError"] != null)
                         {
                             <span class="text-danger">@ViewData["EmailError"]</span>
                         }
-                      <input  asp-for="Email" id="email"  class="form-control" />
+                      <input  asp-for="SignUp.Email" id="email"  class="form-control" />
                       <label class="form-label" for="email">Your Email</label>
                     </div>
                   </div>
@@ -72,8 +72,8 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                            <input type="password" asp-for="Password" id="password" class="form-control" />
+                            <span asp-validation-for="SignUp.Password" class="text-danger"></span>
+                            <input type="password" asp-for="SignUp.Password" id="password" class="form-control" />
                             <label class="form-label" for="password">Password</label>
                         </div>
                     </div>
@@ -81,8 +81,8 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            <input type="password" asp-for="ConfirmPassword" id="confirmPassword" class="form-control" />
+                            <span asp-validation-for="SignUp.ConfirmPassword" class="text-danger"></span>
+                            <input type="password" asp-for="SignUp.ConfirmPassword" id="confirmPassword" class="form-control" />
                             <label class="form-label" for="confirmPassword">Repeat your password</label>
                         </div>
                     </div>
