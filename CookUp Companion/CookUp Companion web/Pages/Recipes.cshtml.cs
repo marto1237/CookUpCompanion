@@ -31,16 +31,18 @@ namespace CookUp_Companion_web.Pages
         private readonly IUserManager userManager;
         private readonly IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam;
         private readonly IShoppingCartManager shoppingCartManager;
+        private readonly IRecipeReviewsManager recipeReviewsManager;
 
         public User _user { get; private set; }
 
         public string sortOrder { get; set; }
-        public RecipeModel(IUserManager userManager, IRecipeManager recipeManager, IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam, IShoppingCartManager shoppingCartManager)
+        public RecipeModel(IUserManager userManager, IRecipeManager recipeManager, IRecommendedRecipesAlgoritam recommendedRecipesAlgoritam, IShoppingCartManager shoppingCartManager, IRecipeReviewsManager recipeReviewsManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
             this.recommendedRecipesAlgoritam = recommendedRecipesAlgoritam;
             this.shoppingCartManager = shoppingCartManager;
+            this.recipeReviewsManager = recipeReviewsManager;
         }
         public IActionResult OnGet(int? pageNum, string sortOrder)
         {
@@ -106,7 +108,7 @@ namespace CookUp_Companion_web.Pages
 
         private void PopulateInteractionStats(int recipeID)
         {
-            var (likes, dislikes) = recipeManager.GetLikesAndDislikes(recipeID);
+            var (likes, dislikes) = recipeReviewsManager.GetLikesAndDislikes(recipeID);
             Likes.Add(likes);
             Dislikes.Add(dislikes);
             int totalVotes = likes + dislikes;

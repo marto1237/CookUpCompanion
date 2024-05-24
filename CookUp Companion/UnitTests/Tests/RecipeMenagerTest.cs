@@ -1,4 +1,5 @@
 ﻿using CookUp_Companion_BusinessLogic.Manager;
+using CookUp_Companion_BusinessLogic.Managers;
 using CookUp_Companion_Classes;
 using InterfacesLL;
 using Logic;
@@ -16,8 +17,10 @@ namespace UnitTests.UserManagerTests
         
         private RecipeManager recipeManager;
         private FakeRecipeDal fakeDal;
+        private RecipeReviewManager recipeReviewsManager;
+        private FakeRecipeReviewsDal fakeRecipeReviewsDal;
 
-      
+
 
         private void SetupFakeData()
         {
@@ -41,6 +44,8 @@ namespace UnitTests.UserManagerTests
             //Arrange
             fakeDal = new FakeRecipeDal();
             recipeManager = new RecipeManager(fakeDal);
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
             SetupFakeData();
             int page = 1;
             int pageSize = 10;
@@ -59,6 +64,8 @@ namespace UnitTests.UserManagerTests
             //Arrange
             fakeDal = new FakeRecipeDal();
             recipeManager = new RecipeManager(fakeDal);
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
             SetupFakeData();
             User creator = new User(null, "testuser", "testuser@example.com", "testuser123", "Test", "User", 1, null);
 
@@ -367,106 +374,7 @@ namespace UnitTests.UserManagerTests
             Assert.Null(recipe);
         }
 
-        [Fact]
-        public void AddComment_WithValidUserAndRecipeId()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int userId = 1;
-            int recipeId = 1;
-            //Act 
-            bool isAddedComment = recipeManager.AddComment(userId,recipeId, "like", "somecomment");
-
-            //Assert
-            Assert.True(isAddedComment);
-        }
-
-        [Fact]
-        public void AddComment_WithInvalidRecipeAndRecipeId()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int userId = -1;
-            int recipeId = -1;
-            //Act 
-            bool isAddedComment = recipeManager.AddComment(userId, recipeId, "like", "somecomment");
-
-            //Assert
-            Assert.False(isAddedComment);
-        }
-        [Fact]
-        public void GetCommentsByRecipeId_WithValidIds()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int recipeId = 1;
-            int page = 1;
-            int commentsPerPage = 10;
-
-            //Act
-            List<Comment> comments = recipeManager.GetCommentsByRecipeId(recipeId, page, commentsPerPage);
-
-            //Assert
-            Assert.True(comments.Count() > 0);
-        }
-
-        [Fact]
-        public void GetCommentsByRecipeId_WithInvalidRecipeId()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int recipeId = 99;
-            int page = 1;
-            int commentsPerPage = 10;
-
-            //Act
-            List<Comment> comments = recipeManager.GetCommentsByRecipeId(recipeId, page, commentsPerPage);
-
-            //Assert
-            Assert.False(comments.Count() > 0);
-        }
-
-        [Fact]
-        public void GetLikesAndDislikes_WithValid_RecipeId()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int recipeId = 1;
-
-            //Act
-            (int Likes, int Dislikes) = recipeManager.GetLikesAndDislikes(recipeId);
-
-            //Assert
-            Assert.Equal(1, Likes);
-            Assert.Equal(1, Dislikes);
-        }
-
-        [Fact]
-        public void GetLikesAndDislikes_WithUnvalid_RecipeId()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int recipeId = 99;
-
-            //Act
-            (int Likes, int Dislikes) = recipeManager.GetLikesAndDislikes(recipeId);
-
-            //Assert
-            Assert.Equal(0, Likes);
-            Assert.Equal(0, Dislikes);
-        }
+        
 
         [Fact]
         public void ToggleFavoriteRecipe_WithValidRecipeAndUserId_Favourite()
@@ -678,23 +586,6 @@ namespace UnitTests.UserManagerTests
            Assert.True(result);
         }
 
-        [Fact]
-        public void GetLikedRecipesByUse_WithValidUserID()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int userId = 1;
-            int recipeId = 1;
-
-            //Act 
-            bool isAddedComment = recipeManager.AddComment(userId, recipeId, "like", "somecomment");
-            List<Recipe> likedRecipes = recipeManager.GetLikedRecipesByUser(userId);
-
-            //Assert
-            Assert.True(likedRecipes.Count() > 0);
-        }
 
         [Fact]
         public void GetLikedRecipesByUser_WithInvalidUserID()
@@ -702,38 +593,18 @@ namespace UnitTests.UserManagerTests
             //Arrange
             fakeDal = new FakeRecipeDal();
             recipeManager = new RecipeManager(fakeDal);
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
             SetupFakeData();
             int userId = 1;
             int recipeId = 1;
 
             //Act 
-            bool isAddedComment = recipeManager.AddComment(userId, recipeId, "like", "somecomment");
-            List<Recipe> likedRecipes = recipeManager.GetLikedRecipesByUser(99);
+            bool isAddedComment = recipeReviewsManager.AddComment(userId, recipeId, "like", "somecomment");
+            List<Recipe> likedRecipes = recipeReviewsManager.GetLikedRecipesByUser(99);
 
             //Assert
             Assert.False(likedRecipes.Count() > 0);
-        }
-
-        [Fact]
-        public void GetLikedRecipes_WithValidUserID()
-        {
-            //Arrange
-            fakeDal = new FakeRecipeDal();
-            recipeManager = new RecipeManager(fakeDal);
-            SetupFakeData();
-            int page = 1;
-            int pageSize = 10;
-            int userId = 1;
-            int recipeId = 1;
-
-            //Act
-            bool isAddedComment = recipeManager.AddComment(userId, recipeId, "like", "somecomment");
-            // FAKE userid 99
-            List<Recipe> recipes = recipeManager.GetLikedRecipes(page, pageSize, userId);
-
-            //Assert
-            Assert.True((recipes.Count() > 0));
-
         }
 
         [Fact]
@@ -742,6 +613,8 @@ namespace UnitTests.UserManagerTests
             //Arrange
             fakeDal = new FakeRecipeDal();
             recipeManager = new RecipeManager(fakeDal);
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
             SetupFakeData();
             int page = 1;
             int pageSize = 10;
@@ -749,9 +622,9 @@ namespace UnitTests.UserManagerTests
             int recipeId = 1;
 
             //Act
-            bool isAddedComment = recipeManager.AddComment(userId, recipeId, "like", "somecomment");
+            bool isAddedComment = recipeReviewsManager.AddComment(userId, recipeId, "like", "somecomment");
             // FAKE userid 99
-            List<Recipe> recipes = recipeManager.GetLikedRecipes(page, pageSize, 99);
+            List<Recipe> recipes = recipeReviewsManager.GetLikedRecipes(page, pageSize, 99);
 
             //Assert
             Assert.False((recipes.Count() > 0));

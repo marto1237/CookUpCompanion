@@ -1,3 +1,4 @@
+using CookUp_Companion_BusinessLogic.InterfacesLL;
 using CookUp_Companion_BusinessLogic.Manager;
 using InterfacesLL;
 using Logic;
@@ -16,11 +17,13 @@ namespace CookUp_Companion_web.Pages
         private User user;
 
         private readonly IRecipeManager recipeManager;
+        private readonly IRecipeReviewsManager recipeReviewsManager;
         private readonly IUserManager userManager;
-        public ProfileModel(IUserManager userManager, IRecipeManager recipeManager)
+        public ProfileModel(IUserManager userManager, IRecipeManager recipeManager, IRecipeReviewsManager recipeReviewsManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
+            this.recipeReviewsManager = recipeReviewsManager;
         }
 
         public IFormFile? userProfilePicture { get; set; }
@@ -85,7 +88,7 @@ namespace CookUp_Companion_web.Pages
             else
             {
                 CurrentPageActivity = pageNumActivity ?? 1;
-                LikedRecipes = recipeManager.GetLikedRecipes(CurrentPageActivity, PageSize, userId);
+                LikedRecipes = recipeReviewsManager.GetLikedRecipes(CurrentPageActivity, PageSize, userId);
                 TotalPagesActivity = recipeManager.GetAllRecipesPageNum(PageSize);
                 LikedRecipeInfo();
             }
@@ -105,7 +108,7 @@ namespace CookUp_Companion_web.Pages
             {
                 int recipeID = recipeManager.GetRecipeID(recipe);
 
-                var (likes, dislikes) = recipeManager.GetLikesAndDislikes(recipeID);
+                var (likes, dislikes) = recipeReviewsManager.GetLikesAndDislikes(recipeID);
                 LikedLikes.Add(likes);
                 LikedDislikes.Add(dislikes);
                 IsFavorite.Add(recipeManager.CheckIfFavorite(userId, recipeID));
@@ -125,7 +128,7 @@ namespace CookUp_Companion_web.Pages
             {
                 int recipeID = recipeManager.GetRecipeID(recipe);
 
-                var (likes, dislikes) = recipeManager.GetLikesAndDislikes(recipeID);
+                var (likes, dislikes) = recipeReviewsManager.GetLikesAndDislikes(recipeID);
                 CreatedLikes.Add(likes);
                 CreatedDislikes.Add(dislikes);
 

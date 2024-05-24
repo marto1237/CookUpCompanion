@@ -11,6 +11,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using CookUp_Companion_Classes;
+using CookUp_Companion_BusinessLogic.InterfacesLL;
 
 
 namespace CookUp_Companion_web.Pages
@@ -51,6 +52,7 @@ namespace CookUp_Companion_web.Pages
         public string FavoriteIconClass => IsFavorite ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark";
 
         private readonly IRecipeManager recipeManager;
+        private readonly IRecipeReviewsManager recipeReviewsManager;
         private readonly IUserManager userManager;
 
         const string API_KEY = "9f5b905af59f40b9840e6f89c57f1760";
@@ -58,10 +60,11 @@ namespace CookUp_Companion_web.Pages
 
 
         public User _user { get; private set; }
-        public RecipeInfoModel(IRecipeManager recipeManager, IUserManager userManager)
+        public RecipeInfoModel(IRecipeManager recipeManager, IUserManager userManager, IRecipeReviewsManager recipeReviewsManager)
         {
             this.userManager = userManager; 
             this.recipeManager = recipeManager;
+            this.recipeReviewsManager = recipeReviewsManager;
         }
         public async Task<IActionResult> OnGetAsync(int? id, int page = 1)
         {
@@ -74,7 +77,7 @@ namespace CookUp_Companion_web.Pages
             await GetRecipe(Convert.ToInt32(id));
             CurrentPage = page;
             LoadComments(id.GetValueOrDefault(), CurrentPage);
-            (Likes, Dislikes) = recipeManager.GetLikesAndDislikes(Convert.ToInt32(id));
+            (Likes, Dislikes) = recipeReviewsManager.GetLikesAndDislikes(Convert.ToInt32(id));
             LikePercentage = (int)Math.Round(CalculateLikePercentage(Likes, Dislikes), 0);
 
             // Retrieve the authenticated user's claims
@@ -95,7 +98,7 @@ namespace CookUp_Companion_web.Pages
 
         private void LoadComments(int recipeId, int page)
         {
-            var newComments = recipeManager.GetCommentsByRecipeId(recipeId, page, CommentsPerPage);
+            var newComments = recipeReviewsManager.GetCommentsByRecipeId(recipeId, page, CommentsPerPage);
             Comments.AddRange(newComments); // Append new comments to the existing list
         }
 
@@ -253,7 +256,7 @@ namespace CookUp_Companion_web.Pages
             {
                 // Assuming the AddComment method exists and handles the comment saving
                 
-                bool IsCommnetAdded =  recipeManager.AddComment(userManager.GetIdByUsername(_user.Username), recipeId, UserReaction, UserComment);
+                bool IsCommnetAdded =  recipeReviewsManager.AddComment(userManager.GetIdByUsername(_user.Username), recipeId, UserReaction, UserComment);
 
                 if (IsCommnetAdded)
                 {

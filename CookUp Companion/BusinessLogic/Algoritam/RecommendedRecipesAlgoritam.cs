@@ -14,11 +14,12 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
     {
         private readonly IRecipeDALManager recipeManager;
         private readonly IUserManager userManager;
-
-        public RecommendedRecipesAlgoritam(IRecipeDALManager recipeManager, IUserManager userManager)
+        private readonly IRecipeReviewsManager recipeReviewsManager;
+        public RecommendedRecipesAlgoritam(IRecipeDALManager recipeManager, IUserManager userManager, IRecipeReviewsManager recipeReviewsManager)
         {
             this.recipeManager = recipeManager;
             this.userManager = userManager;
+            this.recipeReviewsManager = recipeReviewsManager;
         }
 
         public List<Recipe> Recommend(User user, int pageNumber, int pageSize)
@@ -64,7 +65,7 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
         private List<Recipe> GetUserLikedRecipes(int userId)
         {
             // Assuming there's a way to get all liked recipes by a user's ID
-            return recipeManager.GetLikedRecipesByUser(userId);
+            return recipeReviewsManager.GetLikedRecipesByUser(userId);
         }
 
         private List<Recipe> GetUserSavedRecipes(int userId)

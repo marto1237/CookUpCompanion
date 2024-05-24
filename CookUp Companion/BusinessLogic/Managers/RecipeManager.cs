@@ -37,9 +37,6 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public List<Ingredient> GetAllIngredientsForRecipeId(int recipeId) { return controller.GetAllIngredientsForRecipeId(recipeId); }
         public int GetRecipeID(Recipe recipe) { return controller.GetRecipeID(recipe); }
         public Recipe GetRecipeById(int recipeID) { return controller.GetRecipeById(recipeID); }
-        public bool AddComment(int userID, int recipeId, string userReaction, string comment) { return controller.AddComment(userID, recipeId, userReaction, comment); }
-        public List<Comment> GetCommentsByRecipeId(int recipeID, int page, int commentsPerPage) { return controller.GetCommentsByRecipeId(recipeID, page, commentsPerPage); }
-        public (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId) { return controller.GetLikesAndDislikes(recipeId); }
         public bool ToggleFavoriteRecipe(int userId, int recipeId) { return controller.ToggleFavoriteRecipe(userId, recipeId); }
         public bool CheckIfFavorite(int userId, int recipeId) { return controller.CheckIfFavorite(userId, recipeId); }
         public List<Recipe> SearchRecipesByName(string searchRecipeName, int page, int pageSize) { return controller.SearchRecipesByName(searchRecipeName, page, pageSize); }
@@ -47,8 +44,6 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public bool UpdateRecipe(string creator, string recipeName, string newRecipeName, string newRecipeDescription, string newInstructions)
         { return controller.UpdateRecipe(creator, recipeName, newRecipeName, newRecipeDescription, newInstructions); }
         public bool DeleteRecipe(Recipe recipe) { return controller.DeleteRecipe(recipe); }
-        public List<Recipe> GetLikedRecipesByUser(int userId) { return controller.GetLikedRecipesByUser(userId); }
-        public List<Recipe> GetLikedRecipes(int page, int pageSize, int userId) { return controller.GetLikedRecipes(page, pageSize, userId); }
         public bool RemoveSavedRecipe(int userId, int recipeId) { return controller.RemoveSavedRecipe(userId, recipeId); }
         public List<Recipe> GetSavedRecipes(int page, int pageSize, int userId) { return  controller.GetSavedRecipes(page, pageSize, userId); } 
         public int GetSaveCount(int recipeId) { return controller.GetSaveCount(recipeId); }

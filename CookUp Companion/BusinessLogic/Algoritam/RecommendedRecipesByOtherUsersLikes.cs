@@ -13,11 +13,13 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
     {
         private readonly IRecipeDALManager recipeManager;
         private readonly IUserManager userManager;
+        private readonly IRecipeReviewsManager recipeReviewsManager;
 
-        public RecommendedRecipesByOtherUsersLikes(IRecipeDALManager recipeManager, IUserManager userManager)
+        public RecommendedRecipesByOtherUsersLikes(IRecipeDALManager recipeManager, IUserManager userManager, IRecipeReviewsManager recipeReviewsManager)
         {
             this.recipeManager = recipeManager;
             this.userManager = userManager;
+            this.recipeReviewsManager = recipeReviewsManager;
         }
 
         public List<Recipe> Recommend(User user, int pageNumber, int pageSize)
@@ -32,38 +34,14 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
                 }
 
                 // Get all users' liked recipes, excluding the current user
-                Dictionary<User, List<Recipe>> allUsersRecipes = userManager.GetAllUsers()
-                    .Where(u => userManager.GetIdByUsername(u.Username) != userId)
-                    .ToDictionary(u => u, u => GetUserLikedRecipes(userManager.GetIdByUsername(u.Username)));
+                Dictionary<User, List<Recipe>> allUsersRecipes = GetAllUsersRecipes(userId);
 
                 // Calculate similarity scores based on shared liked recipes
-                var similarityScores = allUsersRecipes.Select(u => new
-                {
-                    User = u.Key,
-                    SharedLikedRecipesCount = u.Value.Count(r => userLikedRecipes.Any(ur => IsRecipeSimilar(ur, r))),
-                    UserRecipesToRecommend = u.Value.Where(r => !userLikedRecipes.Any(ur => IsRecipeSimilar(ur, r))).ToList()
-                })
-                .OrderByDescending(u => u.SharedLikedRecipesCount)
-                .ToList();
+                var similarityScores = CalculateSimilarityScores(userLikedRecipes, allUsersRecipes);
 
-                // Recommend recipes from similar users
-                HashSet<int> recommendedRecipeIds = new HashSet<int>();
-                List<Recipe> recommendedRecipes = new List<Recipe>();
+                List<Recipe> recommendedRecipes = GetRecommendedRecipesFromScores(similarityScores, userLikedRecipes);
 
-                foreach (var simUser in similarityScores)
-                {
-                    // Add recipes liked by the current user but not by the similar user
-                    foreach (var recipe in simUser.UserRecipesToRecommend)
-                    {
-                        if (recommendedRecipeIds.Add(GetRecipeId(recipe))) // This checks if the recipe ID was not already added
-                        {
-                            recommendedRecipes.Add(recipe);
-                        }
-                    }
-                }
-
-                // Skip and take recipes based on pagination
-                return recommendedRecipes.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                return PaginateRecommendedRecipes(recommendedRecipes, pageNumber, pageSize);
             }
             catch (Exception ex)
             {
@@ -71,7 +49,50 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
                 return new List<Recipe>();
             }
         }
+        private Dictionary<User, List<Recipe>> GetAllUsersRecipes(int userId)
+        {
+            return userManager.GetAllUsers()
+                .Where(u => userManager.GetIdByUsername(u.Username) != userId)
+                .ToDictionary(u => u, u => GetUserLikedRecipes(userManager.GetIdByUsername(u.Username)));
+        }
 
+        private List<(User User, int SharedLikedRecipesCount, List<Recipe> UserRecipesToRecommend)> CalculateSimilarityScores(
+        List<Recipe> userLikedRecipes, Dictionary<User, List<Recipe>> allUsersRecipes)
+        {
+            return allUsersRecipes.Select(u => new
+            {
+                User = u.Key,
+                SharedLikedRecipesCount = u.Value.Count(r => userLikedRecipes.Any(ur => IsRecipeSimilar(ur, r))),
+                UserRecipesToRecommend = u.Value.Where(r => !userLikedRecipes.Any(ur => IsRecipeSimilar(ur, r))).ToList()
+            })
+            .OrderByDescending(u => u.SharedLikedRecipesCount)
+            .Select(u => (u.User, u.SharedLikedRecipesCount, u.UserRecipesToRecommend))
+            .ToList();
+        }
+
+        private List<Recipe> GetRecommendedRecipesFromScores(
+        List<(User User, int SharedLikedRecipesCount, List<Recipe> UserRecipesToRecommend)> similarityScores, List<Recipe> userLikedRecipes)
+        {
+            HashSet<int> recommendedRecipeIds = new HashSet<int>();
+            List<Recipe> recommendedRecipes = new List<Recipe>();
+
+            foreach (var simUser in similarityScores)
+            {
+                foreach (var recipe in simUser.UserRecipesToRecommend)
+                {
+                    if (recommendedRecipeIds.Add(GetRecipeId(recipe)))
+                    {
+                        recommendedRecipes.Add(recipe);
+                    }
+                }
+            }
+            return recommendedRecipes;
+        }
+
+        private List<Recipe> PaginateRecommendedRecipes(List<Recipe> recommendedRecipes, int pageNumber, int pageSize)
+        {
+            return recommendedRecipes.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        }
         public bool IsRecipeSimilar(Recipe one, Recipe two)
         {
             // Compare recipes by name and creator as a proxy to unique identification
@@ -80,7 +101,7 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
 
         public List<Recipe> GetUserLikedRecipes(int userId)
         {
-            return recipeManager.GetLikedRecipesByUser(userId);
+            return recipeReviewsManager.GetLikedRecipesByUser(userId);
         }
 
         public List<Recipe> RecommendTrendingRecipes(int pageNumber, int pageSize)
@@ -126,7 +147,7 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
 
         public (int Likes, int Dislikes) GetRecipeLikesAndDislikes(int recipeId)
         {
-            return recipeManager.GetLikesAndDislikes(recipeId);
+            return recipeReviewsManager.GetLikesAndDislikes(recipeId);
         }
 
         public int GetRecipeSaveCount(int recipeId)

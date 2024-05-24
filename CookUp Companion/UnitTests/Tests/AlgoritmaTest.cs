@@ -1,5 +1,6 @@
 ﻿using CookUp_Companion_BusinessLogic.Algoritam;
 using CookUp_Companion_BusinessLogic.Manager;
+using CookUp_Companion_BusinessLogic.Managers;
 using InterfaceDAL;
 using InterfacesLL;
 using Logic;
@@ -25,6 +26,8 @@ namespace UnitTests.Tests
         private FakeRecipeDal fakeRecipeDal;
         private UserManager userManager;
         private RecipeManager recipeManager;
+        private RecipeReviewManager recipeReviewsManager;
+        private FakeRecipeReviewsDal fakeRecipeReviewsDal;
 
 
 
@@ -74,23 +77,32 @@ namespace UnitTests.Tests
             recipeManager.CreateRecipe(new Recipe(null, user1, "Basic cookies", "recipeDescription", recipe2Ingredients, "recipeIncrutions", 10, 15));
             string recipe2Name = "Basic cookies";
             recipeManager.CreateRecipe(new Recipe(null, user2, "Cinnamon Sugar Cookies", "recipeDescription", recipe3Ingredients, "recipeIncrutions", 10, 15));
+            
             string recipe3Name = "Cinnamon Sugar Cookies";
 
             Recipe recipe1 = recipeManager.GetRecipeByNameAndCreator(recipe1Name, user1.Username);
             Recipe recipe2 = recipeManager.GetRecipeByNameAndCreator(recipe2Name, user1.Username);
             Recipe recipe3 = recipeManager.GetRecipeByNameAndCreator(recipe3Name, user2.Username);
 
+            fakeRecipeReviewsDal.AddRecipe(recipe1);
+            fakeRecipeReviewsDal.AddRecipe(recipe2);
+            fakeRecipeReviewsDal.AddRecipe(recipe3);
+
+            /*Add them two times to sync the data with FakeRecipeDal*/
+            fakeRecipeReviewsDal.AddRecipe(recipe1);
+            fakeRecipeReviewsDal.AddRecipe(recipe2);
+            fakeRecipeReviewsDal.AddRecipe(recipe3);
             int recipe1Id = recipeManager.GetRecipeID(recipe1);
             int recipe2Id = recipeManager.GetRecipeID(recipe2);
             int recipe3Id = recipeManager.GetRecipeID(recipe3);
 
             // Simulate recipes liked by Martin
-            recipeManager.AddComment(user1Id, recipe1Id, "like", "somecomment");
-            recipeManager.AddComment(user1Id, recipe2Id, "like", "somecomment");
+            recipeReviewsManager.AddComment(user1Id, recipe1Id, "like", "somecomment");
+            recipeReviewsManager.AddComment(user1Id, recipe2Id, "like", "somecomment");
 
             // Simulate recipes liked by Daniel
-            recipeManager.AddComment(user2Id, recipe2Id, "like", "somecomment");
-            recipeManager.AddComment(user2Id, recipe3Id, "like", "somecomment");
+            recipeReviewsManager.AddComment(user2Id, recipe2Id, "like", "somecomment");
+            recipeReviewsManager.AddComment(user2Id, recipe3Id, "like", "somecomment");
         }
         private void CreateUser(string username, string email, string password, string firstName, string lastName, int roleId)
         {
@@ -100,7 +112,7 @@ namespace UnitTests.Tests
             user.ChangePasswordSalt(Convert.ToBase64String(salt));
             fakeUserDal.InsertUser(user);
         }
-
+       
 
         [Fact]
         public void Recommend_WithCommonInterests_ReturnsRecommendations()
@@ -108,9 +120,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string danielEmail = DanielEmail; // Daniel likes Cinnamon Sugar Cookies and Basic Coookie
@@ -130,9 +144,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             User user = userManager.GetUserByEmail(NicoleEmail);
@@ -150,9 +166,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string email = MartinEmail;
@@ -163,7 +181,7 @@ namespace UnitTests.Tests
             List<Recipe> likedRecipes = algorithm.GetUserLikedRecipes(userId);
 
             // Assert
-            Assert.Equal(3, likedRecipes.Count);
+            Assert.Equal(2, likedRecipes.Count);
 
         }
 
@@ -173,9 +191,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string email = NicoleEmail;
@@ -196,9 +216,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string email = NicoleEmail;
@@ -220,9 +242,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string email = DanielEmail;
@@ -244,9 +268,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             string email = DanielEmail;
@@ -268,9 +294,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             Recipe recipe1 = recipeManager.GetRecipeById(1);
@@ -289,9 +317,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             Recipe recipe1 = recipeManager.GetRecipeById(1);
@@ -310,9 +340,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             int recipeId = 1;  // Make sure this ID is valid in your setup
@@ -331,9 +363,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
 
             // Act
@@ -350,12 +384,14 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
-            int recipeId = 1; 
-            DateTime expectedDate = recipeManager.GetRecipeCreateDate(recipeId).Date; 
+            int recipeId = 1;
+            DateTime expectedDate = recipeManager.GetRecipeCreateDate(recipeId).Date;
 
             // Act
             DateTime createDate = algorithm.GetRecipeCreateDate(recipeId).Date;
@@ -370,18 +406,20 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
-            int recipeId = 1; 
+            int recipeId = 4;
 
             // Act
             var (likes, dislikes) = algorithm.GetRecipeLikesAndDislikes(recipeId);
 
             // Assert
-            Assert.Equal(1, likes);  
-            Assert.Equal(1, dislikes); 
+            Assert.Equal(1, likes);
+            Assert.Equal(0, dislikes);
         }
 
         [Fact]
@@ -390,9 +428,11 @@ namespace UnitTests.Tests
             // Arrange
             fakeUserDal = new FakeUserDALManager();
             fakeRecipeDal = new FakeRecipeDal();
+            fakeRecipeReviewsDal = new FakeRecipeReviewsDal();
             userManager = new UserManager(fakeUserDal);
             recipeManager = new RecipeManager(fakeRecipeDal);
-            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager);
+            recipeReviewsManager = new RecipeReviewManager(fakeRecipeReviewsDal);
+            algorithm = new RecommendedRecipesByOtherUsersLikes(fakeRecipeDal, userManager, recipeReviewsManager);
             SetupTestData();
             int newRecipeId = 10; // Assuming this is a new recipe with no interactions
 

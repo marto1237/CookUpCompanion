@@ -25,6 +25,7 @@ namespace CookUp_Companion_web.Pages
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
         private readonly IShoppingCartManager shoppingCartManager;
+        private readonly RecipeReviewManager recipeReviewManager;
 
         public User _user { get; private set; }
         private int userId;
@@ -32,11 +33,12 @@ namespace CookUp_Companion_web.Pages
         [BindProperty]
         public List<Ingredient> SelectedRecipeIngredients { get; set; }
 
-        public SavedModel(IUserManager userManager, IRecipeManager recipeManager, IShoppingCartManager shoppingCartManager)
+        public SavedModel(IUserManager userManager, IRecipeManager recipeManager, IShoppingCartManager shoppingCartManager, RecipeReviewManager recipeReviewManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
             this.shoppingCartManager = shoppingCartManager;
+            this.recipeReviewManager = recipeReviewManager;
         }
         public void OnGet(int? pageNum)
         {
@@ -68,7 +70,7 @@ namespace CookUp_Companion_web.Pages
                 {
                     int recipeID = recipeManager.GetRecipeID(recipe);
 
-                    var (likes, dislikes) = recipeManager.GetLikesAndDislikes(recipeID);
+                    var (likes, dislikes) = recipeReviewManager.GetLikesAndDislikes(recipeID);
                     Likes.Add(likes);
                     Dislikes.Add(dislikes);
 
