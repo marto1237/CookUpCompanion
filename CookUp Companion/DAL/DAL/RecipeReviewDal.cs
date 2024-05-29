@@ -244,5 +244,29 @@ namespace DAL.DAL
 
             return likedRecipes;
         }
+
+        public int GetLikedRecipesPageNum(int pageSize, int userId)
+        {
+            int totalLikedRecipes = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(*) FROM UserRating WHERE userID = @UserId AND rating = 1";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    totalLikedRecipes = (int)command.ExecuteScalar();
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+            return (int)Math.Ceiling((double)totalLikedRecipes / pageSize);
+        }
+
     }
 }

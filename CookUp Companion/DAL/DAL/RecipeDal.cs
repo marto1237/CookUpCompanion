@@ -320,6 +320,52 @@ namespace DAL
             return (int)Math.Ceiling((double)totalRecipes / pageSize);
         }
 
+        public int GetSavedRecipesPageNum(int pageSize, int userId)
+        {
+            int totalSavedRecipes = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(*) FROM UserFavorites WHERE userID = @UserId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    totalSavedRecipes = (int)command.ExecuteScalar();
+                }
+                catch (SqlException e)
+                {
+                    // Handle any errors that may have occurred.
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+            return (int)Math.Ceiling((double)totalSavedRecipes / pageSize);
+        }
+
+        public int GetCreatedRecipesPageNum(int pageSize, int userId)
+        {
+            int totalCreatedRecipes = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(*) FROM Recipes WHERE creator = @UserId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    totalCreatedRecipes = (int)command.ExecuteScalar();
+                }
+                catch (SqlException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+            return (int)Math.Ceiling((double)totalCreatedRecipes / pageSize);
+        }
+
+
         public int GetRecipeID(Recipe recipe)
         {
             int recipeID = -1;

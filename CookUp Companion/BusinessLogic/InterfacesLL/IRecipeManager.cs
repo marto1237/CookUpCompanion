@@ -37,6 +37,8 @@ namespace InterfacesLL
         List<Ingredient> GetUserDislikes(int userId);
         bool RemoveUserDislike(int userId, int ingredientId);
         DateTime GetRecipeCreateDate(int recipeID);
+        int GetSavedRecipesPageNum(int pageSize, int userId);
+        int GetCreatedRecipesPageNum(int pageSize, int userId);
 
     }
 }

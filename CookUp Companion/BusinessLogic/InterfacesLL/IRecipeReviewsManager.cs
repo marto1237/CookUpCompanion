@@ -15,5 +15,6 @@ namespace CookUp_Companion_BusinessLogic.InterfacesLL
         (int Likes, int Dislikes) GetLikesAndDislikes(int recipeId);
         List<Recipe> GetLikedRecipesByUser(int userId);
         List<Recipe> GetLikedRecipes(int page, int pageSize, int userId);
+        int GetLikedRecipesPageNum(int pageSize, int userId);
     }
 }

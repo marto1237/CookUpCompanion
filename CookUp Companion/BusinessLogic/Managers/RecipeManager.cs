@@ -61,6 +61,7 @@ namespace CookUp_Companion_BusinessLogic.Manager
         public bool RemoveUserDislike(int userId, int ingredientId) { return controller.RemoveUserDislike(userId, ingredientId); }
         public DateTime GetRecipeCreateDate(int recipeID) { return controller.GetRecipeCreateDate(recipeID);}
 
-
+        public int GetSavedRecipesPageNum(int pageSize, int userId) { return controller.GetSavedRecipesPageNum(pageSize, userId); }
+        public int GetCreatedRecipesPageNum(int pageSize, int userId) { return controller.GetCreatedRecipesPageNum(pageSize, userId); }
     }
 }

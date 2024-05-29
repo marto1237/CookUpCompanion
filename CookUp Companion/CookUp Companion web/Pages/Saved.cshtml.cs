@@ -25,7 +25,7 @@ namespace CookUp_Companion_web.Pages
         private readonly IRecipeManager recipeManager;
         private readonly IUserManager userManager;
         private readonly IShoppingCartManager shoppingCartManager;
-        private readonly RecipeReviewManager recipeReviewManager;
+        private readonly IRecipeReviewsManager recipeReviewManager;
 
         public User _user { get; private set; }
         private int userId;
@@ -33,7 +33,7 @@ namespace CookUp_Companion_web.Pages
         [BindProperty]
         public List<Ingredient> SelectedRecipeIngredients { get; set; }
 
-        public SavedModel(IUserManager userManager, IRecipeManager recipeManager, IShoppingCartManager shoppingCartManager, RecipeReviewManager recipeReviewManager)
+        public SavedModel(IUserManager userManager, IRecipeManager recipeManager, IShoppingCartManager shoppingCartManager, IRecipeReviewsManager recipeReviewManager)
         {
             this.userManager = userManager;
             this.recipeManager = recipeManager;
@@ -75,6 +75,7 @@ namespace CookUp_Companion_web.Pages
                     Dislikes.Add(dislikes);
 
                     SaveCounts.Add(recipeManager.GetSaveCount(recipeID));
+                    TotalPages = recipeManager.GetSavedRecipesPageNum(PageSize, userId);
                 }
             }
             else

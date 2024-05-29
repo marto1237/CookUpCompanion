@@ -81,7 +81,6 @@ namespace CookUp_Companion_web.Pages
             {
                 CurrentPageCreated = pageNumCreated ?? 1;
                 CreatedRecipes = recipeManager.GetRecipesCreatedByUser(CurrentPageCreated, PageSize, userId);
-                TotalPagesCreated = recipeManager.GetAllRecipesPageNum(PageSize);
                 CreatedRecipeInfo();
                 
             }
@@ -89,7 +88,6 @@ namespace CookUp_Companion_web.Pages
             {
                 CurrentPageActivity = pageNumActivity ?? 1;
                 LikedRecipes = recipeReviewsManager.GetLikedRecipes(CurrentPageActivity, PageSize, userId);
-                TotalPagesActivity = recipeManager.GetAllRecipesPageNum(PageSize);
                 LikedRecipeInfo();
             }
 
@@ -98,7 +96,7 @@ namespace CookUp_Companion_web.Pages
 
         public void LikedRecipeInfo()
         {
-            TotalPagesActivity = recipeManager.GetAllRecipesPageNum(PageSize);
+            TotalPagesActivity =recipeReviewsManager.GetLikedRecipesPageNum(PageSize, userId);
             IsFavorite = new List<bool>();
             LikedLikes = new List<int>();
             LikedDislikes = new List<int>();
@@ -118,8 +116,8 @@ namespace CookUp_Companion_web.Pages
         }
 
         public void CreatedRecipeInfo()
-        {
-            TotalPagesCreated = recipeManager.GetAllRecipesPageNum(PageSize);
+        {   
+            TotalPagesCreated = recipeManager.GetCreatedRecipesPageNum(PageSize, userId);
             CreatedLikes = new List<int>();
             CreatedDislikes = new List<int>();
             CreatedSaveCounts = new List<int>();

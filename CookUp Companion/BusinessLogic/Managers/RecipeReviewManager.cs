@@ -28,5 +28,6 @@ namespace CookUp_Companion_BusinessLogic.Managers
 
         public List<Recipe> GetLikedRecipesByUser(int userId) { return controller.GetLikedRecipesByUser(userId); }
         public List<Recipe> GetLikedRecipes(int page, int pageSize, int userId) { return controller.GetLikedRecipes(page, pageSize, userId); }
+        public int GetLikedRecipesPageNum(int pageSize, int userId) { return controller.GetLikedRecipesPageNum(pageSize, userId); }
     }
 }
