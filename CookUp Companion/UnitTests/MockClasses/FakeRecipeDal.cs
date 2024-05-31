@@ -469,5 +469,21 @@ namespace UnitTests.MockClasses
         {
             return DateTime.Now;
         }
+
+        public int GetSavedRecipesPageNum(int pageSize, int userId)
+        {
+            // Assuming 'savedRecipesByUser' holds lists of saved recipe IDs for each user
+            int totalSavedRecipes = savedRecipesByUser.TryGetValue(userId, out List<int> savedRecipeIds) ? savedRecipeIds.Count : 0;
+            return (int)Math.Ceiling((double)totalSavedRecipes / pageSize);
+        }
+
+        public int GetCreatedRecipesPageNum(int pageSize, int userId)
+        {
+            // Count how many recipes this user has created
+            int totalCreatedRecipes = 0;
+            return (int)Math.Ceiling((double)totalCreatedRecipes / pageSize);
+        }
+
+
     }
 }

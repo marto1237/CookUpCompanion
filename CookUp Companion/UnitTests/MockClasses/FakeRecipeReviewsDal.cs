@@ -125,6 +125,28 @@ namespace UnitTests.MockClasses
 
             List<int> likedRecipeIds = userLikes[userId];
             return likedRecipeIds.Skip((page - 1) * pageSize).Take(pageSize).Select(id => GetRecipeById(id)).ToList();
-        } 
+        }
+        public int GetLikedRecipesPageNum(int pageSize, int userId)
+        {
+            // Assuming that 'userLikes' holds recipe IDs liked by each user
+            int totalLikedRecipes = userLikes.ContainsKey(userId) ? userLikes[userId].Count : 0;
+            return (int)Math.Ceiling((double)totalLikedRecipes / pageSize);
+        }
+
+        public int GetSavedRecipesPageNum(int pageSize, int userId)
+        {
+            // Assuming you need to add logic to maintain saved recipes, for now returning zero
+            // Add appropriate logic based on how your application handles "saved recipes"
+            return 0;
+        }
+
+        public int GetCreatedRecipesPageNum(int pageSize, int userId)
+        {
+            // Assuming 'recipes' holds all recipes and you track the creator, 
+            // we'll count recipes created by the user
+            int totalSavedRecipes = 0; // Placeholder
+            return (int)Math.Ceiling((double)totalSavedRecipes / pageSize);
+        }
+
     }
 }
