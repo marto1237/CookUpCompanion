@@ -64,9 +64,18 @@ namespace CookUp_Companion_web.Pages
                 return RedirectToPage("/Login");
             }
 
-            ViewData["CurrentSort"] = sortOrder;
-            Recipes = GetSortedRecipes(sortOrder, CurrentPage, PageSize);
-            TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+            if (sortOrder == "recommended")
+            {
+                Recipes = recommendedRecipesAlgoritam.Recommend(_user, CurrentPage, PageSize);
+                int totalRecommendedRecipes = recommendedRecipesAlgoritam.GetTotalRecommendedRecipes(_user);
+                TotalPages = (int)Math.Ceiling((double)totalRecommendedRecipes / PageSize);
+            }
+            else
+            {
+                Recipes = GetSortedRecipes(sortOrder, CurrentPage, PageSize);
+                TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+            }
+
             SelectedRecipeIngredients = new List<Ingredient>();
             PopulateRecipeInteractionData();
 
@@ -75,6 +84,7 @@ namespace CookUp_Companion_web.Pages
                 var recipeID = recipeManager.GetRecipeID(recipe);
                 IngredientsByRecipeId.Add(recipeManager.GetRecipeID(recipe), recipeManager.GetAllIngredientsForRecipeId(recipeID));
             }
+
             return Page();
         }
 

@@ -49,6 +49,30 @@ namespace CookUp_Companion_BusinessLogic.Algoritam
                 return new List<Recipe>();
             }
         }
+
+        public int GetTotalRecommendedRecipes(User user)
+        {
+            try
+            {
+                int userId = userManager.GetIdByUsername(user.Username);
+                List<Recipe> userLikedRecipes = GetUserLikedRecipes(userId);
+                if (userLikedRecipes.Count == 0)
+                {
+                    return RecommendTrendingRecipes(1, int.MaxValue).Count;
+                }
+
+                Dictionary<User, List<Recipe>> allUsersRecipes = GetAllUsersRecipes(userId);
+                var similarityScores = CalculateSimilarityScores(userLikedRecipes, allUsersRecipes);
+                List<Recipe> recommendedRecipes = GetRecommendedRecipesFromScores(similarityScores, userLikedRecipes);
+
+                return recommendedRecipes.Count;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error calculating total recommended recipes: {ex.Message}");
+                return 0;
+            }
+        }
         private Dictionary<User, List<Recipe>> GetAllUsersRecipes(int userId)
         {
             return userManager.GetAllUsers()

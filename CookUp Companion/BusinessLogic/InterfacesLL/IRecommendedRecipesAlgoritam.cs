@@ -9,6 +9,7 @@ namespace CookUp_Companion_BusinessLogic.InterfacesLL
 {
     public interface IRecommendedRecipesAlgoritam
     {
+
         List<Recipe> Recommend(User user, int pageNumber, int pageSize);
         List<Recipe> GetUserLikedRecipes(int userId);
         List<Recipe> RecommendTrendingRecipes(int pageNumber, int pageSize);
@@ -19,5 +20,6 @@ namespace CookUp_Companion_BusinessLogic.InterfacesLL
         (int Likes, int Dislikes) GetRecipeLikesAndDislikes(int recipeId);
         int GetRecipeSaveCount(int recipeId);
         int GetRecipeId(Recipe recipe);
+        int GetTotalRecommendedRecipes(User user);
     }
 }

@@ -38,7 +38,7 @@
         <form id="sortForm" method="get">
             <label for="filterRecipe">Sort by: </label>
             <select asp-for="sortOrder" id="filterRecipe" onchange="this.submit();">
-                <option disable selected> -- select an option -- </option>
+                <option selected> -- select an option -- </option>
                 <option value="recommended">Recommended</option>
                 <option value="alphabet">A to Z</option>
                 <option value="newest">Newest</option>
