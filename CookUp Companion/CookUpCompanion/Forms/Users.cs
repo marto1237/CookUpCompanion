@@ -1,15 +1,9 @@
-﻿
-using CookUpCompanion.UserControls;
+﻿using CookUpCompanion.UserControls;
 using InterfacesLL;
 using Logic;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CookUpCompanion.Forms
@@ -17,11 +11,10 @@ namespace CookUpCompanion.Forms
     public partial class Users : Form
     {
         private readonly IUserManager userManager;
-        
 
-        //pagination
+        // Pagination
         private int currentPage = 1;
-        private int usersPerPage = 10; // Change this value as needed
+        private int usersPerPage = 2; // Change this value as needed
 
         public Users(IUserManager userManager)
         {
@@ -29,8 +22,8 @@ namespace CookUpCompanion.Forms
             this.userManager = userManager;
             InitializeEventHandlers();
             userSearchBar1.CbTypeOfUser.SelectedIndex = 0;
-
         }
+
         // Methods
         private void InitializeEventHandlers()
         {
@@ -48,31 +41,29 @@ namespace CookUpCompanion.Forms
 
         private void Users_Load(object sender, EventArgs e)
         {
-            populateUsers();
-    
+            PopulateUsers();
             UpdatePageIndexNum();
         }
 
-        public void populateUsers()
+        public void PopulateUsers()
         {
             flpUsersInfo.Controls.Clear();
             int startIndex = (currentPage - 1) * usersPerPage;
             List<User> users = userManager.GetAllUsers().Skip(startIndex).Take(usersPerPage).ToList();
 
-            if (ListeUsers(users) == false)
+            if (!ListUsers(users))
             {
                 MessageBox.Show("There are no more users yet");
                 userSearchBar1.UpdateUserCount($"Users(0)");
             }
-
         }
 
-        public void populateBannedUsers()
+        public void PopulateBannedUsers()
         {
             flpUsersInfo.Controls.Clear();
             int startIndex = (currentPage - 1) * usersPerPage;
             List<User> users = userManager.GetBannedUsers().Skip(startIndex).Take(usersPerPage).ToList();
-            if (ListeUsers(users) == false)
+            if (!ListUsers(users))
             {
                 MessageBox.Show("There are no more banned users yet");
                 userSearchBar1.UpdateUserCount($"Users(0)");
@@ -81,21 +72,16 @@ namespace CookUpCompanion.Forms
 
         private void userSearchBar1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Get the selected index
             int selectedIndex = userSearchBar1.CbTypeOfUser.SelectedIndex;
 
-            // Check which option is selected
             if (selectedIndex == 0) // All Users
             {
-
-                populateUsers();
+                PopulateUsers();
             }
             else if (selectedIndex == 1) // Banned Users
             {
-                populateBannedUsers();
+                PopulateBannedUsers();
             }
-
-
         }
 
         private void paginationControl1_btnPrevious_Click(object sender, EventArgs e)
@@ -104,12 +90,13 @@ namespace CookUpCompanion.Forms
             {
                 currentPage--;
                 UpdatePageIndexNum();
-                if (userSearchBar1.CbTypeOfUser.SelectedItem == "All Users")
+                if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "All Users")
                 {
-                    populateUsers();
-                }else if (userSearchBar1.CbTypeOfUser.SelectedItem == "Banned Users")
+                    PopulateUsers();
+                }
+                else if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "Banned Users")
                 {
-                    populateBannedUsers();
+                    PopulateBannedUsers();
                 }
             }
         }
@@ -118,13 +105,13 @@ namespace CookUpCompanion.Forms
         {
             currentPage++;
             UpdatePageIndexNum();
-            if (userSearchBar1.CbTypeOfUser.SelectedItem == "All Users")
+            if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "All Users")
             {
-                populateUsers();
+                PopulateUsers();
             }
-            else if (userSearchBar1.CbTypeOfUser.SelectedItem == "Banned Users")
+            else if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "Banned Users")
             {
-                populateBannedUsers();
+                PopulateBannedUsers();
             }
         }
 
@@ -132,13 +119,13 @@ namespace CookUpCompanion.Forms
         {
             int pageNumber = Convert.ToInt32(paginationControl1.PageIndexNum.Value);
             currentPage = pageNumber;
-            if (userSearchBar1.CbTypeOfUser.SelectedItem == "All Users")
+            if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "All Users")
             {
-                populateUsers();
+                PopulateUsers();
             }
-            else if (userSearchBar1.CbTypeOfUser.SelectedItem == "Banned Users")
+            else if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "Banned Users")
             {
-                populateBannedUsers();
+                PopulateBannedUsers();
             }
         }
 
@@ -146,21 +133,19 @@ namespace CookUpCompanion.Forms
         {
             paginationControl1.PageIndexNum.Value = currentPage;
         }
+
         private void userSearchBar1_SearchButtonClicked(object sender, string searchText)
         {
-            if (userSearchBar1.CbTypeOfUser.SelectedItem == "All Users")
+            if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "All Users")
             {
                 flpUsersInfo.Controls.Clear();
                 int startIndex = (currentPage - 1) * usersPerPage;
 
-                // Search for users by username
                 List<User> similarUsernameUsers = userManager.GetUsersBySimilarUsername(searchText);
                 List<User> users = new List<User>(similarUsernameUsers);
 
-                // Search for users by email
                 List<User> similarEmailUsers = userManager.GetUsersBySimilarEmail(searchText);
 
-                // Add users from email search that are not already in the list
                 foreach (var user in similarEmailUsers)
                 {
                     if (!similarUsernameUsers.Any(u => u.Username == user.Username))
@@ -169,25 +154,22 @@ namespace CookUpCompanion.Forms
                     }
                 }
 
-                if (ListeUsers(users) == false)
+                if (!ListUsers(users))
                 {
-                    MessageBox.Show("There are no matches with that username or email in users ");
+                    MessageBox.Show("There are no matches with that username or email in users");
                     userSearchBar1.UpdateUserCount($"Users(0)");
                 }
             }
-            else if (userSearchBar1.CbTypeOfUser.SelectedItem == "Banned Users")
+            else if (userSearchBar1.CbTypeOfUser.SelectedItem.ToString() == "Banned Users")
             {
                 flpUsersInfo.Controls.Clear();
                 int startIndex = (currentPage - 1) * usersPerPage;
 
-                // Search for banned users by username
                 List<User> similarUsernameUsers = userManager.GetUsersBySimilarUsername(searchText);
                 List<User> users = new List<User>(similarUsernameUsers);
 
-                // Search for banned users by email
                 List<User> similarEmailUsers = userManager.GetUsersBySimilarEmail(searchText);
 
-                // Add users from email search that are not already in the list
                 foreach (var user in similarEmailUsers)
                 {
                     if (!similarUsernameUsers.Any(u => u.Username == user.Username))
@@ -196,32 +178,26 @@ namespace CookUpCompanion.Forms
                     }
                 }
 
-                if (ListeUsers(users) == false)
+                if (!ListUsers(users))
                 {
-                    MessageBox.Show("There are no matches with that username or email in banned users ");
+                    MessageBox.Show("There are no matches with that username or email in banned users");
                     userSearchBar1.UpdateUserCount($"Users(0)");
                 }
-
             }
-
         }
 
-        public bool ListeUsers(List<User> users)
+        public bool ListUsers(List<User> users)
         {
             flpUsersInfo.Controls.Clear();
-            int startIndex = (currentPage - 1) * usersPerPage;
-            users = users.Skip(startIndex).Take(usersPerPage).ToList();
+
             if (users.Count > 0)
             {
                 foreach (User user in users)
                 {
-
                     UsersInfoControl usersInfoControl = new UsersInfoControl(userManager);
 
-                    // Determine if the user is banned
                     bool isBanned = userManager.BannedUser(user);
 
-                    // Update the ban button text
                     usersInfoControl.UpdateBanButtonText(isBanned);
 
                     usersInfoControl.UserProfilePicture = user.ProfilePicture;

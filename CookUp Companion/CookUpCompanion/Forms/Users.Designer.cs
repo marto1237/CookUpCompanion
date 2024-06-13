@@ -38,18 +38,18 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(1292, 418);
+            label1.Location = new Point(1130, 314);
             label1.Name = "label1";
-            label1.Size = new Size(50, 20);
+            label1.Size = new Size(38, 15);
             label1.TabIndex = 7;
             label1.Text = "label1";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(1749, 434);
+            label2.Location = new Point(1530, 326);
             label2.Name = "label2";
-            label2.Size = new Size(50, 20);
+            label2.Size = new Size(38, 15);
             label2.TabIndex = 8;
             label2.Text = "label2";
             // 
@@ -58,10 +58,9 @@
             flpUsersInfo.AutoScroll = true;
             flpUsersInfo.BackColor = Color.White;
             flpUsersInfo.Dock = DockStyle.Fill;
-            flpUsersInfo.Location = new Point(0, 185);
-            flpUsersInfo.Margin = new Padding(3, 4, 3, 4);
+            flpUsersInfo.Location = new Point(0, 139);
             flpUsersInfo.Name = "flpUsersInfo";
-            flpUsersInfo.Size = new Size(1920, 917);
+            flpUsersInfo.Size = new Size(1864, 686);
             flpUsersInfo.TabIndex = 10;
             // 
             // userSearchBar1
@@ -69,33 +68,33 @@
             userSearchBar1.BackColor = Color.White;
             userSearchBar1.Dock = DockStyle.Top;
             userSearchBar1.Location = new Point(0, 0);
-            userSearchBar1.Margin = new Padding(3, 5, 3, 5);
+            userSearchBar1.Margin = new Padding(3, 4, 3, 4);
             userSearchBar1.Name = "userSearchBar1";
-            userSearchBar1.Size = new Size(1920, 185);
+            userSearchBar1.Size = new Size(1864, 139);
             userSearchBar1.TabIndex = 9;
             // 
             // paginationControl1
             // 
             paginationControl1.BackColor = SystemColors.ControlLightLight;
             paginationControl1.Dock = DockStyle.Bottom;
-            paginationControl1.Location = new Point(0, 974);
+            paginationControl1.Location = new Point(0, 729);
+            paginationControl1.Margin = new Padding(3, 2, 3, 2);
             paginationControl1.Name = "paginationControl1";
-            paginationControl1.Size = new Size(1920, 128);
+            paginationControl1.Size = new Size(1864, 96);
             paginationControl1.TabIndex = 11;
             // 
             // Users
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1920, 1102);
+            ClientSize = new Size(1864, 825);
             Controls.Add(paginationControl1);
             Controls.Add(flpUsersInfo);
             Controls.Add(userSearchBar1);
             Controls.Add(label2);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Users";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Users";

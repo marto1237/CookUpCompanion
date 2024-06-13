@@ -37,42 +37,42 @@
             // 
             paginationControl1.BackColor = SystemColors.ControlLightLight;
             paginationControl1.Dock = DockStyle.Bottom;
-            paginationControl1.Location = new Point(0, 974);
+            paginationControl1.Location = new Point(0, 729);
+            paginationControl1.Margin = new Padding(3, 2, 3, 2);
             paginationControl1.Name = "paginationControl1";
-            paginationControl1.Size = new Size(1902, 128);
+            paginationControl1.Size = new Size(1664, 96);
             paginationControl1.TabIndex = 10;
             // 
             // flpRecipesInfo
             // 
             flpRecipesInfo.AutoScroll = true;
             flpRecipesInfo.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            flpRecipesInfo.Location = new Point(0, 144);
-            flpRecipesInfo.Margin = new Padding(3, 4, 3, 4);
+            flpRecipesInfo.FlowDirection = FlowDirection.TopDown;
+            flpRecipesInfo.Location = new Point(0, 108);
             flpRecipesInfo.Name = "flpRecipesInfo";
-            flpRecipesInfo.Size = new Size(1902, 832);
+            flpRecipesInfo.Size = new Size(1864, 624);
             flpRecipesInfo.TabIndex = 0;
+            flpRecipesInfo.WrapContents = false;
             // 
             // recipeSearchBar1
             // 
             recipeSearchBar1.BackColor = SystemColors.ControlLightLight;
             recipeSearchBar1.Dock = DockStyle.Top;
             recipeSearchBar1.Location = new Point(0, 0);
-            recipeSearchBar1.Margin = new Padding(3, 4, 3, 4);
             recipeSearchBar1.Name = "recipeSearchBar1";
-            recipeSearchBar1.Size = new Size(1902, 144);
+            recipeSearchBar1.Size = new Size(1664, 108);
             recipeSearchBar1.TabIndex = 11;
             // 
             // Recipes
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
-            ClientSize = new Size(1902, 1102);
+            ClientSize = new Size(1664, 825);
             Controls.Add(recipeSearchBar1);
             Controls.Add(paginationControl1);
             Controls.Add(flpRecipesInfo);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Recipes";
             Text = "Recipes";
             Load += Recipes_Load;

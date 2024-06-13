@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RecipeControl = CookUpCompanion.UserControls.RecipeControl;
+
 namespace CookUpCompanion.Forms
 {
     public partial class Recipes : Form
@@ -18,7 +19,7 @@ namespace CookUpCompanion.Forms
         private readonly IUserManager userManager;
         private readonly IRecipeManager recipeManager;
 
-        //pagination
+        // Pagination
         private int currentPage = 1;
         private int recipesPerPage = 10; // Change this value as needed
 
@@ -34,31 +35,27 @@ namespace CookUpCompanion.Forms
             // Subscribe to the search button clicked event
             recipeSearchBar1.SearchButtonClicked += recipeSearchBar1_SearchButtonClicked;
 
-
             // Subscribe to the pagination control's events
             paginationControl1.PreviousClicked += paginationControl1_btnPrevious_Click;
             paginationControl1.NextClicked += paginationControl1_btnNext_Click;
             paginationControl1.GoToPageClicked += paginationControl1_btnGoToCertainPage_Click;
         }
 
-        public void populateRecipes()
+        public void PopulateRecipes()
         {
             flpRecipesInfo.Controls.Clear();
             int startIndex = (currentPage - 1) * recipesPerPage;
-            List<Recipe> recipes = recipeManager.GetAllRecipes(startIndex, recipesPerPage);
+            List<Recipe> recipes = recipeManager.GetAllRecipes(currentPage, recipesPerPage);
 
             if (!ListRecipes(recipes))
             {
                 MessageBox.Show("There are no recipes yet");
-                recipeSearchBar1.UpdateUserCount($"Recipes (0)");
+                recipeSearchBar1.UpdateUserCount("Recipes (0)");
             }
-
-
         }
 
-        private void populateRecipesBasedOnSearch(string searchText, int currentPage, int recipesPerPage)
+        private void PopulateRecipesBasedOnSearch(string searchText, int currentPage, int recipesPerPage)
         {
-            // Implementation to filter and display recipes based on search text
             List<Recipe> searchedRecipes = recipeManager.SearchRecipesByName(searchText, currentPage, recipesPerPage);
 
             if (!ListRecipes(searchedRecipes))
@@ -66,20 +63,17 @@ namespace CookUpCompanion.Forms
                 MessageBox.Show("No recipes found matching the search criteria.");
                 recipeSearchBar1.UpdateUserCount("Recipes (0)");
             }
-            //ListRecipes(filteredRecipes);
         }
+
         public bool ListRecipes(List<Recipe> recipes)
         {
             flpRecipesInfo.Controls.Clear();
-            int startIndex = (currentPage - 1) * recipesPerPage;
-            recipes = recipes.Skip(startIndex).Take(recipesPerPage).ToList();
+
             if (recipes.Count > 0)
             {
                 foreach (Recipe recipe in recipes)
                 {
-
                     RecipeControl recipeControl = new RecipeControl(recipeManager);
-
 
                     recipeControl.RecipePicture = recipe.Picture;
                     recipeControl.RecipeName = recipe.RecipeName;
@@ -89,57 +83,66 @@ namespace CookUpCompanion.Forms
 
                     flpRecipesInfo.Controls.Add(recipeControl);
                 }
+                RecipeControl emptyControl = new RecipeControl(recipeManager)
+                {
+                    Width = flpRecipesInfo.ClientSize.Width - flpRecipesInfo.Margin.Horizontal,
+                    Height = 150 // Adjust to match the height of other RecipeControls
+                };
 
-                recipeSearchBar1.UpdateUserCount($"Recipes({recipes.Count})");
+                recipeSearchBar1.UpdateUserCount($"Recipes ({recipes.Count})");
 
                 return true;
             }
             return false;
         }
-        
 
         private void Recipes_Load(object sender, EventArgs e)
         {
-            populateRecipes();
+            PopulateRecipes();
             UpdatePageIndexNum();
         }
+
         private void UpdatePageIndexNum()
         {
             paginationControl1.PageIndexNum.Value = currentPage;
         }
+
         private void paginationControl1_btnPrevious_Click(object sender, EventArgs e)
         {
-            currentPage--;
-            UpdatePageIndexNum();
-            string searchText = recipeSearchBar1.GetSearchText();
-            if (!string.IsNullOrEmpty(searchText) && searchText != "Search recipe by name")
+            if (currentPage > 1)
             {
-                populateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
-            }
-            else
-            {
-                populateRecipes();
+                currentPage--;
+                UpdatePageIndexNum();
+                string searchText = recipeSearchBar1.GetSearchText();
+                if (!string.IsNullOrEmpty(searchText) && searchText != "Search recipe by name")
+                {
+                    PopulateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
+                }
+                else
+                {
+                    PopulateRecipes();
+                }
             }
         }
+
         private void recipeSearchBar1_SearchButtonClicked(object sender, string searchText)
         {
             currentPage = 1;
-            populateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
-
+            PopulateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
         }
- 
+
         private void paginationControl1_btnNext_Click(object sender, EventArgs e)
         {
             currentPage++;
             UpdatePageIndexNum();
-            string searchText = recipeSearchBar1.GetSearchText(); 
+            string searchText = recipeSearchBar1.GetSearchText();
             if (!string.IsNullOrEmpty(searchText) && searchText != "Search recipe by name")
             {
-                populateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
+                PopulateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
             }
             else
             {
-                populateRecipes();
+                PopulateRecipes();
             }
         }
 
@@ -150,11 +153,11 @@ namespace CookUpCompanion.Forms
             string searchText = recipeSearchBar1.GetSearchText();
             if (!string.IsNullOrEmpty(searchText) && searchText != "Search recipe by name")
             {
-                populateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
+                PopulateRecipesBasedOnSearch(searchText, currentPage, recipesPerPage);
             }
             else
             {
-                populateRecipes();
+                PopulateRecipes();
             }
         }
     }

@@ -49,10 +49,9 @@
             // 
             pbRecipePicture.Anchor = AnchorStyles.None;
             pbRecipePicture.Image = Properties.Resources.Logo;
-            pbRecipePicture.Location = new Point(31, 4);
-            pbRecipePicture.Margin = new Padding(3, 4, 3, 4);
+            pbRecipePicture.Location = new Point(127, 2);
             pbRecipePicture.Name = "pbRecipePicture";
-            pbRecipePicture.Size = new Size(243, 158);
+            pbRecipePicture.Size = new Size(213, 118);
             pbRecipePicture.SizeMode = PictureBoxSizeMode.Zoom;
             pbRecipePicture.TabIndex = 0;
             pbRecipePicture.TabStop = false;
@@ -62,9 +61,9 @@
             lbRecipeName.Anchor = AnchorStyles.None;
             lbRecipeName.AutoSize = true;
             lbRecipeName.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbRecipeName.Location = new Point(305, 70);
+            lbRecipeName.Location = new Point(367, 52);
             lbRecipeName.Name = "lbRecipeName";
-            lbRecipeName.Size = new Size(107, 20);
+            lbRecipeName.Size = new Size(91, 17);
             lbRecipeName.TabIndex = 1;
             lbRecipeName.Text = "Recipe name";
             // 
@@ -73,9 +72,9 @@
             lbRecipeCreator.Anchor = AnchorStyles.None;
             lbRecipeCreator.AutoSize = true;
             lbRecipeCreator.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbRecipeCreator.Location = new Point(734, 70);
+            lbRecipeCreator.Location = new Point(742, 52);
             lbRecipeCreator.Name = "lbRecipeCreator";
-            lbRecipeCreator.Size = new Size(119, 20);
+            lbRecipeCreator.Size = new Size(101, 17);
             lbRecipeCreator.TabIndex = 3;
             lbRecipeCreator.Text = "Recipe creator";
             // 
@@ -84,9 +83,9 @@
             lbCookTime.Anchor = AnchorStyles.None;
             lbCookTime.AutoSize = true;
             lbCookTime.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbCookTime.Location = new Point(1295, 70);
+            lbCookTime.Location = new Point(1233, 52);
             lbCookTime.Name = "lbCookTime";
-            lbCookTime.Size = new Size(84, 20);
+            lbCookTime.Size = new Size(71, 17);
             lbCookTime.TabIndex = 4;
             lbCookTime.Text = "CookTime";
             // 
@@ -97,22 +96,20 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.Controls.Add(MoreOptions, 1, 0);
             tableLayoutPanel1.Controls.Add(MoreOptionsMenuMenu, 0, 0);
-            tableLayoutPanel1.Location = new Point(1525, 20);
-            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel1.Location = new Point(1334, 15);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(224, 121);
+            tableLayoutPanel1.Size = new Size(196, 91);
             tableLayoutPanel1.TabIndex = 10;
             // 
             // MoreOptions
             // 
             MoreOptions.Anchor = AnchorStyles.None;
             MoreOptions.Image = Properties.Resources.dots;
-            MoreOptions.Location = new Point(182, 30);
-            MoreOptions.Margin = new Padding(3, 4, 3, 4);
+            MoreOptions.Location = new Point(159, 23);
             MoreOptions.Name = "MoreOptions";
-            MoreOptions.Size = new Size(39, 60);
+            MoreOptions.Size = new Size(34, 45);
             MoreOptions.SizeMode = PictureBoxSizeMode.Zoom;
             MoreOptions.TabIndex = 13;
             MoreOptions.TabStop = false;
@@ -125,10 +122,9 @@
             MoreOptionsMenuMenu.Controls.Add(btnDeleteRecipe);
             MoreOptionsMenuMenu.Controls.Add(btnMoreInfo);
             MoreOptionsMenuMenu.Controls.Add(btnLogout);
-            MoreOptionsMenuMenu.Location = new Point(9, 21);
-            MoreOptionsMenuMenu.Margin = new Padding(3, 4, 3, 4);
+            MoreOptionsMenuMenu.Location = new Point(8, 16);
             MoreOptionsMenuMenu.Name = "MoreOptionsMenuMenu";
-            MoreOptionsMenuMenu.Size = new Size(160, 79);
+            MoreOptionsMenuMenu.Size = new Size(140, 59);
             MoreOptionsMenuMenu.TabIndex = 14;
             // 
             // btnDeleteRecipe
@@ -138,10 +134,9 @@
             btnDeleteRecipe.FlatAppearance.BorderSize = 0;
             btnDeleteRecipe.FlatStyle = FlatStyle.Flat;
             btnDeleteRecipe.ForeColor = SystemColors.ActiveCaptionText;
-            btnDeleteRecipe.Location = new Point(0, 39);
-            btnDeleteRecipe.Margin = new Padding(3, 4, 3, 4);
+            btnDeleteRecipe.Location = new Point(0, 29);
             btnDeleteRecipe.Name = "btnDeleteRecipe";
-            btnDeleteRecipe.Size = new Size(160, 40);
+            btnDeleteRecipe.Size = new Size(140, 30);
             btnDeleteRecipe.TabIndex = 15;
             btnDeleteRecipe.Text = "Delete Recipe";
             btnDeleteRecipe.UseVisualStyleBackColor = false;
@@ -155,9 +150,8 @@
             btnMoreInfo.FlatStyle = FlatStyle.Flat;
             btnMoreInfo.ForeColor = SystemColors.ActiveCaptionText;
             btnMoreInfo.Location = new Point(0, 0);
-            btnMoreInfo.Margin = new Padding(3, 4, 3, 4);
             btnMoreInfo.Name = "btnMoreInfo";
-            btnMoreInfo.Size = new Size(160, 42);
+            btnMoreInfo.Size = new Size(140, 32);
             btnMoreInfo.TabIndex = 13;
             btnMoreInfo.Text = "More info";
             btnMoreInfo.UseVisualStyleBackColor = false;
@@ -170,10 +164,9 @@
             btnLogout.FlatAppearance.BorderSize = 0;
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = SystemColors.ActiveCaptionText;
-            btnLogout.Location = new Point(0, 119);
-            btnLogout.Margin = new Padding(3, 4, 3, 4);
+            btnLogout.Location = new Point(0, 89);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(141, 64);
+            btnLogout.Size = new Size(123, 48);
             btnLogout.TabIndex = 12;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
@@ -183,15 +176,15 @@
             lbPrepTime.Anchor = AnchorStyles.None;
             lbPrepTime.AutoSize = true;
             lbPrepTime.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbPrepTime.Location = new Point(1054, 70);
+            lbPrepTime.Location = new Point(1022, 52);
             lbPrepTime.Name = "lbPrepTime";
-            lbPrepTime.Size = new Size(81, 20);
+            lbPrepTime.Size = new Size(69, 17);
             lbPrepTime.TabIndex = 11;
             lbPrepTime.Text = "PrepTime";
             // 
             // RecipeControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(lbPrepTime);
             Controls.Add(tableLayoutPanel1);
@@ -199,9 +192,8 @@
             Controls.Add(lbRecipeCreator);
             Controls.Add(lbRecipeName);
             Controls.Add(pbRecipePicture);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "RecipeControl";
-            Size = new Size(1813, 166);
+            Size = new Size(1786, 124);
             ((System.ComponentModel.ISupportInitialize)pbRecipePicture).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)MoreOptions).EndInit();

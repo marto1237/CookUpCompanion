@@ -53,9 +53,9 @@
             // 
             lbFirstname.Anchor = AnchorStyles.None;
             lbFirstname.AutoSize = true;
-            lbFirstname.Location = new Point(533, 54);
+            lbFirstname.Location = new Point(546, 41);
             lbFirstname.Name = "lbFirstname";
-            lbFirstname.Size = new Size(73, 20);
+            lbFirstname.Size = new Size(59, 15);
             lbFirstname.TabIndex = 10;
             lbFirstname.Text = "Firstname";
             // 
@@ -63,9 +63,9 @@
             // 
             lbLastName.Anchor = AnchorStyles.None;
             lbLastName.AutoSize = true;
-            lbLastName.Location = new Point(759, 54);
+            lbLastName.Location = new Point(775, 41);
             lbLastName.Name = "lbLastName";
-            lbLastName.Size = new Size(72, 20);
+            lbLastName.Size = new Size(58, 15);
             lbLastName.TabIndex = 9;
             lbLastName.Text = "Lastname";
             // 
@@ -73,9 +73,9 @@
             // 
             lbUsername.Anchor = AnchorStyles.None;
             lbUsername.AutoSize = true;
-            lbUsername.Location = new Point(269, 54);
+            lbUsername.Location = new Point(280, 41);
             lbUsername.Name = "lbUsername";
-            lbUsername.Size = new Size(75, 20);
+            lbUsername.Size = new Size(60, 15);
             lbUsername.TabIndex = 8;
             lbUsername.Text = "Username";
             // 
@@ -83,9 +83,9 @@
             // 
             lbEmail.Anchor = AnchorStyles.None;
             lbEmail.AutoSize = true;
-            lbEmail.Location = new Point(1095, 54);
+            lbEmail.Location = new Point(1113, 41);
             lbEmail.Name = "lbEmail";
-            lbEmail.Size = new Size(46, 20);
+            lbEmail.Size = new Size(36, 15);
             lbEmail.TabIndex = 11;
             lbEmail.Text = "Email";
             // 
@@ -110,12 +110,11 @@
             flpUserInfo.Controls.Add(lbRole, 5, 0);
             flpUserInfo.Dock = DockStyle.Fill;
             flpUserInfo.Location = new Point(0, 0);
-            flpUserInfo.Margin = new Padding(3, 4, 3, 4);
             flpUserInfo.Name = "flpUserInfo";
             flpUserInfo.RowCount = 1;
             flpUserInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            flpUserInfo.RowStyles.Add(new RowStyle(SizeType.Absolute, 132F));
-            flpUserInfo.Size = new Size(1766, 129);
+            flpUserInfo.RowStyles.Add(new RowStyle(SizeType.Absolute, 97F));
+            flpUserInfo.Size = new Size(1786, 97);
             flpUserInfo.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -125,22 +124,20 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.Controls.Add(MoreOptions, 1, 0);
             tableLayoutPanel1.Controls.Add(MoreOptionsMenuMenu, 0, 0);
-            tableLayoutPanel1.Location = new Point(1490, 4);
-            tableLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
+            tableLayoutPanel1.Location = new Point(1507, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(224, 121);
+            tableLayoutPanel1.Size = new Size(196, 91);
             tableLayoutPanel1.TabIndex = 9;
             // 
             // MoreOptions
             // 
             MoreOptions.Anchor = AnchorStyles.None;
             MoreOptions.Image = Properties.Resources.dots;
-            MoreOptions.Location = new Point(182, 30);
-            MoreOptions.Margin = new Padding(3, 4, 3, 4);
+            MoreOptions.Location = new Point(159, 23);
             MoreOptions.Name = "MoreOptions";
-            MoreOptions.Size = new Size(39, 60);
+            MoreOptions.Size = new Size(34, 45);
             MoreOptions.SizeMode = PictureBoxSizeMode.Zoom;
             MoreOptions.TabIndex = 13;
             MoreOptions.TabStop = false;
@@ -154,10 +151,9 @@
             MoreOptionsMenuMenu.Controls.Add(btnBanUser);
             MoreOptionsMenuMenu.Controls.Add(btnMoreInfo);
             MoreOptionsMenuMenu.Controls.Add(btnLogout);
-            MoreOptionsMenuMenu.Location = new Point(9, 11);
-            MoreOptionsMenuMenu.Margin = new Padding(3, 4, 3, 4);
+            MoreOptionsMenuMenu.Location = new Point(8, 8);
             MoreOptionsMenuMenu.Name = "MoreOptionsMenuMenu";
-            MoreOptionsMenuMenu.Size = new Size(160, 99);
+            MoreOptionsMenuMenu.Size = new Size(140, 74);
             MoreOptionsMenuMenu.TabIndex = 14;
             // 
             // btnChangeRole
@@ -167,10 +163,9 @@
             btnChangeRole.FlatAppearance.BorderSize = 0;
             btnChangeRole.FlatStyle = FlatStyle.Flat;
             btnChangeRole.ForeColor = SystemColors.ActiveCaptionText;
-            btnChangeRole.Location = new Point(0, 69);
-            btnChangeRole.Margin = new Padding(3, 4, 3, 4);
+            btnChangeRole.Location = new Point(0, 52);
             btnChangeRole.Name = "btnChangeRole";
-            btnChangeRole.Size = new Size(160, 30);
+            btnChangeRole.Size = new Size(140, 22);
             btnChangeRole.TabIndex = 15;
             btnChangeRole.Text = "Change role";
             btnChangeRole.UseVisualStyleBackColor = false;
@@ -183,10 +178,9 @@
             btnBanUser.FlatAppearance.BorderSize = 0;
             btnBanUser.FlatStyle = FlatStyle.Flat;
             btnBanUser.ForeColor = SystemColors.ActiveCaptionText;
-            btnBanUser.Location = new Point(0, 39);
-            btnBanUser.Margin = new Padding(3, 4, 3, 4);
+            btnBanUser.Location = new Point(0, 29);
             btnBanUser.Name = "btnBanUser";
-            btnBanUser.Size = new Size(160, 31);
+            btnBanUser.Size = new Size(140, 23);
             btnBanUser.TabIndex = 14;
             btnBanUser.Text = "Ban user";
             btnBanUser.UseVisualStyleBackColor = false;
@@ -200,9 +194,8 @@
             btnMoreInfo.FlatStyle = FlatStyle.Flat;
             btnMoreInfo.ForeColor = SystemColors.ActiveCaptionText;
             btnMoreInfo.Location = new Point(0, 0);
-            btnMoreInfo.Margin = new Padding(3, 4, 3, 4);
             btnMoreInfo.Name = "btnMoreInfo";
-            btnMoreInfo.Size = new Size(160, 44);
+            btnMoreInfo.Size = new Size(140, 33);
             btnMoreInfo.TabIndex = 13;
             btnMoreInfo.Text = "More info";
             btnMoreInfo.UseVisualStyleBackColor = false;
@@ -215,10 +208,9 @@
             btnLogout.FlatAppearance.BorderSize = 0;
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = SystemColors.ActiveCaptionText;
-            btnLogout.Location = new Point(0, 119);
-            btnLogout.Margin = new Padding(3, 4, 3, 4);
+            btnLogout.Location = new Point(0, 89);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(141, 64);
+            btnLogout.Size = new Size(123, 48);
             btnLogout.TabIndex = 12;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
@@ -228,10 +220,9 @@
             ProfiliePicture.BackColor = Color.Transparent;
             ProfiliePicture.Dock = DockStyle.Fill;
             ProfiliePicture.Image = Properties.Resources.user;
-            ProfiliePicture.Location = new Point(3, 4);
-            ProfiliePicture.Margin = new Padding(3, 4, 3, 4);
+            ProfiliePicture.Location = new Point(3, 3);
             ProfiliePicture.Name = "ProfiliePicture";
-            ProfiliePicture.Size = new Size(169, 121);
+            ProfiliePicture.Size = new Size(171, 91);
             ProfiliePicture.SizeMode = PictureBoxSizeMode.Zoom;
             ProfiliePicture.TabIndex = 7;
             ProfiliePicture.TabStop = false;
@@ -240,21 +231,20 @@
             // 
             lbRole.Anchor = AnchorStyles.None;
             lbRole.AutoSize = true;
-            lbRole.Location = new Point(1397, 54);
+            lbRole.Location = new Point(1418, 41);
             lbRole.Name = "lbRole";
-            lbRole.Size = new Size(39, 20);
+            lbRole.Size = new Size(30, 15);
             lbRole.TabIndex = 12;
             lbRole.Text = "Role";
             // 
             // UsersInfoControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(flpUserInfo);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "UsersInfoControl";
-            Size = new Size(1766, 129);
+            Size = new Size(1786, 97);
             flpUserInfo.ResumeLayout(false);
             flpUserInfo.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
