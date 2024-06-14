@@ -43,7 +43,6 @@
             UserPanel = new Panel();
             btnReport = new Button();
             pbLogo = new PictureBox();
-            btnAnnouncement = new Button();
             btnUsers = new Button();
             MainPanel = new Panel();
             UserDropMenu.SuspendLayout();
@@ -67,20 +66,18 @@
             UserDropMenu.Controls.Add(btnProfile);
             UserDropMenu.Controls.Add(btnLogout);
             UserDropMenu.Controls.Add(btnSetting);
-            UserDropMenu.Location = new Point(162, 56);
-            UserDropMenu.Margin = new Padding(3, 4, 3, 4);
+            UserDropMenu.Location = new Point(142, 42);
             UserDropMenu.Name = "UserDropMenu";
-            UserDropMenu.Size = new Size(175, 137);
+            UserDropMenu.Size = new Size(153, 103);
             UserDropMenu.TabIndex = 9;
             // 
             // pictureBox4
             // 
             pictureBox4.BackColor = Color.White;
             pictureBox4.Image = Properties.Resources.logout;
-            pictureBox4.Location = new Point(142, 90);
-            pictureBox4.Margin = new Padding(3, 4, 3, 4);
+            pictureBox4.Location = new Point(124, 68);
             pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(36, 56);
+            pictureBox4.Size = new Size(32, 42);
             pictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox4.TabIndex = 16;
             pictureBox4.TabStop = false;
@@ -89,10 +86,9 @@
             // 
             pictureBox3.BackColor = Color.White;
             pictureBox3.Image = Properties.Resources.setting;
-            pictureBox3.Location = new Point(142, 41);
-            pictureBox3.Margin = new Padding(3, 4, 3, 4);
+            pictureBox3.Location = new Point(124, 31);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(33, 51);
+            pictureBox3.Size = new Size(29, 38);
             pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox3.TabIndex = 15;
             pictureBox3.TabStop = false;
@@ -101,10 +97,9 @@
             // 
             pictureBox1.BackColor = Color.White;
             pictureBox1.Image = Properties.Resources.user;
-            pictureBox1.Location = new Point(142, -6);
-            pictureBox1.Margin = new Padding(3, 4, 3, 4);
+            pictureBox1.Location = new Point(124, -4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(33, 52);
+            pictureBox1.Size = new Size(29, 39);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 14;
             pictureBox1.TabStop = false;
@@ -117,9 +112,8 @@
             btnProfile.FlatStyle = FlatStyle.Flat;
             btnProfile.ForeColor = SystemColors.ActiveCaptionText;
             btnProfile.Location = new Point(0, 0);
-            btnProfile.Margin = new Padding(3, 4, 3, 4);
             btnProfile.Name = "btnProfile";
-            btnProfile.Size = new Size(145, 46);
+            btnProfile.Size = new Size(127, 49);
             btnProfile.TabIndex = 13;
             btnProfile.Text = "Profile";
             btnProfile.UseVisualStyleBackColor = false;
@@ -132,10 +126,9 @@
             btnLogout.FlatAppearance.BorderSize = 0;
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = SystemColors.ActiveCaptionText;
-            btnLogout.Location = new Point(0, 90);
-            btnLogout.Margin = new Padding(3, 4, 3, 4);
+            btnLogout.Location = new Point(0, 75);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(145, 56);
+            btnLogout.Size = new Size(127, 43);
             btnLogout.TabIndex = 12;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
@@ -148,10 +141,9 @@
             btnSetting.FlatAppearance.BorderSize = 0;
             btnSetting.FlatStyle = FlatStyle.Flat;
             btnSetting.ForeColor = SystemColors.ActiveCaptionText;
-            btnSetting.Location = new Point(0, 46);
-            btnSetting.Margin = new Padding(3, 4, 3, 4);
+            btnSetting.Location = new Point(0, 40);
             btnSetting.Name = "btnSetting";
-            btnSetting.Size = new Size(145, 46);
+            btnSetting.Size = new Size(127, 40);
             btnSetting.TabIndex = 11;
             btnSetting.Text = "Setting";
             btnSetting.UseVisualStyleBackColor = false;
@@ -164,10 +156,9 @@
             btnUsername.FlatAppearance.BorderSize = 0;
             btnUsername.FlatStyle = FlatStyle.Flat;
             btnUsername.ForeColor = SystemColors.ActiveCaptionText;
-            btnUsername.Location = new Point(162, -6);
-            btnUsername.Margin = new Padding(3, 4, 3, 4);
+            btnUsername.Location = new Point(142, -4);
             btnUsername.Name = "btnUsername";
-            btnUsername.Size = new Size(145, 64);
+            btnUsername.Size = new Size(127, 48);
             btnUsername.TabIndex = 9;
             btnUsername.Text = "Username";
             btnUsername.UseVisualStyleBackColor = false;
@@ -177,10 +168,9 @@
             // 
             pictureBox2.BackColor = Color.White;
             pictureBox2.Image = Properties.Resources.down_arrow;
-            pictureBox2.Location = new Point(304, -9);
-            pictureBox2.Margin = new Padding(3, 4, 3, 4);
+            pictureBox2.Location = new Point(266, -7);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(33, 70);
+            pictureBox2.Size = new Size(29, 52);
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox2.TabIndex = 8;
             pictureBox2.TabStop = false;
@@ -190,9 +180,8 @@
             ProfiliePicture.BackColor = Color.Transparent;
             ProfiliePicture.Dock = DockStyle.Left;
             ProfiliePicture.Location = new Point(0, 0);
-            ProfiliePicture.Margin = new Padding(3, 4, 3, 4);
             ProfiliePicture.Name = "ProfiliePicture";
-            ProfiliePicture.Size = new Size(96, 234);
+            ProfiliePicture.Size = new Size(84, 176);
             ProfiliePicture.SizeMode = PictureBoxSizeMode.Zoom;
             ProfiliePicture.TabIndex = 6;
             ProfiliePicture.TabStop = false;
@@ -211,15 +200,13 @@
             tbLayoutNavMenu.Controls.Add(UserPanel, 5, 0);
             tbLayoutNavMenu.Controls.Add(btnReport, 3, 0);
             tbLayoutNavMenu.Controls.Add(pbLogo, 0, 0);
-            tbLayoutNavMenu.Controls.Add(btnAnnouncement, 4, 0);
             tbLayoutNavMenu.Controls.Add(btnUsers, 1, 0);
             tbLayoutNavMenu.Dock = DockStyle.Top;
             tbLayoutNavMenu.Location = new Point(0, 0);
-            tbLayoutNavMenu.Margin = new Padding(3, 4, 3, 4);
             tbLayoutNavMenu.Name = "tbLayoutNavMenu";
             tbLayoutNavMenu.RowCount = 1;
             tbLayoutNavMenu.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tbLayoutNavMenu.Size = new Size(1910, 242);
+            tbLayoutNavMenu.Size = new Size(1671, 182);
             tbLayoutNavMenu.TabIndex = 2;
             // 
             // btnRecipes
@@ -229,10 +216,9 @@
             btnRecipes.FlatAppearance.BorderSize = 0;
             btnRecipes.FlatStyle = FlatStyle.Flat;
             btnRecipes.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnRecipes.Location = new Point(617, 4);
-            btnRecipes.Margin = new Padding(3, 4, 3, 4);
+            btnRecipes.Location = new Point(539, 3);
             btnRecipes.Name = "btnRecipes";
-            btnRecipes.Size = new Size(301, 234);
+            btnRecipes.Size = new Size(262, 176);
             btnRecipes.TabIndex = 11;
             btnRecipes.Text = "Recipes";
             btnRecipes.UseVisualStyleBackColor = false;
@@ -245,10 +231,9 @@
             UserPanel.Controls.Add(btnUsername);
             UserPanel.Controls.Add(pictureBox2);
             UserPanel.Dock = DockStyle.Fill;
-            UserPanel.Location = new Point(1484, 4);
-            UserPanel.Margin = new Padding(3, 4, 3, 4);
+            UserPanel.Location = new Point(1297, 3);
             UserPanel.Name = "UserPanel";
-            UserPanel.Size = new Size(423, 234);
+            UserPanel.Size = new Size(371, 176);
             UserPanel.TabIndex = 10;
             UserPanel.Paint += UserPanel_Paint;
             // 
@@ -259,10 +244,9 @@
             btnReport.FlatAppearance.BorderSize = 0;
             btnReport.FlatStyle = FlatStyle.Flat;
             btnReport.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnReport.Location = new Point(924, 4);
-            btnReport.Margin = new Padding(3, 4, 3, 4);
+            btnReport.Location = new Point(807, 3);
             btnReport.Name = "btnReport";
-            btnReport.Size = new Size(301, 234);
+            btnReport.Size = new Size(262, 176);
             btnReport.TabIndex = 4;
             btnReport.Text = "Reports";
             btnReport.UseVisualStyleBackColor = false;
@@ -271,41 +255,25 @@
             // 
             pbLogo.Dock = DockStyle.Fill;
             pbLogo.Image = Properties.Resources.Logo;
-            pbLogo.Location = new Point(3, 4);
-            pbLogo.Margin = new Padding(3, 4, 3, 4);
+            pbLogo.Location = new Point(3, 3);
             pbLogo.Name = "pbLogo";
-            pbLogo.Size = new Size(301, 234);
+            pbLogo.Size = new Size(262, 176);
             pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pbLogo.TabIndex = 1;
             pbLogo.TabStop = false;
             // 
-            // btnAnnouncement
-            // 
-            btnAnnouncement.BackColor = Color.White;
-            btnAnnouncement.Dock = DockStyle.Fill;
-            btnAnnouncement.FlatAppearance.BorderSize = 0;
-            btnAnnouncement.FlatStyle = FlatStyle.Flat;
-            btnAnnouncement.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnAnnouncement.Location = new Point(1231, 4);
-            btnAnnouncement.Margin = new Padding(3, 4, 3, 4);
-            btnAnnouncement.Name = "btnAnnouncement";
-            btnAnnouncement.Size = new Size(247, 234);
-            btnAnnouncement.TabIndex = 5;
-            btnAnnouncement.Text = "Announcement";
-            btnAnnouncement.UseVisualStyleBackColor = false;
-            // 
             // btnUsers
             // 
             btnUsers.BackColor = Color.White;
-            btnUsers.Dock = DockStyle.Fill;
+            btnUsers.Dock = DockStyle.Top;
             btnUsers.FlatAppearance.BorderColor = Color.White;
             btnUsers.FlatAppearance.BorderSize = 0;
             btnUsers.FlatStyle = FlatStyle.Flat;
             btnUsers.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnUsers.Location = new Point(307, 0);
+            btnUsers.Location = new Point(268, 0);
             btnUsers.Margin = new Padding(0);
             btnUsers.Name = "btnUsers";
-            btnUsers.Size = new Size(307, 242);
+            btnUsers.Size = new Size(268, 182);
             btnUsers.TabIndex = 2;
             btnUsers.Text = "Users";
             btnUsers.UseVisualStyleBackColor = false;
@@ -315,23 +283,22 @@
             // 
             MainPanel.AutoScroll = true;
             MainPanel.BackgroundImage = Properties.Resources.body;
-            MainPanel.Dock = DockStyle.Fill;
-            MainPanel.Location = new Point(0, 242);
-            MainPanel.Margin = new Padding(3, 4, 3, 4);
+            MainPanel.Dock = DockStyle.Bottom;
+            MainPanel.Location = new Point(0, 182);
             MainPanel.Name = "MainPanel";
-            MainPanel.Size = new Size(1910, 813);
+            MainPanel.Size = new Size(1671, 609);
             MainPanel.TabIndex = 3;
+            MainPanel.Paint += MainPanel_Paint;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.body;
-            ClientSize = new Size(1910, 1055);
+            ClientSize = new Size(1671, 791);
             Controls.Add(MainPanel);
             Controls.Add(tbLayoutNavMenu);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
@@ -353,7 +320,6 @@
         private System.Windows.Forms.PictureBox ProfiliePicture;
         private System.Windows.Forms.Panel UserDropMenu;
         private System.Windows.Forms.TableLayoutPanel tbLayoutNavMenu;
-        private System.Windows.Forms.Button btnAnnouncement;
         private System.Windows.Forms.Button btnReport;
         private System.Windows.Forms.PictureBox pbLogo;
         private System.Windows.Forms.Button btnUsers;

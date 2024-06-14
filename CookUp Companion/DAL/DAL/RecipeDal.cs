@@ -709,10 +709,11 @@ namespace DAL
                     string query = $@"
                         SELECT recipeID, recipeName, recipePicture, creator, description, cookingInstructions, preparationTime, cookingTime, dateCreated
                         FROM Recipes 
-                        WHERE creator = @Creator";
+                        WHERE creator = @Creator AND recipeName = @RecipeName";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Creator", userManager.GetIdByUsername(creatorName));
+                    command.Parameters.AddWithValue("@RecipeName", recipeName);
 
                     //Execute the query and get the data
                     using SqlDataReader reader = command.ExecuteReader();

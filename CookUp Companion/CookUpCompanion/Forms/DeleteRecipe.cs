@@ -63,7 +63,7 @@ namespace CookUpCompanion.Forms
             {
                 if (recipeManager.DeleteRecipe(recipe))
                 {
-                    MessageBox.Show($"The recipe {recipe.RecipeName} has been unbanned succefully");
+                    MessageBox.Show($"The recipe {recipe.RecipeName} has been deleted succefully");
                     this.Close();
                 }
                 else

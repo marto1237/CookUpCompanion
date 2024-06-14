@@ -195,7 +195,8 @@ namespace CookUp_Companion_web.Pages
             {
                 //// Assuming the method SearchRecipesByName is implemented in your IRecipeManager
                 Recipes = recipeManager.SearchRecipesByName(searchText, CurrentPage, PageSize);
-                TotalPages = recipeManager.GetAllRecipesPageNum(PageSize);
+                int totalRecipes = Recipes.Count;
+                TotalPages = (int)Math.Ceiling((double)totalRecipes / PageSize);
             }
             catch (Exception ex)
             {

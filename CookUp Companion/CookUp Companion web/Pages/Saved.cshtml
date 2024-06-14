@@ -35,42 +35,48 @@
     </div>
 
     <div class="wrapper-grid">
-
-        @for (int i = 0; i < Model.Recipes.Count; i++)
+        @if (Model.Recipes != null && Model.Recipes.Count > 0)
         {
-            var recipe = Model.Recipes[i];
-            int totalSaves = Model.SaveCounts[i];
-            int totalVotes = Model.Likes[i] + Model.Dislikes[i];
-            double likePercentage = totalVotes > 0 ? (double)Model.Likes[i] / totalVotes * 100 : 0;
+            @for (int i = 0; i < Model.Recipes.Count; i++)
+            {
+                var recipe = Model.Recipes[i];
+                int totalSaves = Model.SaveCounts[i];
+                int totalVotes = Model.Likes[i] + Model.Dislikes[i];
+                double likePercentage = totalVotes > 0 ? (double)Model.Likes[i] / totalVotes * 100 : 0;
 
-            <div class="card-recipe">
-                <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
-                    <img class="card-img-top"
-                         src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
+                <div class="card-recipe">
+                    <a asp-page="/RecipeInfo" asp-route-id=@Model.GetRecipeID(recipe)>
+                        <img class="card-img-top"
+                             src="@($"data:image/png;base64,{Convert.ToBase64String(recipe.Picture)}")" alt="Recipe Image">
 
-                    <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
-                        <div class="card-top">
-                            <div class="card-left">
-                                <div class="like-container">
-                                    <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
-                                    <p>@(likePercentage) %</p>
+                        <div class="card-img-overlay" id=@Model.GetRecipeID(recipe)>
+                            <div class="card-top">
+                                <div class="card-left">
+                                    <div class="like-container">
+                                        <button class="likebtn"><i class="fa-solid fa-thumbs-up fa-lg" style="color: #ffffff;"></i></button>
+                                        <p>@(likePercentage) %</p>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <div class="bookmark-container">
+                                        <button class="savebtn" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showRemoveModal(event);"><i class="fa-solid fa-bookmark fa-lg" style="color: #FFD43B;"></i><span class="save-tooltip">Remove</span></button>
+                                        <p>@RecipeModel.FormatNumber(totalSaves)</p>
+
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-right">
-                                <div class="bookmark-container">
-                                    <button class="savebtn" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showRemoveModal(event);"><i class="fa-solid fa-bookmark fa-lg" style="color: #FFD43B;"></i><span class="save-tooltip">Remove</span></button>
-                                    <p>@RecipeModel.FormatNumber(totalSaves)</p>
-
-                                </div>
+                            <div class="card-bottom">
+                                <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
+                                <div class="card-right"><button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)"><i class="fa-solid fa-ellipsis"></i></button></div>
                             </div>
                         </div>
-                        <div class="card-bottom">
-                            <div class="card-left"><button class="creator">@recipe.Creator.Username</button></div>
-                        <div class="card-right"><button class="more" data-recipe-id="@Model.GetRecipeID(recipe)" onclick="showOptionsMenu(this)"><i class="fa-solid fa-ellipsis"></i></button></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No saved recipes found.</p>
         }
         
     </div>
@@ -78,17 +84,19 @@
 
 @await Html.PartialAsync("_MoreOptionsModal")
 
-<nav aria-label="Page navigation" class="d-flex justify-content-center">
-    <ul class="pagination">
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-page="/Saved" asp-route-pageNum="@i">@i</a>
-            </li>
-        }
-    </ul>
-</nav>
-
+@if (Model.Recipes != null && Model.Recipes.Count > 0)
+{
+    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-page="/Saved" asp-route-pageNum="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
 
 
 @section Scripts {

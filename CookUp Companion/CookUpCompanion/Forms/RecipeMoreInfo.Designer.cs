@@ -85,6 +85,7 @@
             // 
             // flpIngredients
             // 
+            flpIngredients.AutoScroll = true;
             flpIngredients.Location = new Point(23, 484);
             flpIngredients.Name = "flpIngredients";
             flpIngredients.Size = new Size(720, 471);

@@ -24,7 +24,7 @@ namespace CookUpCompanion.Forms
         {
             InitializeComponent();
             this.userManager = userManager;
-            
+
             recipeManager = new RecipeManager(new RecipeDal(userManager));
             // Load user's profile picture
             if (user.ProfilePicture != null && user.ProfilePicture.Length > 0)
@@ -51,7 +51,7 @@ namespace CookUpCompanion.Forms
             }
             else
             {
-                UserDropMenu.Height = 143;
+                UserDropMenu.Height = 110;
             }
 
         }
@@ -117,6 +117,11 @@ namespace CookUpCompanion.Forms
         }
 
         private void UserPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void MainPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }
